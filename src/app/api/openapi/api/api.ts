@@ -1,0 +1,11 @@
+export * from './default.service';
+import { DefaultService } from './default.service';
+export * from './event.service';
+import { EventService } from './event.service';
+export * from './game.service';
+import { GameService } from './game.service';
+export * from './gameOverview.service';
+import { GameOverviewService } from './gameOverview.service';
+export * from './player.service';
+import { PlayerService } from './player.service';
+export const APIS = [DefaultService, EventService, GameService, GameOverviewService, PlayerService];
