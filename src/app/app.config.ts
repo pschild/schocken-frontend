@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { ApiModule as NgOpenapiGenApiModule } from './api/ng-openapi-gen/api.module';
@@ -42,6 +43,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: LOCALE_ID,
       useValue: 'de-DE'
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 2500 }
     },
     {
       provide: ErrorHandler,

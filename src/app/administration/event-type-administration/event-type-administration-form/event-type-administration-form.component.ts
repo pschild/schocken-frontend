@@ -22,13 +22,15 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { EventTypeDto } from '../../../api/openapi';
 import { PenaltyWithUnitComponent } from '../../../shared/penalty-with-unit/penalty-with-unit.component';
+import { ContextToLabelPipe } from '../../../shared/pipes/context-to-label.pipe';
+import { TriggerToLabelPipe } from '../../../shared/pipes/trigger-to-label.pipe';
 import ContextEnum = EventTypeDto.ContextEnum;
 import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
 
 @Component({
   selector: 'hop-event-type-administration-form',
   standalone: true,
-  imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, ReactiveFormsModule, MatLabel, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatRadioGroup, MatRadioButton, MatCheckbox, MatSelect, MatOption, MatIcon, MatDivider, MatExpansionModule, PenaltyWithUnitComponent],
+  imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, ReactiveFormsModule, MatLabel, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatRadioGroup, MatRadioButton, MatCheckbox, MatSelect, MatOption, MatIcon, MatDivider, MatExpansionModule, PenaltyWithUnitComponent, TriggerToLabelPipe, ContextToLabelPipe],
   templateUrl: './event-type-administration-form.component.html',
   styleUrl: './event-type-administration-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

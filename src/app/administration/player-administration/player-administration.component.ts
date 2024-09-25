@@ -9,6 +9,7 @@ import { Observable, switchMap, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { PlayerDto, PlayerService } from '../../api/openapi';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
+import { SuccessMessageService } from '../../shared/success-message.service';
 import { PlayerAdministrationFormComponent } from './player-administration-form/player-administration-form.component';
 
 @Component({
@@ -27,6 +28,7 @@ export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
   players$: Observable<PlayerDto[]> | null = null;
 
   private playerService = inject(PlayerService);
+  private successMessageService = inject(SuccessMessageService);
 
   @ViewChild(MatSort) sort: MatSort | null = null;
 
@@ -56,8 +58,8 @@ export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().pipe(
       filter(result => !!result),
       switchMap(formValue => player
-        ? this.playerService.update(player.id, formValue)
-        : this.playerService.create(formValue)
+        ? this.playerService.update(player.id, formValue).pipe(tap(() => this.successMessageService.showSuccess(`Spieler "${player.name}" aktualisiert`)))
+        : this.playerService.create(formValue).pipe(tap(() => this.successMessageService.showSuccess(`Spieler "${formValue.name}" erstellt`)))
       ),
       tap(() => this.loadList()),
     ).subscribe();
@@ -74,6 +76,7 @@ export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
       filter(result => !!result),
       switchMap(() => this.playerService.remove(id)),
       tap(() => this.loadList()),
+      tap(() => this.successMessageService.showSuccess(`Spieler "${name}" gelöscht`)),
     ).subscribe();
   }
 

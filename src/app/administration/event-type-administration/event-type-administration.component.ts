@@ -10,12 +10,13 @@ import { filter } from 'rxjs/operators';
 import { EventTypeDto, EventTypeService } from '../../api/openapi';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
 import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
+import { ContextToLabelPipe } from '../../shared/pipes/context-to-label.pipe';
 import { EventTypeAdministrationFormComponent } from './event-type-administration-form/event-type-administration-form.component';
 
 @Component({
   selector: 'hop-event-type-administration',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule, MatIconModule, MatButton, MatIconButton, MatFabButton, PenaltyWithUnitComponent],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatIconModule, MatButton, MatIconButton, MatFabButton, PenaltyWithUnitComponent, ContextToLabelPipe],
   templateUrl: './event-type-administration.component.html',
   styleUrl: './event-type-administration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

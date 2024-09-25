@@ -9,8 +9,8 @@
     <div>
       <mat-label>Kontext:</mat-label>
       <mat-radio-group formControlName="context">
-        <mat-radio-button [value]="ContextEnum.Round">Runde</mat-radio-button>
-        <mat-radio-button [value]="ContextEnum.Game">Spiel</mat-radio-button>
+        <mat-radio-button [value]="ContextEnum.Round">{{ContextEnum.Round | contextToLabel}}</mat-radio-button>
+        <mat-radio-button [value]="ContextEnum.Game">{{ContextEnum.Game | contextToLabel}}</mat-radio-button>
       </mat-radio-group>
     </div>
 
@@ -58,7 +58,7 @@
         <mat-select formControlName="trigger">
           <mat-option>Kein Auslöser</mat-option>
           @for (trigger of eventTypeTriggers; track trigger) {
-            <mat-option [value]="trigger">{{ trigger }}</mat-option>
+            <mat-option [value]="trigger">{{ trigger | triggerToLabel }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
