@@ -1,11 +1,15 @@
-export * from './default.service';
-import { DefaultService } from './default.service';
 export * from './event.service';
 import { EventService } from './event.service';
+export * from './eventType.service';
+import { EventTypeService } from './eventType.service';
+export * from './eventTypeOverview.service';
+import { EventTypeOverviewService } from './eventTypeOverview.service';
 export * from './game.service';
 import { GameService } from './game.service';
 export * from './gameOverview.service';
 import { GameOverviewService } from './gameOverview.service';
 export * from './player.service';
 import { PlayerService } from './player.service';
-export const APIS = [DefaultService, EventService, GameService, GameOverviewService, PlayerService];
+export * from './round.service';
+import { RoundService } from './round.service';
+export const APIS = [EventService, EventTypeService, EventTypeOverviewService, GameService, GameOverviewService, PlayerService, RoundService];

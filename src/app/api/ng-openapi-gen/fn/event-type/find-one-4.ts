@@ -8,23 +8,26 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { EventTypeDto } from '../../models/event-type-dto';
 
-export interface FindAll_1$Params {
+export interface FindOne_4$Params {
+  id: string;
 }
 
-export function findAll_1(http: HttpClient, rootUrl: string, params?: FindAll_1$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, findAll_1.PATH, 'get');
+export function findOne_4(http: HttpClient, rootUrl: string, params: FindOne_4$Params, context?: HttpContext): Observable<StrictHttpResponse<EventTypeDto>> {
+  const rb = new RequestBuilder(rootUrl, findOne_4.PATH, 'get');
   if (params) {
+    rb.path('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<EventTypeDto>;
     })
   );
 }
 
-findAll_1.PATH = '/game';
+findOne_4.PATH = '/event-type/{id}';

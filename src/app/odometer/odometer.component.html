@@ -1,0 +1,11 @@
+@switch (type()) {
+  @case ('number') {
+    <span>{{currentValue$ | async | number:precisionExpr}}</span>
+  }
+  @case ('currency') {
+    <span>{{currentValue$ | async | currency}}</span>
+  }
+}
+<!-- <div>
+  <small style="font-size: 12px">({{countTo?.toFixed(2)}})</small>
+</div> -->

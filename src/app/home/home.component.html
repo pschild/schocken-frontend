@@ -1,3 +1,7 @@
+<button mat-fab class="hop-fab-button">
+  <mat-icon>add</mat-icon>
+</button>
+
 @if (gameOverview$ | async; as overview) {
   <mat-accordion>
     @for (item of overview; track item) {
@@ -37,14 +41,9 @@
                 <span>&nbsp;•&nbsp;</span>
                 @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
                   @if (idx > 0) {
-                    <span>,&nbsp;</span>
+                    <span>/</span>
                   }
-
-                  @if (penalty.unit === 'EURO') {
-                    <span>{{penalty.sum | number:'1.2'}}€</span>
-                  } @else if (penalty.unit === 'BEER_CRATE') {
-                    <span>{{penalty.sum}} Bierkiste(n)</span>
-                  }
+                  <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
                 }
               </div>
             </div>

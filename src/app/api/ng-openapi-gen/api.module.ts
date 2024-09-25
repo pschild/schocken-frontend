@@ -7,9 +7,12 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { PlayerService } from './services/player.service';
-import { ApiService } from './services/api.service';
+import { RoundService } from './services/round.service';
 import { GameService } from './services/game.service';
 import { GameOverviewService } from './services/game-overview.service';
+import { EventService } from './services/event.service';
+import { EventTypeService } from './services/event-type.service';
+import { EventTypeOverviewService } from './services/event-type-overview.service';
 
 /**
  * Module that provides all services and configuration.
@@ -20,9 +23,12 @@ import { GameOverviewService } from './services/game-overview.service';
   declarations: [],
   providers: [
     PlayerService,
-    ApiService,
+    RoundService,
     GameService,
     GameOverviewService,
+    EventService,
+    EventTypeService,
+    EventTypeOverviewService,
     ApiConfiguration
   ],
 })

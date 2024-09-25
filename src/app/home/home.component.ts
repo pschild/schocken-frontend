@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 import { GameOverviewService as NgOpenapiGenGameOverviewService } from '../api/ng-openapi-gen/services/game-overview.service';
 import { GameOverviewDto, GameOverviewService as OpenApiGameOverviewService } from '../api/openapi';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
+import { PenaltyWithUnitComponent } from '../shared/penalty-with-unit/penalty-with-unit.component';
 
 interface OverviewItem {
   year: string;
@@ -20,7 +21,7 @@ interface OverviewItem {
 @Component({
   selector: 'hop-home',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton],
+  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatButton, MatFabButton, PenaltyWithUnitComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

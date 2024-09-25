@@ -15,10 +15,12 @@ import { complete } from '../fn/game/complete';
 import { Complete$Params } from '../fn/game/complete';
 import { create_2 } from '../fn/game/create-2';
 import { Create_2$Params } from '../fn/game/create-2';
-import { findAll_1 } from '../fn/game/find-all-1';
-import { FindAll_1$Params } from '../fn/game/find-all-1';
+import { findAll_2 } from '../fn/game/find-all-2';
+import { FindAll_2$Params } from '../fn/game/find-all-2';
 import { findOne_2 } from '../fn/game/find-one-2';
 import { FindOne_2$Params } from '../fn/game/find-one-2';
+import { GameDetailDto } from '../models/game-detail-dto';
+import { GameDto } from '../models/game-dto';
 import { getDetails_1 } from '../fn/game/get-details-1';
 import { GetDetails_1$Params } from '../fn/game/get-details-1';
 import { remove_2 } from '../fn/game/remove-2';
@@ -32,28 +34,28 @@ export class GameService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `findAll_1()` */
-  static readonly FindAll_1Path = '/game';
+  /** Path part for operation `findAll_2()` */
+  static readonly FindAll_2Path = '/game';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `findAll_1()` instead.
+   * To access only the response body, use `findAll_2()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll_1$Response(params?: FindAll_1$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return findAll_1(this.http, this.rootUrl, params, context);
+  findAll_2$Response(params?: FindAll_2$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<GameDto>>> {
+    return findAll_2(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `findAll_1$Response()` instead.
+   * To access the full response (for headers, for example), `findAll_2$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  findAll_1(params?: FindAll_1$Params, context?: HttpContext): Observable<void> {
-    return this.findAll_1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  findAll_2(params?: FindAll_2$Params, context?: HttpContext): Observable<Array<GameDto>> {
+    return this.findAll_2$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<GameDto>>): Array<GameDto> => r.body)
     );
   }
 
@@ -66,7 +68,7 @@ export class GameService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create_2$Response(params: Create_2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  create_2$Response(params: Create_2$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDto>> {
     return create_2(this.http, this.rootUrl, params, context);
   }
 
@@ -76,9 +78,9 @@ export class GameService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  create_2(params: Create_2$Params, context?: HttpContext): Observable<void> {
+  create_2(params: Create_2$Params, context?: HttpContext): Observable<GameDto> {
     return this.create_2$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<GameDto>): GameDto => r.body)
     );
   }
 
@@ -91,7 +93,7 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findOne_2$Response(params: FindOne_2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  findOne_2$Response(params: FindOne_2$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDto>> {
     return findOne_2(this.http, this.rootUrl, params, context);
   }
 
@@ -101,9 +103,9 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  findOne_2(params: FindOne_2$Params, context?: HttpContext): Observable<void> {
+  findOne_2(params: FindOne_2$Params, context?: HttpContext): Observable<GameDto> {
     return this.findOne_2$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<GameDto>): GameDto => r.body)
     );
   }
 
@@ -116,7 +118,7 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  remove_2$Response(params: Remove_2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  remove_2$Response(params: Remove_2$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
     return remove_2(this.http, this.rootUrl, params, context);
   }
 
@@ -126,9 +128,9 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  remove_2(params: Remove_2$Params, context?: HttpContext): Observable<void> {
+  remove_2(params: Remove_2$Params, context?: HttpContext): Observable<string> {
     return this.remove_2$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
@@ -141,7 +143,7 @@ export class GameService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update_2$Response(params: Update_2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  update_2$Response(params: Update_2$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDto>> {
     return update_2(this.http, this.rootUrl, params, context);
   }
 
@@ -151,9 +153,9 @@ export class GameService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  update_2(params: Update_2$Params, context?: HttpContext): Observable<void> {
+  update_2(params: Update_2$Params, context?: HttpContext): Observable<GameDto> {
     return this.update_2$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<GameDto>): GameDto => r.body)
     );
   }
 
@@ -166,7 +168,7 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getDetails_1$Response(params: GetDetails_1$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  getDetails_1$Response(params: GetDetails_1$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDetailDto>> {
     return getDetails_1(this.http, this.rootUrl, params, context);
   }
 
@@ -176,9 +178,9 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getDetails_1(params: GetDetails_1$Params, context?: HttpContext): Observable<void> {
+  getDetails_1(params: GetDetails_1$Params, context?: HttpContext): Observable<GameDetailDto> {
     return this.getDetails_1$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<GameDetailDto>): GameDetailDto => r.body)
     );
   }
 
@@ -191,7 +193,7 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  complete$Response(params: Complete$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  complete$Response(params: Complete$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDto>> {
     return complete(this.http, this.rootUrl, params, context);
   }
 
@@ -201,9 +203,9 @@ export class GameService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  complete(params: Complete$Params, context?: HttpContext): Observable<void> {
+  complete(params: Complete$Params, context?: HttpContext): Observable<GameDto> {
     return this.complete$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<GameDto>): GameDto => r.body)
     );
   }
 

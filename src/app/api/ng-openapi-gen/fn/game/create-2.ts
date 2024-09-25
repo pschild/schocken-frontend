@@ -9,23 +9,24 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CreateGameDto } from '../../models/create-game-dto';
+import { GameDto } from '../../models/game-dto';
 
 export interface Create_2$Params {
       body: CreateGameDto
 }
 
-export function create_2(http: HttpClient, rootUrl: string, params: Create_2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function create_2(http: HttpClient, rootUrl: string, params: Create_2$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDto>> {
   const rb = new RequestBuilder(rootUrl, create_2.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<GameDto>;
     })
   );
 }

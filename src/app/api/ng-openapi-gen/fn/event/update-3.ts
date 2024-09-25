@@ -8,14 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PlayerDto } from '../../models/player-dto';
+import { EventDto } from '../../models/event-dto';
+import { UpdateEventDto } from '../../models/update-event-dto';
 
-export interface Foobar$Params {
+export interface Update_3$Params {
+  id: string;
+      body: UpdateEventDto
 }
 
-export function foobar(http: HttpClient, rootUrl: string, params?: Foobar$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlayerDto>>> {
-  const rb = new RequestBuilder(rootUrl, foobar.PATH, 'get');
+export function update_3(http: HttpClient, rootUrl: string, params: Update_3$Params, context?: HttpContext): Observable<StrictHttpResponse<EventDto>> {
+  const rb = new RequestBuilder(rootUrl, update_3.PATH, 'patch');
   if (params) {
+    rb.path('id', params.id, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -23,9 +28,9 @@ export function foobar(http: HttpClient, rootUrl: string, params?: Foobar$Params
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<PlayerDto>>;
+      return r as StrictHttpResponse<EventDto>;
     })
   );
 }
 
-foobar.PATH = '/player';
+update_3.PATH = '/event/{id}';

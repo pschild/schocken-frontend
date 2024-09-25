@@ -53,3 +53,10 @@ $schocken-frontend-theme: schockenTheme.$light-theme;
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.hop-fab-button {
+  position: fixed !important;
+  right: 35px;
+  bottom: 35px;
+  z-index: 1;
+}

@@ -8,6 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { GameDto } from '../../models/game-dto';
 import { UpdateGameDto } from '../../models/update-game-dto';
 
 export interface Update_2$Params {
@@ -15,7 +16,7 @@ export interface Update_2$Params {
       body: UpdateGameDto
 }
 
-export function update_2(http: HttpClient, rootUrl: string, params: Update_2$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+export function update_2(http: HttpClient, rootUrl: string, params: Update_2$Params, context?: HttpContext): Observable<StrictHttpResponse<GameDto>> {
   const rb = new RequestBuilder(rootUrl, update_2.PATH, 'patch');
   if (params) {
     rb.path('id', params.id, {});
@@ -23,11 +24,11 @@ export function update_2(http: HttpClient, rootUrl: string, params: Update_2$Par
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<GameDto>;
     })
   );
 }

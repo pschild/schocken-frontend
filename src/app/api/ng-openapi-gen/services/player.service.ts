@@ -13,10 +13,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { create } from '../fn/player/create';
 import { Create$Params } from '../fn/player/create';
+import { findAll } from '../fn/player/find-all';
+import { FindAll$Params } from '../fn/player/find-all';
 import { findOne } from '../fn/player/find-one';
 import { FindOne$Params } from '../fn/player/find-one';
-import { foobar } from '../fn/player/foobar';
-import { Foobar$Params } from '../fn/player/foobar';
 import { getAllActive } from '../fn/player/get-all-active';
 import { GetAllActive$Params } from '../fn/player/get-all-active';
 import { PlayerDto } from '../models/player-dto';
@@ -31,27 +31,27 @@ export class PlayerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `foobar()` */
-  static readonly FoobarPath = '/player';
+  /** Path part for operation `findAll()` */
+  static readonly FindAllPath = '/player';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `foobar()` instead.
+   * To access only the response body, use `findAll()` instead.
    *
    * This method doesn't expect any request body.
    */
-  foobar$Response(params?: Foobar$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlayerDto>>> {
-    return foobar(this.http, this.rootUrl, params, context);
+  findAll$Response(params?: FindAll$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlayerDto>>> {
+    return findAll(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `foobar$Response()` instead.
+   * To access the full response (for headers, for example), `findAll$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  foobar(params?: Foobar$Params, context?: HttpContext): Observable<Array<PlayerDto>> {
-    return this.foobar$Response(params, context).pipe(
+  findAll(params?: FindAll$Params, context?: HttpContext): Observable<Array<PlayerDto>> {
+    return this.findAll$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<PlayerDto>>): Array<PlayerDto> => r.body)
     );
   }

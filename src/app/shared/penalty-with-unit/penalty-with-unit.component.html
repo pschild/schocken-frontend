@@ -1,0 +1,30 @@
+@switch (unit()) {
+  @case (PenaltyUnit.Euro) {
+    <span>
+      {{penalty() | currency}}
+      @if (multiplicatorUnit()) {
+        pro {{multiplicatorUnit()}}
+      }
+    </span>
+  }
+  @case (PenaltyUnit.BeerCrate) {
+    <span>
+      @if (penalty() === 1) {
+        {{penalty()}} Bierkiste
+      } @else {
+        {{penalty()}} Bierkisten
+      }
+      @if (multiplicatorUnit()) {
+        pro {{multiplicatorUnit()}}
+      }
+    </span>
+  }
+  @default {
+    <span>
+      {{penalty()}} {{unit()}}
+      @if (multiplicatorUnit()) {
+        pro {{multiplicatorUnit()}}
+      }
+    </span>
+  }
+}

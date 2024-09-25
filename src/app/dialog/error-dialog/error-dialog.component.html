@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Fehler</h2>
+<mat-dialog-content>
+  {{data.userMessage}}
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Fehlerdetails</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="error-message">
+      <p>Time: {{now}}</p>
+      <p>Reason: {{data.message}}</p>
+    </div>
+  </mat-expansion-panel>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close>OK</button>
+</mat-dialog-actions>

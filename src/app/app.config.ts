@@ -1,13 +1,22 @@
 import { registerLocaleData } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig, DEFAULT_CURRENCY_CODE, importProvidersFrom, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
+import localeDe from '@angular/common/locales/de';
+import {
+  ApplicationConfig,
+  DEFAULT_CURRENCY_CODE,
+  ErrorHandler,
+  importProvidersFrom,
+  LOCALE_ID,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { ApiModule as NgOpenapiGenApiModule } from './api/ng-openapi-gen/api.module';
 import { ApiModule as OpenApiModule, Configuration } from './api/openapi';
 import { routes } from './app.routes';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import localeDe from '@angular/common/locales/de';
+import { GlobalErrorHandler } from './global-error-handler';
 
 registerLocaleData(localeDe, 'de');
 
@@ -18,10 +27,14 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideNativeDateAdapter(),
     importProvidersFrom(
-      NgOpenapiGenApiModule.forRoot({rootUrl: 'http://localhost:3001'}),
-      OpenApiModule.forRoot(() => new Configuration({basePath: 'http://localhost:3001'}))
+      NgOpenapiGenApiModule.forRoot({rootUrl: 'http://localhost:3000'}),
+      OpenApiModule.forRoot(() => new Configuration({basePath: 'http://localhost:3000'}))
     ),
     provideAnimationsAsync(),
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: {autoFocus: 'dialog'}
+    },
     {
       provide: DEFAULT_CURRENCY_CODE,
       useValue: 'EUR'
@@ -29,6 +42,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: LOCALE_ID,
       useValue: 'de-DE'
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
     },
   ]
 };

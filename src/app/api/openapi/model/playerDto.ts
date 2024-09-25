@@ -8,6 +8,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GameDto } from './gameDto';
 
 
 export interface PlayerDto { 
@@ -18,6 +19,6 @@ export interface PlayerDto {
     name: string;
     registered: string;
     active: boolean;
-    hostedGames?: Array<object>;
+    hostedGames?: Array<GameDto>;
 }
 
