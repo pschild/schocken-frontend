@@ -13,6 +13,7 @@
 export interface CreateGameDto { 
     datetime?: string;
     completed?: boolean;
+    excludeFromStatistics?: boolean;
     placeType: CreateGameDto.PlaceTypeEnum;
     hostedById?: string;
     placeOfAwayGame?: string;

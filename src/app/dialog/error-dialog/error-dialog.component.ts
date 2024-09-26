@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'hop-error-dialog',
@@ -13,6 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatDialogContent,
     MatDialogTitle,
     MatExpansionModule,
+    MatIcon,
   ],
   templateUrl: './error-dialog.component.html',
   styleUrl: './error-dialog.component.scss'

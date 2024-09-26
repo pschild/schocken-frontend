@@ -60,3 +60,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   bottom: 35px;
   z-index: 1;
 }
+
+mat-form-field {
+  &.full-width {
+    width: 100%;
+  }
+
+  &.half-width {
+    width: 50%;
+  }
+}

@@ -11,6 +11,7 @@ import { EventTypeDto, EventTypeService } from '../../api/openapi';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
 import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
 import { ContextToLabelPipe } from '../../shared/pipes/context-to-label.pipe';
+import { SuccessMessageService } from '../../shared/success-message.service';
 import { EventTypeAdministrationFormComponent } from './event-type-administration-form/event-type-administration-form.component';
 
 @Component({
@@ -29,6 +30,7 @@ export class EventTypeAdministrationComponent implements OnInit, AfterViewInit {
   eventTypes$: Observable<EventTypeDto[]> | null = null;
 
   private eventTypeService = inject(EventTypeService);
+  private successMessageService = inject(SuccessMessageService);
 
   @ViewChild(MatSort) sort: MatSort | null = null;
 
@@ -58,8 +60,8 @@ export class EventTypeAdministrationComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().pipe(
       filter(result => !!result),
       switchMap(formValue => eventType
-        ? this.eventTypeService.update(eventType.id, formValue)
-        : this.eventTypeService.create(formValue)
+        ? this.eventTypeService.update(eventType.id, formValue).pipe(tap(() => this.successMessageService.showSuccess(`Ereignis "${eventType.description}" aktualisiert`)))
+        : this.eventTypeService.create(formValue).pipe(tap(() => this.successMessageService.showSuccess(`Ereignis "${formValue.description}" erstellt`)))
       ),
       tap(() => this.loadList()),
     ).subscribe();
@@ -76,6 +78,7 @@ export class EventTypeAdministrationComponent implements OnInit, AfterViewInit {
       filter(result => !!result),
       switchMap(() => this.eventTypeService.remove(id)),
       tap(() => this.loadList()),
+      tap(() => this.successMessageService.showSuccess(`Ereignis "${name}" gelöscht`)),
     ).subscribe();
   }
 }
