@@ -12,7 +12,8 @@
 
 export interface PlaceDto { 
     type: PlaceDto.TypeEnum;
-    location?: string;
+    hostedById?: string;
+    locationLabel?: string;
 }
 export namespace PlaceDto {
     export type TypeEnum = 'HOME' | 'AWAY' | 'REMOTE';

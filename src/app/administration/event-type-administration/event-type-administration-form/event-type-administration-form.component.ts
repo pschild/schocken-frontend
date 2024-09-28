@@ -26,6 +26,7 @@ import { ContextToLabelPipe } from '../../../shared/pipes/context-to-label.pipe'
 import { TriggerToLabelPipe } from '../../../shared/pipes/trigger-to-label.pipe';
 import ContextEnum = EventTypeDto.ContextEnum;
 import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
+import TriggerEnum = EventTypeDto.TriggerEnum;
 
 @Component({
   selector: 'hop-event-type-administration-form',
@@ -37,7 +38,7 @@ import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
 })
 export class EventTypeAdministrationFormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<EventTypeAdministrationFormComponent>);
-  data = inject(MAT_DIALOG_DATA);
+  data: { eventType?: EventTypeDto } = inject(MAT_DIALOG_DATA);
   destroyRef = inject(DestroyRef);
 
   ContextEnum = EventTypeDto.ContextEnum;
@@ -47,21 +48,21 @@ export class EventTypeAdministrationFormComponent implements OnInit {
   title: string = 'Neues Ereignis';
 
   form = new FormGroup({
-    description: new FormControl(null, Validators.required),
-    context: new FormControl(ContextEnum.Round, Validators.required),
-    hasComment: new FormControl(false),
-    hasPenalty: new FormControl(false),
-    penaltyValue: new FormControl(),
-    penaltyUnit: new FormControl(PenaltyUnitEnum.Euro),
-    multiplicatorUnit: new FormControl(),
-    trigger: new FormControl(null),
+    description: new FormControl<string | null>(null, Validators.required),
+    context: new FormControl<ContextEnum>(ContextEnum.Round, Validators.required),
+    hasComment: new FormControl<boolean>(false),
+    hasPenalty: new FormControl<boolean>(false),
+    penaltyValue: new FormControl<number | null>(null),
+    penaltyUnit: new FormControl<PenaltyUnitEnum | null>(null),
+    multiplicatorUnit: new FormControl<string | null>(null),
+    trigger: new FormControl<TriggerEnum | null>(null),
   });
 
   ngOnInit(): void {
     if (this.data.eventType) {
       this.title = 'Ereignis bearbeiten';
       this.form.patchValue(this.data.eventType);
-      this.form.controls.hasPenalty.patchValue(this.data.eventType.penaltyValue && this.data.eventType.penaltyUnit);
+      this.form.controls.hasPenalty.patchValue(typeof this.data.eventType.penaltyValue !== 'undefined' && !!this.data.eventType.penaltyUnit);
     }
 
     this.form.controls.hasPenalty.valueChanges.pipe(
@@ -71,14 +72,14 @@ export class EventTypeAdministrationFormComponent implements OnInit {
       const penaltyUnitControl = this.form.controls.penaltyUnit;
       const multiplicatorUnitControl = this.form.controls.multiplicatorUnit;
       if (checked) {
-        penaltyValueControl.setValidators(Validators.required);
+        penaltyValueControl.setValidators([Validators.required, Validators.min(0)]);
         penaltyUnitControl.setValidators(Validators.required);
       } else {
         penaltyValueControl.clearValidators();
         penaltyUnitControl.clearValidators();
 
         penaltyValueControl.reset();
-        penaltyUnitControl.reset(PenaltyUnitEnum.Euro);
+        penaltyUnitControl.reset();
         multiplicatorUnitControl.reset();
       }
       penaltyValueControl.updateValueAndValidity();
@@ -87,7 +88,14 @@ export class EventTypeAdministrationFormComponent implements OnInit {
   }
 
   save(): void {
-    this.dialogRef.close(this.form.value);
+    this.dialogRef.close({
+      context: this.form.value.context,
+      description: this.form.value.description,
+      trigger: this.form.value.trigger || null, // undefined would mean that the property is not sent to server and so cannot be reset, once it's set!
+      hasComment: this.form.value.hasComment,
+      multiplicatorUnit: this.form.value.multiplicatorUnit,
+      penalty: { penaltyValue: this.form.value.penaltyValue, penaltyUnit: this.form.value.penaltyUnit },
+    });
   }
 
 }

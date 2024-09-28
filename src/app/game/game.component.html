@@ -1,1 +1,56 @@
-<p>game works!</p>
+@if (game$ | async; as game) {
+  <h3>Spiel vom {{game.datetime | date:'dd.MM.yyyy'}}</h3>
+
+  <div>
+    <mat-icon>place</mat-icon>
+    @if (game.place.type === PlaceTypeEnum.Home) {
+      bei {{game.place.locationLabel}}
+    } @else if (game.place.type === PlaceTypeEnum.Away) {
+      {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
+    } @else {
+      {{game.place.type | placeTypeToLabel}}
+    }
+
+    @if (game.excludeFromStatistics) {
+      <mat-icon>visibility_off</mat-icon>
+      taucht nicht in der Statistik auf
+    }
+  </div>
+
+  @if (!game.completed) {
+    <button mat-flat-button>
+      Spiel abschließen
+    </button>
+  }
+
+  <button mat-icon-button (click)="openGameDetailsDialog(game)">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <mat-stepper orientation="vertical" #stepper>
+    <ng-template matStepperIcon="edit" let-index="index">
+      <span *ngIf="index > 0">{{index}}</span>
+      <mat-icon *ngIf="index === 0">gavel</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="number" let-index="index">
+      <span *ngIf="index > 0">{{index}}</span>
+      <mat-icon *ngIf="index === 0">gavel</mat-icon>
+    </ng-template>
+
+    <mat-step>
+      <p>{{game.events | json}}</p>
+    </mat-step>
+
+    @for (round of game.rounds; track round.id) {
+      <mat-step>
+        <p>{{round.datetime}}</p>
+      </mat-step>
+    }
+  </mat-stepper>
+
+  @if (!game.completed) {
+    <button mat-flat-button>
+      Spiel abschließen
+    </button>
+  }
+}

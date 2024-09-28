@@ -11,8 +11,8 @@
 
 
 export interface CreatePenaltyDto { 
-    penaltyValue: number;
-    penaltyUnit: CreatePenaltyDto.PenaltyUnitEnum;
+    penaltyValue?: number;
+    penaltyUnit?: CreatePenaltyDto.PenaltyUnitEnum;
 }
 export namespace CreatePenaltyDto {
     export type PenaltyUnitEnum = 'EURO' | 'BEER_CRATE';

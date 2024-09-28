@@ -20,6 +20,6 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './error-dialog.component.scss'
 })
 export class ErrorDialogComponent {
-  data = inject(MAT_DIALOG_DATA);
+  data:  { message: string; userMessage: string; } = inject(MAT_DIALOG_DATA);
   now = new Date();
 }

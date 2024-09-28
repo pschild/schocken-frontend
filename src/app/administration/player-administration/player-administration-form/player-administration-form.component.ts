@@ -12,6 +12,7 @@ import {
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { PlayerDto } from '../../../api/openapi';
 
 @Component({
   selector: 'hop-player-administration-form',
@@ -23,13 +24,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 })
 export class PlayerAdministrationFormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<PlayerAdministrationFormComponent>);
-  data = inject(MAT_DIALOG_DATA);
+  data: { player?: PlayerDto } = inject(MAT_DIALOG_DATA);
 
   title: string = 'Neuer Spieler';
 
   form = new FormGroup({
-    name: new FormControl(null, Validators.required),
-    active: new FormControl(true),
+    name: new FormControl<string | null>(null, Validators.required),
+    active: new FormControl<boolean>(true),
   });
 
   ngOnInit(): void {
@@ -40,6 +41,9 @@ export class PlayerAdministrationFormComponent implements OnInit {
   }
 
   save(): void {
-    this.dialogRef.close(this.form.value);
+    this.dialogRef.close({
+      name: this.form.value.name,
+      active: this.form.value.active,
+    });
   }
 }

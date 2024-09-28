@@ -25,9 +25,9 @@
                 }
                 <strong>{{ game.datetime | date:'dd.MM.yyyy' }}</strong>
                 @if (game.place.type === 'HOME') {
-                  <span>&nbsp;bei {{game.place.location}}</span>
+                  <span>&nbsp;bei {{game.place.locationLabel}}</span>
                 } @else if (game.place.type === 'AWAY') {
-                  <span>&nbsp;auswärts ({{game.place.location}})</span>
+                  <span>&nbsp;auswärts ({{game.place.locationLabel}})</span>
                 } @else {
                   <span>&nbsp;Remote</span>
                 }

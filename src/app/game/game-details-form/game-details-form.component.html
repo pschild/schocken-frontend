@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field class="full-width">
+      <mat-label>Ort</mat-label>
+      <mat-select formControlName="type">
+        <mat-option>bitte wählen</mat-option>
+        @for (type of placeTypes; track type) {
+          <mat-option [value]="type">{{ type | placeTypeToLabel }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (form.value.type === PlaceType.Home) {
+      <mat-form-field class="full-width">
+        <mat-label>bei</mat-label>
+        <mat-select formControlName="hostedById">
+          <mat-option>bitte wählen</mat-option>
+          @for (player of data.activePlayers; track player.id) {
+            <mat-option [value]="player.id">{{ player.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    @if (form.value.type === PlaceType.Away) {
+      <mat-form-field class="full-width">
+        <mat-label>Wo genau?</mat-label>
+        <input matInput formControlName="placeOfAwayGame">
+      </mat-form-field>
+    }
+
+    <div>
+      <mat-slide-toggle formControlName="excludeFromStatistics">aus Statistiken ausschließen</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-flat-button [disabled]="!form.valid" (click)="save()">{{confirmButtonLabel}}</button>
+</mat-dialog-actions>

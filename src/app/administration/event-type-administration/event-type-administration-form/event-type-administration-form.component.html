@@ -28,6 +28,7 @@
         <mat-form-field class="half-width">
           <mat-label>Einheit der Strafe</mat-label>
           <mat-select formControlName="penaltyUnit">
+            <mat-option>bitte wählen</mat-option>
             <mat-option [value]="PenaltyUnitEnum.Euro">€</mat-option>
             <mat-option [value]="PenaltyUnitEnum.BeerCrate">Bierkiste(n)</mat-option>
           </mat-select>
@@ -73,7 +74,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      @for (revision of data.eventType.revisions; track revision.id) {
+      @for (revision of data.eventType!.revisions; track revision.id) {
         <div>
           <div>Name: {{ revision.description }}</div>
           @if (revision.penaltyValue && revision.penaltyUnit) {
