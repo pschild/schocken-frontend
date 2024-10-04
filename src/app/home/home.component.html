@@ -32,18 +32,23 @@
                   <span>&nbsp;Remote</span>
                 }
               </div>
-              <div>
-                @if (game.roundCount === 1) {
-                  <span>1 Runde</span>
-                } @else {
-                  <span>{{game.roundCount}} Runden</span>
-                }
-                <span>&nbsp;•&nbsp;</span>
-                @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
-                  @if (idx > 0) {
-                    <span>/</span>
+              <div class="game-detail-info-container">
+                <div class="game-detail-info-item">
+                  @if (game.roundCount === 1) {
+                    <span>1 Runde</span>
+                  } @else {
+                    <span>{{game.roundCount}} Runden</span>
                   }
-                  <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                </div>
+                @if (game.penalties.length) {
+                  <div class="game-detail-info-item">
+                    @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
+                      @if (idx > 0) {
+                        <span>/</span>
+                      }
+                      <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                    }
+                  </div>
                 }
               </div>
             </div>

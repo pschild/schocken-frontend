@@ -3,12 +3,15 @@ README.md
 api.module.ts
 api/api.ts
 api/event.service.ts
+api/eventDetails.service.ts
 api/eventType.service.ts
 api/eventTypeOverview.service.ts
 api/game.service.ts
+api/gameDetails.service.ts
 api/gameOverview.service.ts
 api/player.service.ts
 api/round.service.ts
+api/roundDetails.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -29,6 +32,7 @@ model/eventTypeDto.ts
 model/eventTypeOverviewDto.ts
 model/eventTypeRevisionDto.ts
 model/gameDetailDto.ts
+model/gameDetailFullDto.ts
 model/gameDto.ts
 model/gameOverviewDto.ts
 model/models.ts

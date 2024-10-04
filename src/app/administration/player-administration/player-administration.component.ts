@@ -35,7 +35,7 @@ export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
   readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
-    this.players$ = this.playerService.findAll(false);
+    this.players$ = this.playerService.findAll();
     this.loadList();
   }
 

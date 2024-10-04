@@ -13,6 +13,7 @@ import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { PlayerDto } from '../../../api/openapi';
+import { undefinedToNull } from '../../../dialog/dialog.utils';
 
 @Component({
   selector: 'hop-player-administration-form',
@@ -41,9 +42,6 @@ export class PlayerAdministrationFormComponent implements OnInit {
   }
 
   save(): void {
-    this.dialogRef.close({
-      name: this.form.value.name,
-      active: this.form.value.active,
-    });
+    this.dialogRef.close(undefinedToNull(this.form.value));
   }
 }

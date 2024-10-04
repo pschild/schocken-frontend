@@ -20,6 +20,8 @@ export interface EventDetailDto {
     comment: string;
     context: EventDetailDto.ContextEnum;
     playerId: string;
+    gameId?: string;
+    roundId?: string;
     eventType: EventTypeDetailDto;
 }
 export namespace EventDetailDto {

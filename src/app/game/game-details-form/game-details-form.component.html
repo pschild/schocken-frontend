@@ -16,7 +16,7 @@
         <mat-label>bei</mat-label>
         <mat-select formControlName="hostedById">
           <mat-option>bitte wählen</mat-option>
-          @for (player of data.activePlayers; track player.id) {
+          @for (player of activePlayers; track player.id) {
             <mat-option [value]="player.id">{{ player.name }}</mat-option>
           }
         </mat-select>
@@ -31,7 +31,7 @@
     }
 
     <div>
-      <mat-slide-toggle formControlName="excludeFromStatistics">aus Statistiken ausschließen</mat-slide-toggle>
+      <mat-slide-toggle formControlName="excludeFromStatistics">ohne Wertung</mat-slide-toggle>
     </div>
   </form>
 </mat-dialog-content>

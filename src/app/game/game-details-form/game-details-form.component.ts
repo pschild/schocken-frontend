@@ -16,6 +16,7 @@ import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { CreateGameDto, GameDetailDto, PlayerDto } from '../../api/openapi';
+import { undefinedToNull } from '../../dialog/dialog.utils';
 import { PlaceTypeToLabelPipe } from '../../shared/pipes/place-type-to-label.pipe';
 import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
 
@@ -49,13 +50,15 @@ export class GameDetailsFormComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   readonly dialogRef = inject(MatDialogRef<GameDetailsFormComponent>);
-  data: { gameDetails?: GameDetailDto; activePlayers: PlayerDto[] } = inject(MAT_DIALOG_DATA);
+  data: { gameDetails?: GameDetailDto; players: PlayerDto[] } = inject(MAT_DIALOG_DATA);
 
   title: string = 'Neues Spiel';
   confirmButtonLabel: string = 'Weiter';
 
   PlaceType = CreateGameDto.PlaceTypeEnum;
   placeTypes: string[] = Object.values(CreateGameDto.PlaceTypeEnum);
+
+  activePlayers: PlayerDto[] = [];
 
   form = new FormGroup({
     type: new FormControl<PlaceTypeEnum | null>(null, Validators.required),
@@ -75,6 +78,8 @@ export class GameDetailsFormComponent implements OnInit {
         excludeFromStatistics: this.data.gameDetails.excludeFromStatistics
       });
     }
+
+    this.activePlayers = this.data.players.filter(player => player.active && !player.isDeleted);
 
     this.form.controls.type.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -104,12 +109,7 @@ export class GameDetailsFormComponent implements OnInit {
   }
 
   save(): void {
-    this.dialogRef.close({
-      type: this.form.value.type,
-      hostedById: this.form.value.hostedById,
-      placeOfAwayGame: this.form.value.placeOfAwayGame,
-      excludeFromStatistics: this.form.value.excludeFromStatistics,
-    });
+    this.dialogRef.close(undefinedToNull(this.form.value));
   }
 
 }

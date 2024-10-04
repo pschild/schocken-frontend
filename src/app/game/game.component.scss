@@ -1,0 +1,17 @@
+.game-info-container {
+  display: flex;
+
+  .game-info-item {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-of-type):after {
+      content: "•";
+      padding: 0 10px;
+    }
+  }
+
+  button {
+    margin-left: 10px;
+  }
+}

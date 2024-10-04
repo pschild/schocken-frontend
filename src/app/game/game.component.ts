@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, switchMap, tap } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { CreateGameDto, GameDetailDto, GameService, PlayerService } from '../api/openapi';
+import { Observable } from 'rxjs';
+import { CreateGameDto, EventDetailDto, GameDetailDto, RoundDetailDto } from '../api/openapi';
 import { PlaceTypeToLabelPipe } from '../shared/pipes/place-type-to-label.pipe';
 import { SuccessMessageService } from '../shared/success-message.service';
-import { GameDetailsFormComponent } from './game-details-form/game-details-form.component';
+import { GameState } from './game.state';
 import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
 
 @Component({
@@ -33,37 +33,26 @@ import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
 export class GameComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
+  readonly destroyRef = inject(DestroyRef);
 
   PlaceTypeEnum = PlaceTypeEnum;
 
-  game$: Observable<GameDetailDto> | null = null;
-
+  private state = inject(GameState);
   private route = inject(ActivatedRoute);
-  private gameService = inject(GameService);
-  private playerService = inject(PlayerService);
   private successMessageService = inject(SuccessMessageService);
 
+  gameDetails$: Observable<GameDetailDto | null> = this.state.gameDetails$;
+  rounds$: Observable<RoundDetailDto[]> = this.state.rounds$;
+  gameEvents$: Observable<EventDetailDto[]> = this.state.gameEvents$;
+  roundEvents$: Observable<EventDetailDto[]> = this.state.roundEvents$;
+  roundEventsByRound$: (roundId: string) => Observable<EventDetailDto[]> = this.state.roundEventsByRound$;
+  roundsWithEvents$: Observable<(RoundDetailDto & { events: EventDetailDto[] })[]> = this.state.roundsWithEvents$;
+
   ngOnInit() {
-    this.game$ = this.route.params.pipe(
-      switchMap(({ id }) => this.gameService.getDetails(id)),
-    );
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ id }) => this.state.init(id));
   }
 
-  openGameDetailsDialog(gameDetails: GameDetailDto): void {
-    this.playerService.findAll(true).pipe(
-      switchMap(activePlayers => {
-        return this.dialog.open(GameDetailsFormComponent, {
-          minWidth: 500,
-          height: '350px',
-          data: {
-            gameDetails,
-            activePlayers,
-          }
-        }).afterClosed();
-      }),
-      filter(result => !!result),
-      switchMap(({ type, hostedById, placeOfAwayGame, excludeFromStatistics }) => this.gameService.update(gameDetails.id, { placeType: type, hostedById, placeOfAwayGame, excludeFromStatistics })),
-      tap(() => this.successMessageService.showSuccess(`Spiel aktualisiert`)),
-    ).subscribe();
+  openGameDetailsDialog(): void {
+    this.state.openGameDetailsDialog();
   }
 }

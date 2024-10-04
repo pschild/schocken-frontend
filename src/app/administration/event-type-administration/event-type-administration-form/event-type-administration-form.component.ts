@@ -21,6 +21,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { EventTypeDto } from '../../../api/openapi';
+import { undefinedToNull } from '../../../dialog/dialog.utils';
 import { PenaltyWithUnitComponent } from '../../../shared/penalty-with-unit/penalty-with-unit.component';
 import { ContextToLabelPipe } from '../../../shared/pipes/context-to-label.pipe';
 import { TriggerToLabelPipe } from '../../../shared/pipes/trigger-to-label.pipe';
@@ -88,14 +89,7 @@ export class EventTypeAdministrationFormComponent implements OnInit {
   }
 
   save(): void {
-    this.dialogRef.close({
-      context: this.form.value.context,
-      description: this.form.value.description,
-      trigger: this.form.value.trigger || null, // undefined would mean that the property is not sent to server and so cannot be reset, once it's set!
-      hasComment: this.form.value.hasComment,
-      multiplicatorUnit: this.form.value.multiplicatorUnit,
-      penalty: { penaltyValue: this.form.value.penaltyValue, penaltyUnit: this.form.value.penaltyUnit },
-    });
+    this.dialogRef.close(undefinedToNull(this.form.value));
   }
 
 }

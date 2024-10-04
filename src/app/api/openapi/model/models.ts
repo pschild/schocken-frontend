@@ -14,6 +14,7 @@ export * from './eventTypeDto';
 export * from './eventTypeOverviewDto';
 export * from './eventTypeRevisionDto';
 export * from './gameDetailDto';
+export * from './gameDetailFullDto';
 export * from './gameDto';
 export * from './gameOverviewDto';
 export * from './penaltyDto';

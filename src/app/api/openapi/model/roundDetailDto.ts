@@ -8,8 +8,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PenaltyDto } from './penaltyDto';
-import { EventDetailDto } from './eventDetailDto';
 
 
 export interface RoundDetailDto { 
@@ -17,9 +15,6 @@ export interface RoundDetailDto {
     datetime: string;
     attendees: Array<string>;
     finalists: Array<string>;
-    events: Array<EventDetailDto>;
-    penalties: Array<PenaltyDto>;
-    schockAusCount: number;
     hasFinal: boolean;
 }
 

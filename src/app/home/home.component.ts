@@ -52,13 +52,13 @@ export class HomeComponent implements OnInit {
   }
 
   createNewGame(): void {
-    this.playerService.findAll(true).pipe(
-      switchMap(activePlayers => {
+    this.playerService.findAll().pipe(
+      switchMap(players => {
         return this.dialog.open(GameDetailsFormComponent, {
           minWidth: 500,
           height: '350px',
           data: {
-            activePlayers,
+            players,
           }
         }).afterClosed();
       }),

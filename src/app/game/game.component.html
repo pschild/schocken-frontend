@@ -1,31 +1,41 @@
-@if (game$ | async; as game) {
-  <h3>Spiel vom {{game.datetime | date:'dd.MM.yyyy'}}</h3>
+@if (gameDetails$ | async; as game) {
+  <h3>Spielübersicht</h3>
+  <div class="game-info-container">
+    <div class="game-info-item">
+      <mat-icon>today</mat-icon>
+      {{game.datetime | date:'dd.MM.yyyy'}}
+    </div>
 
-  <div>
-    <mat-icon>place</mat-icon>
-    @if (game.place.type === PlaceTypeEnum.Home) {
-      bei {{game.place.locationLabel}}
-    } @else if (game.place.type === PlaceTypeEnum.Away) {
-      {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
-    } @else {
-      {{game.place.type | placeTypeToLabel}}
-    }
+    <div class="game-info-item">
+      <mat-icon>place</mat-icon>
+      @if (game.place.type === PlaceTypeEnum.Home) {
+        bei {{game.place.locationLabel}}
+      } @else if (game.place.type === PlaceTypeEnum.Away) {
+        {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
+      } @else {
+        {{game.place.type | placeTypeToLabel}}
+      }
+    </div>
 
     @if (game.excludeFromStatistics) {
-      <mat-icon>visibility_off</mat-icon>
-      taucht nicht in der Statistik auf
+      <div class="game-info-item">
+        <mat-icon>visibility_off</mat-icon>
+        ohne Wertung
+      </div>
     }
+
+    <button mat-stroked-button (click)="openGameDetailsDialog()">
+      <mat-icon>edit</mat-icon>
+      bearbeiten
+    </button>
   </div>
 
   @if (!game.completed) {
     <button mat-flat-button>
+      <mat-icon>check</mat-icon>
       Spiel abschließen
     </button>
   }
-
-  <button mat-icon-button (click)="openGameDetailsDialog(game)">
-    <mat-icon>edit</mat-icon>
-  </button>
 
   <mat-stepper orientation="vertical" #stepper>
     <ng-template matStepperIcon="edit" let-index="index">
@@ -38,18 +48,22 @@
     </ng-template>
 
     <mat-step>
-      <p>{{game.events | json}}</p>
+      @if (gameEvents$ | async; as gameEvents) {
+        <p>{{gameEvents | json}}</p>
+      }
     </mat-step>
 
-    @for (round of game.rounds; track round.id) {
+    @for (round of roundsWithEvents$ | async; track round.id) {
       <mat-step>
         <p>{{round.datetime}}</p>
+        <div>{{round.events | json}}</div>
       </mat-step>
     }
   </mat-stepper>
 
   @if (!game.completed) {
     <button mat-flat-button>
+      <mat-icon>check</mat-icon>
       Spiel abschließen
     </button>
   }
