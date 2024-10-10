@@ -15,3 +15,13 @@
     margin-left: 10px;
   }
 }
+
+.round-marker-list {
+  mat-icon:not(:first-child) {
+    padding-left: 10px;
+  }
+}
+
+.penalty-sum-container {
+  text-align: right;
+}

@@ -3,7 +3,6 @@ README.md
 api.module.ts
 api/api.ts
 api/event.service.ts
-api/eventDetails.service.ts
 api/eventType.service.ts
 api/eventTypeOverview.service.ts
 api/game.service.ts
@@ -44,6 +43,7 @@ model/roundDto.ts
 model/updateAttendanceDto.ts
 model/updateEventDto.ts
 model/updateEventTypeDto.ts
+model/updateFinalistsDto.ts
 model/updateGameDto.ts
 model/updatePlayerDto.ts
 model/updateRoundDto.ts

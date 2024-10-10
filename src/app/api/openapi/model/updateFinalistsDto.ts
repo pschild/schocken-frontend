@@ -8,16 +8,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EventDetailDto } from './eventDetailDto';
-import { PlaceDto } from './placeDto';
 
 
-export interface GameDetailDto { 
-    id: string;
-    datetime: string;
-    completed: boolean;
-    excludeFromStatistics: boolean;
-    place: PlaceDto;
-    events: Array<EventDetailDto>;
+export interface UpdateFinalistsDto { 
+    playerIds: Array<string>;
 }
 

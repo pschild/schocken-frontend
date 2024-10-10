@@ -25,6 +25,7 @@ export * from './roundDto';
 export * from './updateAttendanceDto';
 export * from './updateEventDto';
 export * from './updateEventTypeDto';
+export * from './updateFinalistsDto';
 export * from './updateGameDto';
 export * from './updatePlayerDto';
 export * from './updateRoundDto';

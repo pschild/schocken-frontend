@@ -31,7 +31,7 @@
   </div>
 
   @if (!game.completed) {
-    <button mat-flat-button>
+    <button mat-flat-button (click)="celebrate($event)">
       <mat-icon>check</mat-icon>
       Spiel abschließen
     </button>
@@ -48,15 +48,51 @@
     </ng-template>
 
     <mat-step>
-      @if (gameEvents$ | async; as gameEvents) {
-        <p>{{gameEvents | json}}</p>
-      }
+      <ng-template matStepLabel>
+        <div>
+          Feststellungen
+        </div>
+        <div class="penalty-sum-container">
+          42,00 €
+        </div>
+      </ng-template>
+      <hop-event-list
+        [context]="Context.Game"
+        [players]="(playersForGameEvents$ | async) || []"
+        [events]="game.events"
+        [disabled]="game.completed"
+        (onEventRemove)="handleEventRemove($event)"
+      ></hop-event-list>
     </mat-step>
 
-    @for (round of roundsWithEvents$ | async; track round.id) {
-      <mat-step>
-        <p>{{round.datetime}}</p>
-        <div>{{round.events | json}}</div>
+    @for (round of rounds$ | async; track round.id) {
+      <mat-step completed="true">
+        <ng-template matStepLabel>
+          <div class="round-marker-list">
+            @if (round.hasFinal) {
+              <mat-icon>sports_score</mat-icon>
+            }
+            @if (round.schockAusCount > 0) {
+              <mat-icon style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
+            }
+          </div>
+          <div class="penalty-sum-container">
+            @if (round.penalties && round.penalties.length) {
+              @for (penalty of round.penalties; track penalty.unit) {
+                <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+              }
+            } @else {
+              <span>-</span>
+            }
+          </div>
+        </ng-template>
+        <hop-round
+          [round]="round"
+          [players]="(players$ | async) || []"
+          [disabled]="game.completed"
+          (onRoundRemove)="handleRoundRemove($event)"
+          (onFinalistsChange)="handleFinalistsChange($event)"
+        ></hop-round>
       </mat-step>
     }
   </mat-stepper>

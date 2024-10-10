@@ -2,16 +2,19 @@ import { registerLocaleData } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import {
+  APP_INITIALIZER,
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,
   ErrorHandler,
-  importProvidersFrom,
+  importProvidersFrom, inject,
   LOCALE_ID,
   provideZoneChangeDetection
 } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MatIconRegistry } from '@angular/material/icon';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { DomSanitizer } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { ApiModule as NgOpenapiGenApiModule } from './api/ng-openapi-gen/api.module';
@@ -32,6 +35,17 @@ export const appConfig: ApplicationConfig = {
       OpenApiModule.forRoot(() => new Configuration({basePath: 'http://localhost:3000'}))
     ),
     provideAnimationsAsync(),
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: () => {
+        const iconRegistry = inject(MatIconRegistry);
+        const sanitizer = inject(DomSanitizer);
+        return () => {
+          iconRegistry.addSvgIcon('schock_aus', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/schock-aus.svg'));
+        };
+      },
+    },
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: {autoFocus: 'dialog'}

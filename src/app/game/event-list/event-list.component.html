@@ -1,0 +1,41 @@
+<table>
+  @for (player of players(); track player.id) {
+    <tr>
+      <td>
+        @if (context() === Context.Game) {
+          <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
+        } @else {
+<!--          <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled()">-->
+          <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)">
+            <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
+          </mat-checkbox>
+        }
+      </td>
+      <td>
+<!--        @if (!disabled()) {-->
+          <!--<button mat-icon-button>
+            <mat-icon>add</mat-icon>
+          </button>-->
+          <button mat-mini-fab (click)="openAddEventDialog(player)">
+            <mat-icon>add</mat-icon>
+          </button>
+<!--        }-->
+      </td>
+      <td>
+        @for (event of events() | eventsByPlayerId:player.id; track event.id) {
+          <div>
+            <span>{{ event.eventType.description }}</span>
+<!--            @if (!disabled()) {-->
+              <button mat-icon-button (click)="removeEvent(event.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+<!--            }-->
+            @if (event.calculatedPenalty.sum) {
+              <hop-penalty-with-unit [unit]="event.calculatedPenalty.unit" [penalty]="event.calculatedPenalty.sum"></hop-penalty-with-unit>
+            }
+          </div>
+        }
+      </td>
+    </tr>
+  }
+</table>

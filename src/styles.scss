@@ -70,3 +70,19 @@ mat-form-field {
     width: 50%;
   }
 }
+
+hop-game {
+  .mat-step-label {
+    width: 100%;
+
+    .mat-step-text-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .mat-badge-content {
+    --mat-badge-large-size-container-overlap-offset: -10px;
+  }
+}

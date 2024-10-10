@@ -8,6 +8,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PenaltyDto } from './penaltyDto';
 import { EventTypeDetailDto } from './eventTypeDetailDto';
 
 
@@ -17,6 +18,7 @@ export interface EventDetailDto {
     multiplicatorValue: number;
     penaltyValue?: number;
     penaltyUnit?: EventDetailDto.PenaltyUnitEnum;
+    calculatedPenalty: PenaltyDto;
     comment: string;
     context: EventDetailDto.ContextEnum;
     playerId: string;
