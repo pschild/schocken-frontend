@@ -3,7 +3,7 @@
   <form [formGroup]="form">
     <mat-form-field class="full-width">
       <mat-label>Ort</mat-label>
-      <mat-select formControlName="type">
+      <mat-select formControlName="placeType">
         <mat-option>bitte wählen</mat-option>
         @for (type of placeTypes; track type) {
           <mat-option [value]="type">{{ type | placeTypeToLabel }}</mat-option>
@@ -11,7 +11,7 @@
       </mat-select>
     </mat-form-field>
 
-    @if (form.value.type === PlaceType.Home) {
+    @if (form.value.placeType === PlaceType.Home) {
       <mat-form-field class="full-width">
         <mat-label>bei</mat-label>
         <mat-select formControlName="hostedById">
@@ -23,7 +23,7 @@
       </mat-form-field>
     }
 
-    @if (form.value.type === PlaceType.Away) {
+    @if (form.value.placeType === PlaceType.Away) {
       <mat-form-field class="full-width">
         <mat-label>Wo genau?</mat-label>
         <input matInput formControlName="placeOfAwayGame">
@@ -32,6 +32,10 @@
 
     <div>
       <mat-slide-toggle formControlName="excludeFromStatistics">ohne Wertung</mat-slide-toggle>
+    </div>
+
+    <div>
+      <mat-slide-toggle formControlName="completed">abgeschlossen</mat-slide-toggle>
     </div>
   </form>
 </mat-dialog-content>

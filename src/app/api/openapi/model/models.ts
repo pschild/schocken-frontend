@@ -1,4 +1,6 @@
 export * from './celebrationDto';
+export * from './createDetailEventResponse';
+export * from './createDetailRoundResponse';
 export * from './createEventDto';
 export * from './createEventResponse';
 export * from './createEventTypeDto';

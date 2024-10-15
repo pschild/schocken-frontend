@@ -1,4 +1,45 @@
+.event-table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+  white-space: nowrap;
+
+  tr {
+    vertical-align: top;
+    height: 50px;
+
+    &:nth-child(even) {
+      background-color: #eff2e5;
+    }
+
+    td:first-child {
+      width: 150px;
+      padding-left: 5px;
+      vertical-align: top;
+      line-height: 40px;
+    }
+
+    td:nth-child(2) {
+      font-size: 12px;
+      vertical-align: top;
+      line-height: 40px;
+    }
+
+    td:last-child {
+      width: 90px;
+      text-align: right;
+      padding-right: 5px;
+      vertical-align: top;
+      line-height: 40px;
+    }
+  }
+}
+
 .inactive {
   color: #999;
   text-decoration: line-through;
+}
+
+mat-checkbox {
+  --mat-checkbox-disabled-label-color: --mat-checkbox-label-text-color;
 }

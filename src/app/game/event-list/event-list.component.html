@@ -1,37 +1,36 @@
-<table>
+<table class="event-table">
   @for (player of players(); track player.id) {
     <tr>
       <td>
         @if (context() === Context.Game) {
           <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
         } @else {
-<!--          <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled()">-->
-          <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)">
+          <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled()">
             <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
           </mat-checkbox>
         }
       </td>
       <td>
-<!--        @if (!disabled()) {-->
-          <!--<button mat-icon-button>
+        @if (!this.disabled()) {
+          <!--<button mat-mini-fab (click)="openAddEventDialog(player)">
             <mat-icon>add</mat-icon>
           </button>-->
-          <button mat-mini-fab (click)="openAddEventDialog(player)">
+          <button mat-icon-button class="hop-icon-button primary" (click)="openAddEventDialog(player)">
             <mat-icon>add</mat-icon>
           </button>
-<!--        }-->
+        }
       </td>
       <td>
         @for (event of events() | eventsByPlayerId:player.id; track event.id) {
           <div>
-            <span>{{ event.eventType.description }}</span>
-<!--            @if (!disabled()) {-->
-              <button mat-icon-button (click)="removeEvent(event.id)">
-                <mat-icon>delete</mat-icon>
-              </button>
-<!--            }-->
+            <span style="font-size: smaller">{{ event.eventType.description }}</span>
             @if (event.calculatedPenalty.sum) {
               <hop-penalty-with-unit [unit]="event.calculatedPenalty.unit" [penalty]="event.calculatedPenalty.sum"></hop-penalty-with-unit>
+            }
+            @if (!disabled()) {
+              <button mat-icon-button class="hop-icon-button danger" (click)="removeEvent(event.id)">
+                <mat-icon>close</mat-icon>
+              </button>
             }
           </div>
         }

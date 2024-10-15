@@ -17,6 +17,7 @@ export interface EventTypeOverviewDto {
     penaltyValue?: number;
     penaltyUnit?: EventTypeOverviewDto.PenaltyUnitEnum;
     multiplicatorUnit?: string;
+    hasComment: boolean;
     eventCount?: number;
 }
 export namespace EventTypeOverviewDto {

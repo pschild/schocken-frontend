@@ -30,13 +30,6 @@
     </button>
   </div>
 
-  @if (!game.completed) {
-    <button mat-flat-button (click)="celebrate($event)">
-      <mat-icon>check</mat-icon>
-      Spiel abschließen
-    </button>
-  }
-
   <mat-stepper orientation="vertical" #stepper>
     <ng-template matStepperIcon="edit" let-index="index">
       <span *ngIf="index > 0">{{index}}</span>
@@ -53,16 +46,25 @@
           Feststellungen
         </div>
         <div class="penalty-sum-container">
-          42,00 €
+          @if (game.penalties && game.penalties.length) {
+            @for (penalty of game.penalties; track penalty.unit) {
+              <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+            }
+          } @else {
+            <span>-</span>
+          }
         </div>
       </ng-template>
-      <hop-event-list
-        [context]="Context.Game"
-        [players]="(playersForGameEvents$ | async) || []"
-        [events]="game.events"
-        [disabled]="game.completed"
-        (onEventRemove)="handleEventRemove($event)"
-      ></hop-event-list>
+      <ng-template matStepContent>
+        <hop-event-list
+          [context]="Context.Game"
+          [players]="(playersForGameEvents$ | async) || []"
+          [events]="game.events"
+          [disabled]="game.completed"
+          (onEventAdd)="handleGameEventAdd($event)"
+          (onEventRemove)="handleGameEventRemove($event)"
+        ></hop-event-list>
+      </ng-template>
     </mat-step>
 
     @for (round of rounds$ | async; track round.id) {
@@ -73,7 +75,7 @@
               <mat-icon>sports_score</mat-icon>
             }
             @if (round.schockAusCount > 0) {
-              <mat-icon style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
+              <mat-icon aria-hidden="false" style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
             }
           </div>
           <div class="penalty-sum-container">
@@ -86,21 +88,34 @@
             }
           </div>
         </ng-template>
-        <hop-round
-          [round]="round"
-          [players]="(players$ | async) || []"
-          [disabled]="game.completed"
-          (onRoundRemove)="handleRoundRemove($event)"
-          (onFinalistsChange)="handleFinalistsChange($event)"
-        ></hop-round>
+        <ng-template matStepContent>
+          <hop-round
+            [round]="round"
+            [players]="(players$ | async) || []"
+            [activePlayers]="(activePlayers$ | async) || []"
+            [disabled]="game.completed"
+            (onEventAdd)="handleRoundEventAdd($event)"
+            (onEventRemove)="handleRoundEventRemove($event)"
+            (onRoundRemove)="handleRoundRemove($event)"
+            (onFinalistsChange)="handleFinalistsChange($event)"
+            (onAttendanceChange)="handleAttendanceChange($event)"
+          ></hop-round>
+        </ng-template>
       </mat-step>
     }
   </mat-stepper>
 
   @if (!game.completed) {
-    <button mat-flat-button>
-      <mat-icon>check</mat-icon>
-      Spiel abschließen
+    <button mat-flat-button (click)="startNewRound()">
+      <mat-icon>add</mat-icon>
+      Neue Runde
     </button>
+
+    <div>
+      <button mat-flat-button (click)="setGameCompleted($event)">
+        <mat-icon>check</mat-icon>
+        Spiel abschließen
+      </button>
+    </div>
   }
 }

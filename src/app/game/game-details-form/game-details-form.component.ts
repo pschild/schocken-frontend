@@ -61,10 +61,11 @@ export class GameDetailsFormComponent implements OnInit {
   activePlayers: PlayerDto[] = [];
 
   form = new FormGroup({
-    type: new FormControl<PlaceTypeEnum | null>(null, Validators.required),
+    placeType: new FormControl<PlaceTypeEnum | null>(null, Validators.required),
     hostedById: new FormControl<string | null>(null),
     placeOfAwayGame: new FormControl<string | null>(null),
     excludeFromStatistics: new FormControl<boolean>(false),
+    completed: new FormControl<boolean>(false),
   });
 
   ngOnInit() {
@@ -72,16 +73,17 @@ export class GameDetailsFormComponent implements OnInit {
       this.title = 'Spiel bearbeiten';
       this.confirmButtonLabel = 'Speichern';
       this.form.setValue({
-        type: this.data.gameDetails.place.type,
+        placeType: this.data.gameDetails.place.type,
         hostedById: this.data.gameDetails.place.hostedById || null,
         placeOfAwayGame: this.data.gameDetails.place.type === PlaceTypeEnum.Away ? this.data.gameDetails.place.locationLabel || null : null,
-        excludeFromStatistics: this.data.gameDetails.excludeFromStatistics
+        excludeFromStatistics: this.data.gameDetails.excludeFromStatistics,
+        completed: this.data.gameDetails.completed,
       });
     }
 
     this.activePlayers = this.data.players.filter(player => player.active && !player.isDeleted);
 
-    this.form.controls.type.valueChanges.pipe(
+    this.form.controls.placeType.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(type => {
       const hostedByIdControl = this.form.controls.hostedById;

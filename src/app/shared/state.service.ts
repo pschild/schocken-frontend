@@ -19,10 +19,15 @@ export class StateService<T> {
     );
   }
 
+  public selectSnapshot<K>(mapFn: (state: T) => K): K {
+    return mapFn(this.state$.getValue());
+  }
+
   protected setState(newState: Partial<T>): void {
     this.state$.next({
       ...this.state,
       ...structuredClone(newState), // ensure immutability
     });
   }
+
 }

@@ -1,0 +1,13 @@
+.box-container {
+  display: flex;
+
+  mat-icon {
+    flex: none;
+  }
+
+  .message {
+    padding-top: 4px;
+    padding-left: 4px;
+    font-size: smaller;
+  }
+}

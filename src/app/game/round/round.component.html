@@ -1,19 +1,18 @@
 <hop-event-list
   [context]="Context.Round"
-  [players]="attendees"
+  [players]="attendees()"
   [selectedPlayers]="round().finalists"
   [events]="round().events"
   [disabled]="disabled()"
   (onSelectionChange)="handleSelectionChange($event)"
+  (onEventAdd)="handleEventAdd($event)"
   (onEventRemove)="handleEventRemove($event)"
 ></hop-event-list>
-<!--<button mat-flat-button (click)="openEditAttendanceDialog()" [disabled]="disabled()">-->
-<button mat-stroked-button (click)="openEditAttendanceDialog()">
+<button mat-stroked-button (click)="openEditAttendanceDialog()" [disabled]="disabled()">
   <mat-icon>people</mat-icon>
   Teilnahmen anpassen
 </button>
-<!--<button mat-flat-button (click)="removeRound()" [disabled]="disabled()">-->
-<button mat-stroked-button (click)="removeRound()">
+<button mat-stroked-button (click)="removeRound()" [disabled]="disabled()">
   <mat-icon>delete</mat-icon>
   Runde löschen
 </button>

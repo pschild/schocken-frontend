@@ -8,6 +8,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PenaltyDto } from './penaltyDto';
 import { EventDetailDto } from './eventDetailDto';
 import { PlaceDto } from './placeDto';
 
@@ -19,5 +20,6 @@ export interface GameDetailDto {
     excludeFromStatistics: boolean;
     place: PlaceDto;
     events: Array<EventDetailDto>;
+    penalties: Array<PenaltyDto>;
 }
 

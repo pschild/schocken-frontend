@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>🎉Es gibt etwas zu feiern...🎉</h2>
+<mat-dialog-content>
+  <h2>{{data.celebration.label}}</h2>
+  <div class="counter">
+    <hop-odometer [countTo]="data.celebration.count"></hop-odometer>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close (click)="celebrate($event)">Prost!</button>
+</mat-dialog-actions>

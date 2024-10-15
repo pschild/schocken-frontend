@@ -8,11 +8,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CelebrationDto } from './celebrationDto';
+import { RoundDetailDto } from './roundDetailDto';
 
 
-export interface CreateRoundDto { 
-    datetime?: string;
-    gameId: string;
-    attendees?: Array<string>;
+export interface CreateDetailRoundResponse { 
+    round: RoundDetailDto;
+    celebration?: CelebrationDto;
 }
 

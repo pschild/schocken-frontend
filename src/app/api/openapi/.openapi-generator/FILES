@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/event.service.ts
+api/eventDetails.service.ts
 api/eventType.service.ts
 api/eventTypeOverview.service.ts
 api/game.service.ts
@@ -16,6 +17,8 @@ encoder.ts
 git_push.sh
 index.ts
 model/celebrationDto.ts
+model/createDetailEventResponse.ts
+model/createDetailRoundResponse.ts
 model/createEventDto.ts
 model/createEventResponse.ts
 model/createEventTypeDto.ts

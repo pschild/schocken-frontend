@@ -36,6 +36,16 @@ $schocken-frontend-theme: schockenTheme.$light-theme;
     @include mat.checkbox-color($schocken-frontend-theme, $color-variant: secondary);
   }
 
+  .hop-icon-button {
+    &.primary {
+      --mdc-icon-button-icon-color: #{mat.get-theme-color($schocken-frontend-theme, primary, 70)};
+    }
+
+    &.danger {
+      --mdc-icon-button-icon-color: #{mat.get-theme-color($schocken-frontend-theme, error, 40)};
+    }
+  }
+
   .mat-toolbar {
     --mat-toolbar-container-text-color: #{mat.get-theme-color($schocken-frontend-theme, primary, 100)};
     --mat-toolbar-container-background-color: #{mat.get-theme-color($schocken-frontend-theme, primary)};
@@ -53,6 +63,10 @@ $schocken-frontend-theme: schockenTheme.$light-theme;
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.info-text {
+  color: #888;
+}
 
 .hop-fab-button {
   position: fixed !important;

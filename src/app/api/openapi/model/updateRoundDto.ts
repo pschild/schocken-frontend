@@ -13,5 +13,6 @@
 export interface UpdateRoundDto { 
     datetime?: string;
     gameId?: string;
+    attendees?: Array<string>;
 }
 

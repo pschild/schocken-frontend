@@ -1,1 +1,26 @@
-<p>add-event-dialog works!</p>
+<h2 mat-dialog-title>Neues Ereignis</h2>
+<mat-dialog-content>
+  @for (eventType of favoriteEventTypes; track eventType.id) {
+    <hop-add-event-form
+      [eventType]="eventType"
+      (onAddEvent)="handleEventAdded($event)"
+    ></hop-add-event-form>
+  }
+  <mat-form-field class="full-width">
+    <mat-label>Weitere Ereignisse suchen</mat-label>
+    <mat-select [(ngModel)]="selectedEventType">
+      @for (eventType of otherEventTypes; track eventType.id) {
+        <mat-option [value]="eventType">{{eventType.description}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  @if (selectedEventType) {
+    <hop-add-event-form
+      [eventType]="selectedEventType"
+      (onAddEvent)="handleEventAdded($event)"
+    ></hop-add-event-form>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+</mat-dialog-actions>
