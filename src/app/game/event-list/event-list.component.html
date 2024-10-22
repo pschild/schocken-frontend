@@ -12,9 +12,6 @@
       </td>
       <td>
         @if (!this.disabled()) {
-          <!--<button mat-mini-fab (click)="openAddEventDialog(player)">
-            <mat-icon>add</mat-icon>
-          </button>-->
           <button mat-icon-button class="hop-icon-button primary" (click)="openAddEventDialog(player)">
             <mat-icon>add</mat-icon>
           </button>
@@ -22,16 +19,23 @@
       </td>
       <td>
         @for (event of events() | eventsByPlayerId:player.id; track event.id) {
-          <div>
-            <span style="font-size: smaller">{{ event.eventType.description }}</span>
-            @if (event.calculatedPenalty.sum) {
-              <hop-penalty-with-unit [unit]="event.calculatedPenalty.unit" [penalty]="event.calculatedPenalty.sum"></hop-penalty-with-unit>
-            }
-            @if (!disabled()) {
-              <button mat-icon-button class="hop-icon-button danger" (click)="removeEvent(event.id)">
-                <mat-icon>close</mat-icon>
-              </button>
-            }
+          <div class="event-row">
+            <div class="left-col">
+              @if (!disabled()) {
+                <button mat-icon-button class="hop-icon-button danger" (click)="removeEvent(event.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+              <span>{{ event.eventType.description }}</span>
+              @if (event.comment) {
+                <mat-icon [matTooltip]="event.comment" style="margin-left: 10px;">comment</mat-icon>
+              }
+            </div>
+            <div class="right-col">
+              @if (event.calculatedPenalty.sum) {
+                <hop-penalty-with-unit [unit]="event.calculatedPenalty.unit" [penalty]="event.calculatedPenalty.sum"></hop-penalty-with-unit>
+              }
+            </div>
           </div>
         }
       </td>

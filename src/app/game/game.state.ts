@@ -89,12 +89,16 @@ export class GameState extends StateService<IGameState> {
       context,
       eventTypeId: event.id,
       multiplicatorValue: event.multiplicatorValue,
+      comment: event.comment,
       playerId,
       ...(context === ContextEnum.Game ? { gameId: this.state.gameDetails!.id } : { roundId }),
     }).pipe(
       tap(response => {
         if (response.celebration) {
           this.dialog.open(CelebrationDialogComponent, { data: { celebration: response.celebration } });
+        }
+        if (response.warning) {
+          this.dialog.open(InfoDialogComponent, { data: { title: 'Hinweis', message: response.warning } });
         }
       }),
       switchMap(() => {

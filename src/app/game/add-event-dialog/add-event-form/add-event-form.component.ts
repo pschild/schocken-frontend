@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, input, OnInit, output } fro
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { EventTypeOverviewDto } from '../../../api/openapi';
 import { PenaltyWithUnitComponent } from '../../../shared/penalty-with-unit/penalty-with-unit.component';
@@ -20,6 +21,7 @@ export interface AddEventModel {
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
     PenaltyWithUnitComponent,
   ],
   templateUrl: './add-event-form.component.html',
@@ -40,7 +42,7 @@ export class AddEventFormComponent {
 
   constructor() {
     effect(() => {
-      this.form.patchValue({ id: this.eventType().id });
+      this.form.reset({ id: this.eventType().id });
     });
   }
 

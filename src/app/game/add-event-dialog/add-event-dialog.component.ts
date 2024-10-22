@@ -3,12 +3,14 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDivider } from '@angular/material/divider';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { EventTypeOverviewDto, PlayerDto } from '../../api/openapi';
+import { EventTypeDetailDto, EventTypeOverviewDto, PlayerDto } from '../../api/openapi';
 import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
 import { AddEventFormComponent, AddEventModel } from './add-event-form/add-event-form.component';
+import TriggerEnum = EventTypeDetailDto.TriggerEnum;
 
 @Component({
   selector: 'hop-add-event-dialog',
@@ -26,7 +28,8 @@ import { AddEventFormComponent, AddEventModel } from './add-event-form/add-event
     AddEventFormComponent,
     MatSelect,
     MatOption,
-    FormsModule
+    FormsModule,
+    MatDivider
   ],
   templateUrl: './add-event-dialog.component.html',
   styleUrl: './add-event-dialog.component.scss',
@@ -42,8 +45,13 @@ export class AddEventDialogComponent implements OnInit {
   selectedEventType: EventTypeOverviewDto | null = null;
 
   ngOnInit(): void {
-    this.favoriteEventTypes = this.data.eventTypes.slice(0, 3);
-    this.otherEventTypes = this.data.eventTypes.slice(3);
+    const schockAusPenaltyEventType = this.data.eventTypes.find(eventType => eventType.trigger === TriggerEnum.SchockAusPenalty);
+    const cleanedEventTypes = this.data.eventTypes.filter(eventType => ![schockAusPenaltyEventType?.id].includes(eventType.id));
+    this.favoriteEventTypes = cleanedEventTypes.slice(0, 3);
+    this.otherEventTypes = [
+      ...cleanedEventTypes.slice(3),
+      ...(schockAusPenaltyEventType ? [schockAusPenaltyEventType] : []),
+    ];
   }
 
   handleEventAdded(event: AddEventModel): void {

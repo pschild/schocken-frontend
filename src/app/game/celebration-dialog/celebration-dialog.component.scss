@@ -4,20 +4,14 @@ mat-dialog-content {
   align-items: center;
 
   h2 {
-    margin-top: 50px;
-
-    line-height: var(--mdc-dialog-subhead-line-height, 14px);
-    font-size: var(--mdc-dialog-subhead-size, 14px);
-    font-weight: var(--mdc-dialog-subhead-weight, 500);
-    letter-spacing: var(--mdc-dialog-subhead-tracking, 1px);
+    text-align: center;
   }
 
-  .counter {
-    font-size: 96px;
-    font-weight: 300;
-    line-height: 96px;
-    font-family: Roboto, sans-serif;
-    letter-spacing: -.015625em;
-    margin: 0 0 56px;
+  .mat-headline-1 {
+    margin-bottom: 15px;
+  }
+
+  button {
+    margin: 20px 0;
   }
 }

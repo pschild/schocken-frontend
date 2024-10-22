@@ -14,6 +14,7 @@ export interface EventTypeOverviewDto {
     id: string;
     description: string;
     context: EventTypeOverviewDto.ContextEnum;
+    trigger?: EventTypeOverviewDto.TriggerEnum;
     penaltyValue?: number;
     penaltyUnit?: EventTypeOverviewDto.PenaltyUnitEnum;
     multiplicatorUnit?: string;
@@ -25,6 +26,12 @@ export namespace EventTypeOverviewDto {
     export const ContextEnum = {
         Game: 'GAME' as ContextEnum,
         Round: 'ROUND' as ContextEnum
+    };
+    export type TriggerEnum = 'START_NEW_ROUND' | 'SCHOCK_AUS' | 'SCHOCK_AUS_PENALTY';
+    export const TriggerEnum = {
+        StartNewRound: 'START_NEW_ROUND' as TriggerEnum,
+        SchockAus: 'SCHOCK_AUS' as TriggerEnum,
+        SchockAusPenalty: 'SCHOCK_AUS_PENALTY' as TriggerEnum
     };
     export type PenaltyUnitEnum = 'EURO' | 'BEER_CRATE';
     export const PenaltyUnitEnum = {

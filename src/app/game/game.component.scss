@@ -16,6 +16,10 @@
   }
 }
 
+mat-stepper {
+  max-width: 900px;
+}
+
 .round-marker-list {
   mat-icon:not(:first-child) {
     padding-left: 10px;

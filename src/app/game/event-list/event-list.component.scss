@@ -5,32 +5,53 @@
   white-space: nowrap;
 
   tr {
-    vertical-align: top;
     height: 50px;
 
     &:nth-child(even) {
       background-color: #eff2e5;
     }
 
-    td:first-child {
-      width: 150px;
-      padding-left: 5px;
-      vertical-align: top;
-      line-height: 40px;
-    }
+    td {
+      // Checkbox and player's name
+      &:first-child {
+        width: 140px;
+        padding-left: 7px;
+        vertical-align: top;
+        line-height: 40px;
+      }
 
-    td:nth-child(2) {
-      font-size: 12px;
-      vertical-align: top;
-      line-height: 40px;
-    }
+      // add-Button
+      &:nth-child(2) {
+        width: 70px;
+        vertical-align: top;
+        line-height: 40px;
+      }
 
-    td:last-child {
-      width: 90px;
-      text-align: right;
-      padding-right: 5px;
-      vertical-align: top;
-      line-height: 40px;
+      // events with penalties
+      &:last-child {
+        padding-right: 5px;
+        vertical-align: top;
+        line-height: 40px;
+      }
+
+      .event-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .left-col {
+          display: flex;
+          align-items: center;
+
+          span {
+            font-size: smaller;
+          }
+        }
+
+        .right-col {
+          text-align: right;
+        }
+      }
     }
   }
 }

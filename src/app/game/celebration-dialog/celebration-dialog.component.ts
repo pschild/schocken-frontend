@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import {
   MAT_DIALOG_DATA,
@@ -10,6 +10,7 @@ import {
   MatDialogTitle
 } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatSelect } from '@angular/material/select';
 import confetti from 'canvas-confetti';
 import { CelebrationDto } from '../../api/openapi';
@@ -21,7 +22,7 @@ import { AddEventFormComponent } from '../add-event-dialog/add-event-form/add-ev
   standalone: true,
   imports: [
     AddEventFormComponent,
-    MatButton,
+    MatButtonModule,
     MatDialogActions,
     MatDialogClose,
     MatDialogContent,
@@ -30,7 +31,8 @@ import { AddEventFormComponent } from '../add-event-dialog/add-event-form/add-ev
     MatLabel,
     MatOption,
     MatSelect,
-    OdometerComponent
+    OdometerComponent,
+    MatIcon
   ],
   templateUrl: './celebration-dialog.component.html',
   styleUrl: './celebration-dialog.component.scss',
@@ -46,6 +48,7 @@ export class CelebrationDialogComponent {
       particleCount: 200,
       startVelocity: 30,
       spread: 120,
+      zIndex: 1001,
       origin: {
         x: e.x / window.innerWidth,
         y: e.y / window.innerHeight

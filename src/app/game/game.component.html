@@ -47,7 +47,10 @@
         </div>
         <div class="penalty-sum-container">
           @if (game.penalties && game.penalties.length) {
-            @for (penalty of game.penalties; track penalty.unit) {
+            @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
+              @if (idx > 0) {
+                <span>/</span>
+              }
               <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
             }
           } @else {
@@ -80,7 +83,10 @@
           </div>
           <div class="penalty-sum-container">
             @if (round.penalties && round.penalties.length) {
-              @for (penalty of round.penalties; track penalty.unit) {
+              @for (penalty of round.penalties; track penalty.unit; let idx = $index) {
+                @if (idx > 0) {
+                  <span>/</span>
+                }
                 <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
               }
             } @else {

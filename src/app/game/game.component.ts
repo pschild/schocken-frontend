@@ -79,7 +79,7 @@ export class GameComponent implements OnInit {
 
     this.dialog.open(GameDetailsFormComponent, {
       minWidth: 500,
-      height: '370px',
+      height: 'auto',
       data: {
         gameDetails: gameSnapshot,
         players: playersSnapshot,

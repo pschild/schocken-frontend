@@ -4,6 +4,7 @@ import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/bu
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { switchMap, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { EventDetailDto, EventDto, EventTypeOverviewService, PlayerDto } from '../../api/openapi';
@@ -25,6 +26,7 @@ import ContextEnum = EventDto.ContextEnum;
     MatIconButton,
     MatMiniFabButton,
     MatButton,
+    MatTooltipModule,
     PenaltyWithUnitComponent
   ],
   templateUrl: './event-list.component.html',
@@ -68,6 +70,8 @@ export class EventListComponent {
   openAddEventDialog(player: PlayerDto): void {
     this.eventTypeOverviewService.getOverview(this.context()).pipe(
       switchMap(eventTypes => this.dialog.open(AddEventDialogComponent, {
+        minWidth: 500,
+        height: 'auto',
           data: {
             player,
             eventTypes

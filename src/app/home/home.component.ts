@@ -56,14 +56,14 @@ export class HomeComponent implements OnInit {
       switchMap(players => {
         return this.dialog.open(GameDetailsFormComponent, {
           minWidth: 500,
-          height: '350px',
+          height: 'auto',
           data: {
             players,
           }
         }).afterClosed();
       }),
       filter(result => !!result),
-      switchMap(({ type, hostedById, placeOfAwayGame, excludeFromStatistics }) => this.gameService.create({ placeType: type, hostedById, placeOfAwayGame, excludeFromStatistics })),
+      switchMap(({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics }) => this.gameService.create({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics })),
       tap(game => this.router.navigate(['game', game.id])),
       tap(() => this.successMessageService.showSuccess(`Spiel erstellt`)),
     ).subscribe();
