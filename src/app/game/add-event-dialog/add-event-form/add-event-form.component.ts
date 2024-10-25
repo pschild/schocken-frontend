@@ -6,11 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { EventTypeOverviewDto } from '../../../api/openapi';
 import { PenaltyWithUnitComponent } from '../../../shared/penalty-with-unit/penalty-with-unit.component';
+import TriggerEnum = EventTypeOverviewDto.TriggerEnum;
 
 export interface AddEventModel {
   id: string;
   comment?: string;
   multiplicatorValue?: number;
+  trigger?: TriggerEnum;
 }
 
 @Component({
@@ -51,6 +53,7 @@ export class AddEventFormComponent {
       id: this.form.value.id!,
       ...(this.form.value.multiplicatorValue ? { multiplicatorValue: this.form.value.multiplicatorValue } : {}),
       ...(this.form.value.comment ? { comment: this.form.value.comment } : {}),
+      trigger: this.eventType().trigger,
     });
   }
 }

@@ -1,3 +1,4 @@
+export * from './bulkCreateEventsDto';
 export * from './celebrationDto';
 export * from './createDetailEventResponse';
 export * from './createDetailRoundResponse';
