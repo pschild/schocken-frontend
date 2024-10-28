@@ -6,12 +6,15 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
 import confetti from 'canvas-confetti';
 import { debounceTime, delay, Observable, Subject, switchMap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CreateGameDto, EventDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
+import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
+import { LoadingMaskComponent } from '../shared/loading/loading-mask/loading-mask.component';
 import { PenaltyWithUnitComponent } from '../shared/penalty-with-unit/penalty-with-unit.component';
 import { PlaceTypeToLabelPipe } from '../shared/pipes/place-type-to-label.pipe';
 import { AddEventModel } from './add-event-dialog/add-event-form/add-event-form.component';
@@ -37,6 +40,9 @@ import ContextEnum = EventDto.ContextEnum;
     PenaltyWithUnitComponent,
     RoundComponent,
     EventListComponent,
+    MatProgressSpinner,
+    IsLoadingPipe,
+    LoadingMaskComponent,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',

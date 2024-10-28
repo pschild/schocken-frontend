@@ -20,6 +20,8 @@ import {
   UpdateGameDto
 } from '../api/openapi';
 import { InfoDialogComponent } from '../dialog/info-dialog/info-dialog.component';
+import { LoadingState } from '../shared/loading/loading.state';
+import { doWithLoading } from '../shared/operators';
 import { StateService } from '../shared/state.service';
 import { SuccessMessageService } from '../shared/success-message.service';
 import { AddEventModel } from './add-event-dialog/add-event-form/add-event-form.component';
@@ -55,6 +57,7 @@ export class GameState extends StateService<IGameState> {
   private eventTypeService = inject(EventTypeService);
   private playerService = inject(PlayerService);
   private successMessageService = inject(SuccessMessageService);
+  private loadingState = inject(LoadingState);
 
   gameDetails$: Observable<GameDetailDto | null> = this.select(state => state.gameDetails);
   rounds$: Observable<RoundDetailDto[]> = this.select(state => state.rounds.sort((a, b) => compareAsc(a.datetime, b.datetime)));
@@ -74,7 +77,7 @@ export class GameState extends StateService<IGameState> {
   }
 
   init(gameId: string): void {
-    this.gameDetailsService.getDetails(gameId).subscribe(gameDetails => this.setState({ gameDetails }));
+    this.gameDetailsService.getDetails(gameId).pipe(doWithLoading(this.loadingState, 'game-details')).subscribe(gameDetails => this.setState({ gameDetails }));
     this.roundDetailsService.getByGameId(gameId).subscribe(rounds => this.setState({ rounds }));
     this.playerService.findAll().subscribe(players => this.setState({ players }));
     this.eventTypeService.findAll().subscribe(eventTypes => this.setState({ eventTypes }));
@@ -82,7 +85,8 @@ export class GameState extends StateService<IGameState> {
 
   updateGame(gameId: string, dto: UpdateGameDto): Observable<GameDetailDto> {
     return this.gameDetailsService.update(gameId, dto).pipe(
-      tap(gameDetails => this.setState({ gameDetails })),
+      doWithLoading(this.loadingState, 'game-details'),
+      tap((gameDetails: GameDetailDto) => this.setState({ gameDetails })),
       tap(() => this.successMessageService.showSuccess(`Spiel aktualisiert`)),
     );
   }
@@ -144,6 +148,7 @@ export class GameState extends StateService<IGameState> {
           return throwError(() => new Error(`Invalid argument: context was ${context}`));
         }
       }),
+      doWithLoading(this.loadingState, roundId ? roundId : 'game-events'),
       tap(() => this.successMessageService.showSuccess(`Ereignis hinzugefügt`)),
       switchMap((responses: CreateDetailEventResponse[]) => {
         const celebrationDialogs$ = responses.filter(r => !!r.celebration).map(r => defer(() => this.dialog.open(CelebrationDialogComponent, { data: { celebration: r.celebration } }).afterClosed()));
@@ -155,6 +160,7 @@ export class GameState extends StateService<IGameState> {
 
   removeEvent(context: ContextEnum, id: string, roundId?: string): Observable<GameDetailDto | RoundDetailDto> {
     return this.eventDetailsService.remove(id).pipe(
+      doWithLoading(this.loadingState, roundId ? roundId : 'game-events'),
       switchMap(() => {
         if (context === ContextEnum.Game) {
           return this.gameDetailsService.getDetails(this.state.gameDetails!.id).pipe(
@@ -174,6 +180,7 @@ export class GameState extends StateService<IGameState> {
 
   updateFinalists({ roundId, finalistIds }: { roundId: string; finalistIds: string[] }): Observable<RoundDetailDto> {
     return this.roundDetailsService.updateFinalists(roundId, { playerIds: finalistIds }).pipe(
+      doWithLoading(this.loadingState, roundId),
       tap(updatedRound => this.setState({ rounds: this.state.rounds.map(round => round.id === roundId ? updatedRound : round) })),
       tap(() => this.successMessageService.showSuccess(`Finalisten aktualisiert`)),
     );
@@ -181,6 +188,7 @@ export class GameState extends StateService<IGameState> {
 
   updateAttendance({ roundId, playerIds }: { roundId: string; playerIds: string[] }): Observable<RoundDetailDto> {
     return this.roundDetailsService.updateAttendees(roundId, {playerIds}).pipe(
+      doWithLoading(this.loadingState, roundId),
       tap(updatedRound => this.setState({ rounds: this.state.rounds.map(round => round.id === roundId ? updatedRound : round) })),
       tap(() => this.successMessageService.showSuccess(`Teilnahmen aktualisiert`)),
     );
@@ -188,6 +196,7 @@ export class GameState extends StateService<IGameState> {
 
   removeRound(id: string): Observable<string> {
     return this.roundDetailsService.remove(id).pipe(
+      doWithLoading(this.loadingState, `remove-round-${id}`),
       tap(id => this.setState({ rounds: this.state.rounds.filter(round => round.id !== id) })),
       tap(() => this.successMessageService.showSuccess(`Runde gelöscht`)),
     );
@@ -195,6 +204,7 @@ export class GameState extends StateService<IGameState> {
 
   startNewRound(): Observable<CreateDetailRoundResponse> {
     return this.roundDetailsService.create({ gameId: this.state.gameDetails!.id }).pipe(
+      doWithLoading(this.loadingState, 'start-new-round'),
       tap(response => {
         if (response.celebration) {
           this.dialog.open(CelebrationDialogComponent, { data: { celebration: response.celebration } });
@@ -207,6 +217,7 @@ export class GameState extends StateService<IGameState> {
 
   setGameCompleted(completed: boolean): Observable<GameDetailDto> {
     return this.gameDetailsService.update(this.state.gameDetails!.id, { completed }).pipe(
+      doWithLoading(this.loadingState, 'complete-game'),
       tap(gameDetails => this.setState({ gameDetails })),
       tap(() => this.successMessageService.showSuccess(`Spiel aktualisiert`)),
     );

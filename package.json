@@ -7,8 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate:api:ng-openapi-gen": "ng-openapi-gen --input http://localhost:3000/api-json --output src/app/api/ng-openapi-gen",
-    "generate:api:openapi": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-angular -o src/app/api/openapi --skip-validate-spec"
+    "generate:api": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-angular -o src/app/api/openapi --skip-validate-spec"
   },
   "private": true,
   "dependencies": {
@@ -25,7 +24,6 @@
     "canvas-confetti": "^1.9.3",
     "date-fns": "^4.1.0",
     "lodash": "^4.17.21",
-    "ng-openapi-gen": "^0.52.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

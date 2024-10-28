@@ -4,15 +4,18 @@ import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { getYear } from 'date-fns';
 import { groupBy } from 'lodash';
-import { Observable, switchMap, tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { GameOverviewService as NgOpenapiGenGameOverviewService } from '../api/ng-openapi-gen/services/game-overview.service';
-import { GameOverviewDto, GameOverviewService as OpenApiGameOverviewService, GameService, PlayerService } from '../api/openapi';
+import { GameOverviewDto, GameOverviewService, GameService, PlayerService } from '../api/openapi';
 import { GameDetailsFormComponent } from '../game/game-details-form/game-details-form.component';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
+import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
+import { LoadingState } from '../shared/loading/loading.state';
+import { doWithLoading } from '../shared/operators';
 import { PenaltyWithUnitComponent } from '../shared/penalty-with-unit/penalty-with-unit.component';
 import { SuccessMessageService } from '../shared/success-message.service';
 
@@ -24,7 +27,7 @@ interface OverviewItem {
 @Component({
   selector: 'hop-home',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatButton, MatFabButton, PenaltyWithUnitComponent],
+  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatButton, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,22 +36,22 @@ export class HomeComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  gameOverview$: Observable<OverviewItem[]> | undefined;
+  gameOverview: OverviewItem[] = [];
 
-  private ngOpenapiGenGameOverviewService = inject(NgOpenapiGenGameOverviewService);
-  private openApiGameOverviewService = inject(OpenApiGameOverviewService);
+  private openApiGameOverviewService = inject(GameOverviewService);
   private gameService = inject(GameService);
   private playerService = inject(PlayerService);
   private successMessageService = inject(SuccessMessageService);
   private router = inject(Router);
+  private loadingState = inject(LoadingState);
 
   ngOnInit(): void {
-    // this.ngOpenapiGenGameOverviewService.getOverview().subscribe(console.log);
-    this.gameOverview$ = this.openApiGameOverviewService.getOverview().pipe(
+    this.openApiGameOverviewService.getOverview().pipe(
+      doWithLoading(this.loadingState, 'game-overview'),
       map(res => groupBy(res, item => getYear(item.datetime))),
       map(res => Object.entries<GameOverviewDto[]>(res).map(([year, games]) => ({ year, games }))),
       map((items: OverviewItem[]) => items.sort((a, b) => +b.year - +a.year)),
-    );
+    ).subscribe(overview => this.gameOverview = overview);
   }
 
   createNewGame(): void {

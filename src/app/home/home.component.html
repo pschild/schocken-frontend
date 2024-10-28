@@ -2,9 +2,11 @@
   <mat-icon>add</mat-icon>
 </button>
 
-@if (gameOverview$ | async; as overview) {
+@if ('game-overview' | isLoading | async) {
+  <mat-spinner diameter="50" strokeWidth="3"></mat-spinner>
+} @else {
   <mat-accordion>
-    @for (item of overview; track item) {
+    @for (item of gameOverview; track item) {
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>{{ item.year }}</mat-panel-title>

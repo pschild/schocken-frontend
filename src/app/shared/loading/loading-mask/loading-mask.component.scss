@@ -1,0 +1,13 @@
+.mask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  height: 100%;
+  width: calc(100% - 1px);
+  left: 1px;
+
+  background: color-mix(in srgb, var(--mat-app-background-color) 50%, transparent);
+  z-index: 1000;
+}

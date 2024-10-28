@@ -53,6 +53,10 @@ $schocken-frontend-theme: schockenTheme.$light-theme;
     --mat-toolbar-container-background-color: #{mat.get-theme-color($schocken-frontend-theme, primary)};
     --mdc-icon-button-icon-color: #{mat.get-theme-color($schocken-frontend-theme, primary, 100)};
   }
+
+  .white-spinner {
+    --mdc-circular-progress-active-indicator-color: #{mat.get-theme-color($schocken-frontend-theme, primary, 100)};
+  }
 }
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.

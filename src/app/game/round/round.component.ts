@@ -3,11 +3,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { EventDto, PlayerDto, RoundDetailDto } from '../../api/openapi';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
 import { InfoDialogComponent } from '../../dialog/info-dialog/info-dialog.component';
+import { IsLoadingPipe } from '../../shared/loading/is-loading.pipe';
 import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
 import { AddEventModel } from '../add-event-dialog/add-event-form/add-event-form.component';
 import { EditAttendanceDialogComponent } from '../edit-attendance-dialog/edit-attendance-dialog.component';
@@ -17,7 +19,7 @@ import ContextEnum = EventDto.ContextEnum;
 @Component({
   selector: 'hop-round',
   standalone: true,
-  imports: [CommonModule, EventsByPlayerIdPipe, EventListComponent, MatButton, MatIconModule],
+  imports: [CommonModule, EventsByPlayerIdPipe, EventListComponent, MatButton, MatIconModule, IsLoadingPipe, MatProgressSpinner],
   templateUrl: './round.component.html',
   styleUrl: './round.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

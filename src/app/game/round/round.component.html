@@ -13,6 +13,10 @@
   Teilnahmen anpassen
 </button>
 <button mat-stroked-button (click)="removeRound()" [disabled]="disabled()">
-  <mat-icon>delete</mat-icon>
+  @if ('remove-round-' + round().id | isLoading | async) {
+    <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
+  } @else {
+    <mat-icon>delete</mat-icon>
+  }
   Runde löschen
 </button>
