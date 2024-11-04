@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { EventTypeOverviewDto } from '../../../api/openapi';
+import { CelebrationDirective } from '../../../shared/celebration.directive';
 import { PenaltyWithUnitComponent } from '../../../shared/penalty-with-unit/penalty-with-unit.component';
 import TriggerEnum = EventTypeOverviewDto.TriggerEnum;
 
@@ -25,12 +26,15 @@ export interface AddEventModel {
     MatInputModule,
     MatIconModule,
     PenaltyWithUnitComponent,
+    CelebrationDirective,
   ],
   templateUrl: './add-event-form.component.html',
   styleUrl: './add-event-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddEventFormComponent {
+
+  TriggerEnum = TriggerEnum;
 
   eventType = input.required<EventTypeOverviewDto>();
 

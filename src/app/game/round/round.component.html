@@ -1,3 +1,13 @@
+@if (round().warnings) {
+  <div class="warning-container">
+  @for (warning of round().warnings; track warning) {
+    <div class="warning-row">
+      <mat-icon style="color: #ffa700;">warning</mat-icon>
+      {{warning}}
+    </div>
+  }
+  </div>
+}
 <hop-event-list
   [context]="Context.Round"
   [players]="attendees()"
@@ -8,15 +18,17 @@
   (onEventAdd)="handleEventAdd($event)"
   (onEventRemove)="handleEventRemove($event)"
 ></hop-event-list>
-<button mat-stroked-button (click)="openEditAttendanceDialog()" [disabled]="disabled()">
-  <mat-icon>people</mat-icon>
-  Teilnahmen anpassen
-</button>
-<button mat-stroked-button (click)="removeRound()" [disabled]="disabled()">
-  @if ('remove-round-' + round().id | isLoading | async) {
-    <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
-  } @else {
-    <mat-icon>delete</mat-icon>
-  }
-  Runde löschen
-</button>
+<div class="edit-round-buttons">
+  <button mat-stroked-button (click)="openEditAttendanceDialog()" [disabled]="disabled()">
+    <mat-icon>people</mat-icon>
+    Teilnahmen anpassen
+  </button>
+  <button mat-stroked-button class="danger" (click)="removeRound()" [disabled]="disabled()">
+    @if ('remove-round-' + round().id | isLoading | async) {
+      <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
+    } @else {
+      <mat-icon>delete</mat-icon>
+    }
+    Runde löschen
+  </button>
+</div>

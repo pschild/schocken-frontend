@@ -1,0 +1,21 @@
+.warning-container {
+  margin: 10px 15px;
+
+  .warning-row {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+
+    mat-icon {
+      margin-right: 10px;
+    }
+  }
+}
+
+.edit-round-buttons {
+  margin-top: 10px;
+
+  button:last-child {
+    margin-left: 8px;
+  }
+}

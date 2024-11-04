@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { compareAsc } from 'date-fns';
-import { combineLatest, concat, defaultIfEmpty, defer, Observable, of, switchMap, tap, throwError, toArray } from 'rxjs';
+import { combineLatest, concat, defaultIfEmpty, defer, EMPTY, Observable, of, Subject, switchMap, tap, throwError, toArray } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import {
-  CreateDetailEventResponse,
+  CelebrationDto,
   CreateDetailRoundResponse,
   EventDetailsService,
   EventDto,
@@ -19,14 +20,26 @@ import {
   RoundDetailsService,
   UpdateGameDto
 } from '../api/openapi';
+import { ConfirmationDialogComponent } from '../dialog/confirmation-dialog/confirmation-dialog.component';
 import { InfoDialogComponent } from '../dialog/info-dialog/info-dialog.component';
+import { InvalidArgumentError } from '../error/invalid-argument.error';
 import { LoadingState } from '../shared/loading/loading.state';
 import { doWithLoading } from '../shared/operators';
 import { StateService } from '../shared/state.service';
 import { SuccessMessageService } from '../shared/success-message.service';
 import { AddEventModel } from './add-event-dialog/add-event-form/add-event-form.component';
 import { CelebrationDialogComponent } from './celebration-dialog/celebration-dialog.component';
-import { EditAttendanceDialogComponent } from './edit-attendance-dialog/edit-attendance-dialog.component';
+import { ChoosePlayerDialogComponent } from './choose-player-dialog/choose-player-dialog.component';
+import {
+  countWarnings,
+  findEventTypeByTrigger,
+  findPlayerNameById,
+  findRoundById,
+  possiblePlayersForSchockAusStrafe,
+  selectedPlayersForSchockAusStrafe,
+  validateArguments
+} from './game-state.utils';
+import { HandleVerlorenEventDialogComponent } from './handle-verloren-event-dialog/handle-verloren-event-dialog.component';
 import ContextEnum = EventDto.ContextEnum;
 import TriggerEnum = EventTypeDto.TriggerEnum;
 
@@ -51,6 +64,7 @@ export class GameState extends StateService<IGameState> {
 
   readonly dialog = inject(MatDialog);
 
+  private router = inject(Router);
   private gameDetailsService = inject(GameDetailsService);
   private roundDetailsService = inject(RoundDetailsService);
   private eventDetailsService = inject(EventDetailsService);
@@ -71,13 +85,16 @@ export class GameState extends StateService<IGameState> {
       return players.filter(player => result.has(player.id));
     }),
   );
+  warnings$: Observable<number> = this.rounds$.pipe(map(rounds => countWarnings(rounds)));
+
+  openLastRound$ = new Subject<void>();
 
   constructor() {
     super(initialState);
   }
 
   init(gameId: string): void {
-    this.gameDetailsService.getDetails(gameId).pipe(doWithLoading(this.loadingState, 'game-details')).subscribe(gameDetails => this.setState({ gameDetails }));
+    this.gameDetailsService.getDetails(gameId).subscribe(gameDetails => this.setState({ gameDetails }));
     this.roundDetailsService.getByGameId(gameId).subscribe(rounds => this.setState({ rounds }));
     this.playerService.findAll().subscribe(players => this.setState({ players }));
     this.eventTypeService.findAll().subscribe(eventTypes => this.setState({ eventTypes }));
@@ -91,13 +108,16 @@ export class GameState extends StateService<IGameState> {
     );
   }
 
+  removeGame(gameId: string): Observable<any> {
+    return this.gameDetailsService.remove(gameId).pipe(
+      doWithLoading(this.loadingState, 'remove-game'),
+      tap(game => this.router.navigate(['home'])),
+      tap(() => this.successMessageService.showSuccess(`Spiel gelöscht`)),
+    );
+  }
+
   addEvent(context: ContextEnum, playerId: string, event: AddEventModel, roundId?: string): Observable<unknown[]> {
-    if (context === ContextEnum.Game && !this.state.gameDetails?.id) {
-      throw new Error(`Invalid arguments: Missing gameId`);
-    }
-    if (context === ContextEnum.Round && !roundId) {
-      throw new Error(`Invalid arguments: Missing roundId`);
-    }
+    validateArguments(context, this.state.gameDetails?.id, roundId);
 
     return this.eventDetailsService.create({
       context,
@@ -108,54 +128,66 @@ export class GameState extends StateService<IGameState> {
       ...(context === ContextEnum.Game ? { gameId: this.state.gameDetails!.id } : { roundId }),
     }).pipe(
       switchMap(response => {
-        if (event.trigger === TriggerEnum.SchockAus && roundId) {
-          const round = this.state.rounds.find(round => round.id === roundId);
-          const attendeeIds = round?.attendees || [];
-          const finalistIds = round?.finalists || [];
-          const hasFinal = finalistIds?.length > 0;
-          const schockAusStrafeEventType = this.state.eventTypes.find(type => type.trigger === TriggerEnum.SchockAusPenalty);
-          if (!schockAusStrafeEventType) {
-            throw new Error(`Invalid arguments: Missing event for "Schock Aus-Strafe"`);
-          }
-
-          return this.dialog.open(EditAttendanceDialogComponent, {
-            data: {
-              players: hasFinal ? this.state.players.filter(p => finalistIds.includes(p.id)) : this.state.players.filter(p => attendeeIds.includes(p.id)),
-              selectedIds: hasFinal ? finalistIds.filter(id => id !== playerId) : attendeeIds.filter(id => id !== playerId),
-              disabledIds: [playerId],
-            }
-          }).afterClosed().pipe(
-            filter(result => !!result),
-            switchMap((playerIds: string[]) => this.eventDetailsService.createMany({ eventTypeId: schockAusStrafeEventType.id, context: ContextEnum.Round, roundId, playerIds })),
-            map(responses => [response, ...responses]),
-            defaultIfEmpty([]),
-          );
-        }
-        return of([response]);
+        return this.handleSpecialEvent(playerId, event, roundId).pipe(
+          map(responses => [response, ...responses]),
+          defaultIfEmpty([response]),
+        );
       }),
-      switchMap((responses: CreateDetailEventResponse[]) => {
-        if (context === ContextEnum.Game) {
-          return this.gameDetailsService.getDetails(this.state.gameDetails!.id).pipe(
-            tap(gameDetails => this.setState({ gameDetails })),
-            map(() => responses),
-          );
-        } else if (context === ContextEnum.Round) {
-          return this.roundDetailsService.getDetails(roundId!).pipe(
-            tap(updatedRound => this.setState({ rounds: this.state.rounds.map(round => round.id === roundId ? updatedRound : round) })),
-            map(() => responses),
-          );
-        } else {
-          return throwError(() => new Error(`Invalid argument: context was ${context}`));
-        }
+      switchMap((responses: { celebration?: CelebrationDto; warning?: string; }[]) => {
+        return this.reloadGameOrRound(context, roundId).pipe(
+          map(() => responses)
+        )
       }),
       doWithLoading(this.loadingState, roundId ? roundId : 'game-events'),
       tap(() => this.successMessageService.showSuccess(`Ereignis hinzugefügt`)),
-      switchMap((responses: CreateDetailEventResponse[]) => {
+      switchMap((responses: { celebration?: CelebrationDto; warning?: string; }[]) => {
         const celebrationDialogs$ = responses.filter(r => !!r.celebration).map(r => defer(() => this.dialog.open(CelebrationDialogComponent, { data: { celebration: r.celebration } }).afterClosed()));
         const warningDialogs$ = responses.filter(r => !!r.warning).map(r => defer(() => this.dialog.open(InfoDialogComponent, { data: { title: 'Hinweis', message: r.warning } }).afterClosed()));
         return concat(...warningDialogs$, ...celebrationDialogs$).pipe(toArray());
       }),
     );
+  }
+
+  private handleSpecialEvent(playerId: string, event: AddEventModel, roundId?: string): Observable<{ celebration?: CelebrationDto; warning?: string; }[]> {
+    if (event.trigger === TriggerEnum.SchockAus && roundId) {
+      const round = findRoundById(this.state.rounds, roundId);
+      return this.dialog.open(ChoosePlayerDialogComponent, {
+        data: {
+          title: 'Schock-Aus-Strafen verteilen',
+          players: possiblePlayersForSchockAusStrafe(round, this.state.players),
+          selectedIds: selectedPlayersForSchockAusStrafe(round, playerId),
+          disabledIds: [playerId],
+        }
+      }).afterClosed().pipe(
+        filter(result => !!result),
+        switchMap((playerIds: string[]) => {
+          const schockAusStrafeEventType = findEventTypeByTrigger(this.state.eventTypes, TriggerEnum.SchockAusPenalty);
+          return this.eventDetailsService.createMany({eventTypeId: schockAusStrafeEventType.id, context: ContextEnum.Round, roundId, playerIds})
+        }),
+      );
+    } else if (event.trigger === TriggerEnum.StartNewRound) {
+      return this.dialog.open(HandleVerlorenEventDialogComponent, {
+        data: { playerName: findPlayerNameById(this.state.players, playerId) }
+      }).afterClosed().pipe(
+        filter(result => !!result),
+        switchMap(result => result ? this.startNewRound().pipe(map(res => [{ celebration: res.celebration }])) : EMPTY),
+      );
+    }
+    return EMPTY;
+  }
+
+  private reloadGameOrRound(context: ContextEnum, roundId?: string): Observable<GameDetailDto | RoundDetailDto> {
+    if (context === ContextEnum.Game) {
+      return this.gameDetailsService.getDetails(this.state.gameDetails!.id).pipe(
+        tap((gameDetails: GameDetailDto) => this.setState({ gameDetails })),
+      );
+    } else if (context === ContextEnum.Round) {
+      return this.roundDetailsService.getDetails(roundId!).pipe(
+        tap((updatedRound: RoundDetailDto) => this.setState({ rounds: this.state.rounds.map(round => round.id === roundId ? updatedRound : round) })),
+      );
+    } else {
+      return throwError(() => new InvalidArgumentError(`Invalid context "${context}"`));
+    }
   }
 
   removeEvent(context: ContextEnum, id: string, roundId?: string): Observable<GameDetailDto | RoundDetailDto> {
@@ -171,7 +203,7 @@ export class GameState extends StateService<IGameState> {
             tap(updatedRound => this.setState({ rounds: this.state.rounds.map(round => round.id === roundId ? updatedRound : round) })),
           );
         } else {
-          return throwError(() => new Error(`Invalid argument: context was ${context}`));
+          return throwError(() => new InvalidArgumentError(`Invalid context "${context}"`));
         }
       }),
       tap(() => this.successMessageService.showSuccess(`Ereignis gelöscht`)),
@@ -198,6 +230,7 @@ export class GameState extends StateService<IGameState> {
     return this.roundDetailsService.remove(id).pipe(
       doWithLoading(this.loadingState, `remove-round-${id}`),
       tap(id => this.setState({ rounds: this.state.rounds.filter(round => round.id !== id) })),
+      tap(() => this.openLastRound$.next()),
       tap(() => this.successMessageService.showSuccess(`Runde gelöscht`)),
     );
   }
@@ -205,18 +238,22 @@ export class GameState extends StateService<IGameState> {
   startNewRound(): Observable<CreateDetailRoundResponse> {
     return this.roundDetailsService.create({ gameId: this.state.gameDetails!.id }).pipe(
       doWithLoading(this.loadingState, 'start-new-round'),
-      tap(response => {
-        if (response.celebration) {
-          this.dialog.open(CelebrationDialogComponent, { data: { celebration: response.celebration } });
-        }
-      }),
       tap(response => this.setState({ rounds: [...this.state.rounds, response.round] })),
+      tap(() => this.openLastRound$.next()),
       tap(() => this.successMessageService.showSuccess(`Neue Runde erstellt`)),
     );
   }
 
   setGameCompleted(completed: boolean): Observable<GameDetailDto> {
-    return this.gameDetailsService.update(this.state.gameDetails!.id, { completed }).pipe(
+    const warningCount = countWarnings(this.state.rounds);
+    const confirmation$ = warningCount > 0
+      ? this.dialog.open(ConfirmationDialogComponent, {
+        data: { title: 'Achtung', message: `Es gibt noch ${warningCount} Warnung(en). Soll das Spiel trotzdem abgeschlossen werden?` }
+      }).afterClosed().pipe(filter(result => !!result))
+      : of({});
+
+    return confirmation$.pipe(
+      switchMap(() => this.gameDetailsService.update(this.state.gameDetails!.id, { completed })),
       doWithLoading(this.loadingState, 'complete-game'),
       tap(gameDetails => this.setState({ gameDetails })),
       tap(() => this.successMessageService.showSuccess(`Spiel aktualisiert`)),

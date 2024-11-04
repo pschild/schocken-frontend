@@ -48,6 +48,12 @@ $schocken-frontend-theme: schockenTheme.$light-theme;
     }
   }
 
+  button {
+    &.danger {
+      @include mat.button-color($schocken-frontend-theme, $color-variant: error);
+    }
+  }
+
   .mat-toolbar {
     --mat-toolbar-container-text-color: #{mat.get-theme-color($schocken-frontend-theme, primary, 100)};
     --mat-toolbar-container-background-color: #{mat.get-theme-color($schocken-frontend-theme, primary)};

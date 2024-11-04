@@ -8,16 +8,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
-import confetti from 'canvas-confetti';
-import { debounceTime, delay, Observable, Subject, switchMap } from 'rxjs';
+import { debounceTime, delay, Observable, Subject, switchMap, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CreateGameDto, EventDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
+import { ConfirmationDialogComponent } from '../dialog/confirmation-dialog/confirmation-dialog.component';
+import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
+import { CelebrationDirective } from '../shared/celebration.directive';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
 import { LoadingMaskComponent } from '../shared/loading/loading-mask/loading-mask.component';
 import { PenaltyWithUnitComponent } from '../shared/penalty-with-unit/penalty-with-unit.component';
 import { PlaceTypeToLabelPipe } from '../shared/pipes/place-type-to-label.pipe';
 import { AddEventModel } from './add-event-dialog/add-event-form/add-event-form.component';
+import { CelebrationDialogComponent } from './celebration-dialog/celebration-dialog.component';
 import { EventListComponent } from './event-list/event-list.component';
 import { GameDetailsFormComponent } from './game-details-form/game-details-form.component';
 import { GameState } from './game.state';
@@ -43,6 +47,9 @@ import ContextEnum = EventDto.ContextEnum;
     MatProgressSpinner,
     IsLoadingPipe,
     LoadingMaskComponent,
+    CelebrationDirective,
+    MatTooltip,
+    LiveIndicatorComponent,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -66,6 +73,7 @@ export class GameComponent implements OnInit {
   players$: Observable<PlayerDto[]> = this.state.players$;
   activePlayers$: Observable<PlayerDto[]> = this.state.activePlayers$;
   playersForGameEvents$: Observable<PlayerDto[]> = this.state.playersForGameEvents$;
+  warnings$: Observable<number> = this.state.warnings$;
 
   private updateFinalistsDebouncer$ = new Subject<{ roundId: string; finalistIds: string[] }>();
 
@@ -76,7 +84,14 @@ export class GameComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
 
-    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ id }) => this.state.init(id));
+    this.route.params.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ id }) => this.state.init(id));
+
+    this.state.openLastRound$.pipe(
+      delay(500), // wait for stepper being updated before activating the last step
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => this.openLastRound());
   }
 
   openGameDetailsDialog(): void {
@@ -93,6 +108,21 @@ export class GameComponent implements OnInit {
     }).afterClosed().pipe(
       filter(result => !!result),
       switchMap(dto => this.state.updateGame(gameSnapshot!.id, dto)),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
+  }
+
+  openRemoveGameDialog(): void {
+    const gameSnapshot = this.state.selectSnapshot(state => state.gameDetails);
+
+    this.dialog.open(ConfirmationDialogComponent, {
+      data: {
+        title: `Spiel löschen`,
+        message: `Beim Löschen des Spiels werden auch alle dazugehörigen Daten (Runden, Ereignisse, Teilnahmen etc.) gelöscht.\n\nBist du sicher, dass du dieses Spiel löschen möchtest?`,
+      }
+    }).afterClosed().pipe(
+      filter(result => !!result),
+      switchMap(() => this.state.removeGame(gameSnapshot!.id)),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }
@@ -132,35 +162,24 @@ export class GameComponent implements OnInit {
   }
 
   handleRoundRemove(id: string): void {
-    this.state.removeRound(id).pipe(
-      delay(1), // wait for stepper being updated before activating the last step
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => this.openLastRound());
+    this.state.removeRound(id).subscribe();
   }
 
   startNewRound(): void {
     this.state.startNewRound().pipe(
-      delay(1), // wait for stepper being updated before activating the last step
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => this.openLastRound());
+      tap(response => {
+        if (response.celebration) {
+          this.dialog.open(CelebrationDialogComponent, { data: { celebration: response.celebration } });
+        }
+      }),
+    ).subscribe();
   }
 
   private openLastRound(): void {
     this.stepper.selectedIndex = this.stepper.steps.length - 1;
   }
 
-  setGameCompleted(e: MouseEvent): void {
-    confetti({
-      shapes: ['circle'],
-      particleCount: 200,
-      startVelocity: 30,
-      spread: 120,
-      origin: {
-        x: e.x / window.innerWidth,
-        y: e.y / window.innerHeight
-      }
-    });
-
+  setGameCompleted(): void {
     this.state.setGameCompleted(true).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();

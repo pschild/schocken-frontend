@@ -1,5 +1,6 @@
 .game-info-container {
   display: flex;
+  margin-bottom: 10px;
 
   .game-info-item {
     display: flex;
@@ -13,6 +14,22 @@
 
   button {
     margin-left: 10px;
+  }
+}
+
+.game-bottom-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  margin-top: 10px;
+
+  button.new-round {
+    margin-left: 15px;
+  }
+
+  button.complete-game {
+    margin-top: 10px;
   }
 }
 

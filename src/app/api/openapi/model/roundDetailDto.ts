@@ -21,5 +21,6 @@ export interface RoundDetailDto {
     penalties: Array<PenaltyDto>;
     schockAusCount: number;
     hasFinal: boolean;
+    warnings?: Array<string>;
 }
 

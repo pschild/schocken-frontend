@@ -15,7 +15,7 @@ import { PlayerDto } from '../../api/openapi';
 import { InfoBoxComponent } from '../../shared/info-box/info-box.component';
 
 @Component({
-  selector: 'hop-edit-attendance-dialog',
+  selector: 'hop-choose-player-dialog',
   standalone: true,
   imports: [
     MatSelectionList,
@@ -29,13 +29,13 @@ import { InfoBoxComponent } from '../../shared/info-box/info-box.component';
     MatIcon,
     InfoBoxComponent
   ],
-  templateUrl: './edit-attendance-dialog.component.html',
-  styleUrl: './edit-attendance-dialog.component.scss',
+  templateUrl: './choose-player-dialog.component.html',
+  styleUrl: './choose-player-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EditAttendanceDialogComponent implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<EditAttendanceDialogComponent>);
-  data: { players: PlayerDto[]; selectedIds: string[]; disabledIds: string[] } = inject(MAT_DIALOG_DATA);
+export class ChoosePlayerDialogComponent implements OnInit {
+  readonly dialogRef = inject(MatDialogRef<ChoosePlayerDialogComponent>);
+  data: { title: string; showHint?: boolean; players: PlayerDto[]; selectedIds: string[]; disabledIds: string[] } = inject(MAT_DIALOG_DATA);
 
   selectedOptions: string[] = [];
 

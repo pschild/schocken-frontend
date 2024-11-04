@@ -4,5 +4,10 @@ mat-expansion-panel {
   .error-message {
     font-family: Consolas, "Courier New", sans-serif;
     font-size: small;
+
+    .reason {
+      white-space: pre;
+      overflow-x: auto;
+    }
   }
 }

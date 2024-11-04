@@ -1,6 +1,6 @@
-<h2 mat-dialog-title>Teilnahmen anpassen</h2>
+<h2 mat-dialog-title>{{data.title}}</h2>
 <mat-dialog-content>
-  @if (data.disabledIds.length) {
+  @if (data.disabledIds.length && data.showHint) {
     <hop-info-box message="Eine Teilnahme kann nur entfernt werden, falls der Spieler nicht im Finale ist und kein Ereignis in dieser Runde hat."></hop-info-box>
   }
   <mat-selection-list [(ngModel)]="selectedOptions">

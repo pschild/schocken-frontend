@@ -24,8 +24,14 @@
     </button>
   } @else {
     {{ eventType().description }}
-    <button mat-stroked-button class="no-text-button" (click)="saveEvent()">
-      <mat-icon>add</mat-icon>
-    </button>
+    @if (eventType().trigger === TriggerEnum.SchockAus) {
+      <button hopCelebration mat-stroked-button class="no-text-button" (click)="saveEvent()">
+        <mat-icon>add</mat-icon>
+      </button>
+    } @else {
+      <button mat-stroked-button class="no-text-button" (click)="saveEvent()">
+        <mat-icon>add</mat-icon>
+      </button>
+    }
   }
 </form>

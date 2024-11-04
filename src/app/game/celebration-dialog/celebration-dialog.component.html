@@ -4,10 +4,11 @@
   <div class="mat-headline-1">
     <hop-odometer [countTo]="data.celebration.count"></hop-odometer>
   </div>
-  <button mat-fab (click)="celebrate($event)">
+  <button hopCelebration mat-fab extended>
     <mat-icon>celebration</mat-icon>
+    Konfetti!
   </button>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button mat-dialog-close (click)="celebrate($event)">Prost!</button>
+  <button hopCelebration mat-flat-button mat-dialog-close>Prost!</button>
 </mat-dialog-actions>

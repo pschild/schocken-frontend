@@ -17,6 +17,13 @@ export class GlobalErrorHandler implements ErrorHandler {
           message: error.message,
         }
       });
+    } else {
+      this.dialog.open(ErrorDialogComponent, {
+        data: {
+          userMessage: 'Es ist ein unbekannter Fehler aufgetreten. Bitte versuche es erneut.',
+          message: `${error.message}\n\n${error.stack}`,
+        }
+      });
     }
   }
 }

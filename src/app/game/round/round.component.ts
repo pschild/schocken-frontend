@@ -8,11 +8,10 @@ import { tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { EventDto, PlayerDto, RoundDetailDto } from '../../api/openapi';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
-import { InfoDialogComponent } from '../../dialog/info-dialog/info-dialog.component';
 import { IsLoadingPipe } from '../../shared/loading/is-loading.pipe';
 import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
 import { AddEventModel } from '../add-event-dialog/add-event-form/add-event-form.component';
-import { EditAttendanceDialogComponent } from '../edit-attendance-dialog/edit-attendance-dialog.component';
+import { ChoosePlayerDialogComponent } from '../choose-player-dialog/choose-player-dialog.component';
 import { EventListComponent } from '../event-list/event-list.component';
 import ContextEnum = EventDto.ContextEnum;
 
@@ -58,8 +57,10 @@ export class RoundComponent {
   openEditAttendanceDialog(): void {
     const playerIdsWithAtLeastOneRoundEvent = this.round().events.map(event => event.playerId);
 
-    const dialogRef = this.dialog.open(EditAttendanceDialogComponent, {
+    const dialogRef = this.dialog.open(ChoosePlayerDialogComponent, {
       data: {
+        title: 'Teilnehmer auswählen',
+        showHint: true,
         players: this.activePlayers(),
         selectedIds: this.round().attendees,
         disabledIds: Array.from(new Set([...this.round().finalists, ...playerIdsWithAtLeastOneRoundEvent])),
@@ -72,20 +73,10 @@ export class RoundComponent {
   }
 
   removeRound(): void {
-    if (this.round().events.length > 0 || this.round().finalists.length > 0) {
-      this.dialog.open(InfoDialogComponent, {
-        data: {
-          title: `Runde löschen`,
-          message: `Die Runde kann nicht gelöscht werden, da es noch Ereignisse und/oder Finalteilnahmen gibt. Sobald du diese gelöscht hast, kannst du die Runde löschen.`,
-        }
-      });
-      return;
-    }
-
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: `Runde löschen`,
-        message: `Bist du sicher, dass du diese Runde löschen möchtest?`,
+        message: `Beim Löschen der Runde werden auch alle dazugehörigen Daten (Ereignisse, Teilnahmen etc.) gelöscht.\n\nBist du sicher, dass du diese Runde löschen möchtest?`,
       }
     });
     dialogRef.afterClosed().pipe(
