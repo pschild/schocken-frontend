@@ -1,5 +1,4 @@
 @if (gameDetails$ | async; as game) {
-  <h3>Spielübersicht</h3>
   <div class="game-info-container">
     @if (!game.completed) {
       <div class="game-info-item">
@@ -38,7 +37,7 @@
       </div>
     }
 
-    <button mat-stroked-button (click)="openGameDetailsDialog()">
+    <button mat-stroked-button (click)="handleUpdateGame()">
       @if ('game-details' | isLoading | async) {
         <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
       } @else {
@@ -47,7 +46,7 @@
       bearbeiten
     </button>
 
-    <button mat-stroked-button class="danger" (click)="openRemoveGameDialog()">
+    <button mat-stroked-button class="danger" (click)="handleRemoveGame()">
       @if ('delete-game' | isLoading | async) {
         <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
       } @else {
@@ -146,7 +145,6 @@
           <hop-round
             [round]="round"
             [players]="(players$ | async) || []"
-            [activePlayers]="(activePlayers$ | async) || []"
             [disabled]="game.completed"
             (onEventAdd)="handleRoundEventAdd($event)"
             (onEventRemove)="handleRoundEventRemove($event)"

@@ -37,7 +37,7 @@ import TriggerEnum = EventTypeDetailDto.TriggerEnum;
 })
 export class AddEventDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<AddEventDialogComponent>);
-  data: { player: PlayerDto; eventTypes: EventTypeOverviewDto[] } = inject(MAT_DIALOG_DATA);
+  data: { eventTypes: EventTypeOverviewDto[] } = inject(MAT_DIALOG_DATA);
 
   favoriteEventTypes: EventTypeOverviewDto[] = [];
   otherEventTypes: EventTypeOverviewDto[] = [];

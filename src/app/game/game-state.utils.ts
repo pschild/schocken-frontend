@@ -1,4 +1,4 @@
-import { EventTypeDto, EventTypeOverviewDto, PlayerDto, RoundDetailDto } from '../api/openapi';
+import { EventTypeDto, EventTypeOverviewDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
 import { InvalidArgumentError } from '../error/invalid-argument.error';
 import TriggerEnum = EventTypeDto.TriggerEnum;
 import ContextEnum = EventTypeDto.ContextEnum;
@@ -36,16 +36,35 @@ export function findPlayerNameById(players: PlayerDto[], id: string): string {
   return player.name;
 }
 
+export function getActivePlayers(players: PlayerDto[]): PlayerDto[] {
+  return players.filter(player => player.active && !player.isDeleted);
+}
+
+export function playersForGameEvents(game: GameDetailDto | null, players: PlayerDto[]): PlayerDto[] {
+  if (!game) {
+    return [];
+  }
+  const activePlayerIds = getActivePlayers(players).map(player => player.id);
+  const playerIdsWithAtLeastOneGameEvent = game.events.map(event => event.playerId);
+  const playerIdsForGameEvents = new Set<string>([...activePlayerIds, ...playerIdsWithAtLeastOneGameEvent]);
+  return players.filter(player => playerIdsForGameEvents.has(player.id));
+}
+
 export function possiblePlayersForSchockAusStrafe(round: RoundDetailDto, players: PlayerDto[]): PlayerDto[] {
   return round.hasFinal
     ? players.filter(p => (round.finalists || []).includes(p.id))
     : players.filter(p => (round.attendees || []).includes(p.id));
 }
 
-export function selectedPlayersForSchockAusStrafe(round: RoundDetailDto, playerIdWithSchockAus: string): string[] {
+export function selectedPlayerIdsForSchockAusStrafe(round: RoundDetailDto, playerIdWithSchockAus: string): string[] {
   return round.hasFinal
     ? (round.finalists || []).filter(id => id !== playerIdWithSchockAus)
     : (round.attendees || []).filter(id => id !== playerIdWithSchockAus);
+}
+
+export function playerIdsNotRemovableFromAttendees(round: RoundDetailDto): string[] {
+  const playerIdsWithAtLeastOneRoundEvent = round.events.map(event => event.playerId);
+  return Array.from(new Set([...round.finalists, ...playerIdsWithAtLeastOneRoundEvent]));
 }
 
 export function countWarnings(rounds: RoundDetailDto[]): number {
