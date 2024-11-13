@@ -20,6 +20,7 @@ export * from './gameDetailDto';
 export * from './gameDetailFullDto';
 export * from './gameDto';
 export * from './gameOverviewDto';
+export * from './gameOverviewOfYearDto';
 export * from './penaltyDto';
 export * from './placeDto';
 export * from './playerDto';

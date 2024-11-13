@@ -27,8 +27,6 @@ export class GameDialogService {
 
   updateGameDialog(gameDetails: GameDetailDto | null, players: PlayerDto[]): Observable<UpdateGameDto> {
     return this.dialog.open(GameDetailsFormComponent, {
-      minWidth: 500,
-      height: 'auto',
       data: {
         gameDetails,
         players,
@@ -51,8 +49,7 @@ export class GameDialogService {
 
   addEventDialog(eventTypes: EventTypeOverviewDto[]): Observable<AddEventModel> {
     return this.dialog.open(AddEventDialogComponent, {
-      minWidth: 500,
-      height: 'auto',
+      minWidth: 450,
       data: { eventTypes }
     }).afterClosed().pipe(
       filter(result => !!result),

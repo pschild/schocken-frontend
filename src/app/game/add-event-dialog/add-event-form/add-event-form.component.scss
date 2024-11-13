@@ -12,7 +12,7 @@
   }
 
   button.no-text-button mat-icon {
-    margin-left: 0;
-    margin-right: 0;
+    --mat-outlined-button-icon-spacing: 0;
+    --mat-outlined-button-icon-offset: 0;
   }
 }

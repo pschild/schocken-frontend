@@ -50,7 +50,7 @@ export class GameDetailsFormComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   readonly dialogRef = inject(MatDialogRef<GameDetailsFormComponent>);
-  data: { gameDetails?: GameDetailDto; players: PlayerDto[] } = inject(MAT_DIALOG_DATA);
+  data: { gameDetails?: GameDetailDto; players: PlayerDto[]; hideCompleteControl?: boolean } = inject(MAT_DIALOG_DATA);
 
   title: string = 'Neues Spiel';
   confirmButtonLabel: string = 'Weiter';
@@ -70,7 +70,7 @@ export class GameDetailsFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.gameDetails) {
-      this.title = 'Spiel bearbeiten';
+      this.title = 'Spielinformationen bearbeiten';
       this.confirmButtonLabel = 'Speichern';
       this.form.setValue({
         placeType: this.data.gameDetails.place.type,

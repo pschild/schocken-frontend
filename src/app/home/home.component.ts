@@ -6,11 +6,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
-import { getYear } from 'date-fns';
-import { groupBy } from 'lodash';
 import { switchMap, tap } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { GameOverviewDto, GameOverviewService, GameService, PlayerService } from '../api/openapi';
+import { filter } from 'rxjs/operators';
+import { GameOverviewOfYearDto, GameOverviewService, GameService, PlayerService } from '../api/openapi';
 import { GameDetailsFormComponent } from '../game/game-details-form/game-details-form.component';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
@@ -18,11 +16,6 @@ import { LoadingState } from '../shared/loading/loading.state';
 import { doWithLoading } from '../shared/operators';
 import { PenaltyWithUnitComponent } from '../shared/penalty-with-unit/penalty-with-unit.component';
 import { SuccessMessageService } from '../shared/success-message.service';
-
-interface OverviewItem {
-  year: string;
-  games: GameOverviewDto[];
-}
 
 @Component({
   selector: 'hop-home',
@@ -36,7 +29,7 @@ export class HomeComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  gameOverview: OverviewItem[] = [];
+  gameOverview: GameOverviewOfYearDto[] = [];
 
   private openApiGameOverviewService = inject(GameOverviewService);
   private gameService = inject(GameService);
@@ -48,9 +41,6 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.openApiGameOverviewService.getOverview().pipe(
       doWithLoading(this.loadingState, 'game-overview'),
-      map(res => groupBy(res, item => getYear(item.datetime))),
-      map(res => Object.entries<GameOverviewDto[]>(res).map(([year, games]) => ({ year, games }))),
-      map((items: OverviewItem[]) => items.sort((a, b) => +b.year - +a.year)),
     ).subscribe(overview => this.gameOverview = overview);
   }
 
@@ -62,6 +52,7 @@ export class HomeComponent implements OnInit {
           height: 'auto',
           data: {
             players,
+            hideCompleteControl: true,
           }
         }).afterClosed();
       }),

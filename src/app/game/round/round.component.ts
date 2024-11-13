@@ -4,15 +4,17 @@ import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { EventDto, PlayerDto, RoundDetailDto } from '../../api/openapi';
+import { ButtonSpinnerDirective } from '../../shared/button-spinner.directive';
 import { IsLoadingPipe } from '../../shared/loading/is-loading.pipe';
 import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
+import { ResponsiveButtonDirective } from '../../shared/responsive-button.directive';
 import { EventListComponent } from '../event-list/event-list.component';
 import ContextEnum = EventDto.ContextEnum;
 
 @Component({
   selector: 'hop-round',
   standalone: true,
-  imports: [CommonModule, EventsByPlayerIdPipe, EventListComponent, MatButton, MatIconModule, IsLoadingPipe, MatProgressSpinner],
+  imports: [CommonModule, EventsByPlayerIdPipe, EventListComponent, MatButton, MatIconModule, IsLoadingPipe, MatProgressSpinner, ButtonSpinnerDirective, ResponsiveButtonDirective],
   templateUrl: './round.component.html',
   styleUrl: './round.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,133 +1,90 @@
 @if (gameDetails$ | async; as game) {
-  <div class="game-info-container">
-    @if (!game.completed) {
-      <div class="game-info-item">
-        <hop-live-indicator></hop-live-indicator>
-        Spiel läuft
-      </div>
-    }
-
-    <div class="game-info-item">
-      <mat-icon>today</mat-icon>
-      {{game.datetime | date:'dd.MM.yyyy'}}
-    </div>
-
-    <div class="game-info-item">
-      <mat-icon>place</mat-icon>
-      @if (game.place.type === PlaceTypeEnum.Home) {
-        bei {{game.place.locationLabel}}
-      } @else if (game.place.type === PlaceTypeEnum.Away) {
-        {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
-      } @else {
-        {{game.place.type | placeTypeToLabel}}
-      }
-    </div>
-
-    @if (game.excludeFromStatistics) {
-      <div class="game-info-item">
-        <mat-icon>visibility_off</mat-icon>
-        ohne Wertung
-      </div>
-    }
-
-    @if (warnings$ | async; as warnings) {
-      <div class="game-info-item">
-        <mat-icon style="color: #ffa700;">warning</mat-icon>
-        {{warnings}} Warnung(en)
-      </div>
-    }
-
-    <button mat-stroked-button (click)="handleUpdateGame()">
-      @if ('game-details' | isLoading | async) {
-        <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
-      } @else {
-        <mat-icon>edit</mat-icon>
-      }
-      bearbeiten
-    </button>
-
-    <button mat-stroked-button class="danger" (click)="handleRemoveGame()">
-      @if ('delete-game' | isLoading | async) {
-        <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
-      } @else {
-        <mat-icon>delete</mat-icon>
-      }
-      Spiel löschen
-    </button>
-  </div>
-
-  <mat-stepper orientation="vertical" #stepper>
-    <ng-template matStepperIcon="edit" let-index="index">
-      <span *ngIf="index > 0">{{index}}</span>
-      <mat-icon *ngIf="index === 0">gavel</mat-icon>
-    </ng-template>
-    <ng-template matStepperIcon="number" let-index="index">
-      <span *ngIf="index > 0">{{index}}</span>
-      <mat-icon *ngIf="index === 0">gavel</mat-icon>
-    </ng-template>
-
-    <mat-step>
-      <ng-template matStepLabel>
-        <div>
-          Feststellungen
+  <div class="game-container">
+    <div class="game-info-container">
+      <div class="game-info-block">
+        <div class="game-info-item">
+          <mat-icon>today</mat-icon>
+          {{game.datetime | date:'dd.MM.yyyy'}}
         </div>
-        <div class="penalty-sum-container">
-          @if ('game-events' | isLoading | async) {
-            <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
-          }
-          @else if (game.penalties && game.penalties.length) {
-            @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
-              @if (idx > 0) {
-                <span>/</span>
-              }
-              <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+
+        <div class="game-info-item">
+          <mat-icon>place</mat-icon>
+          @if (game.place.type === PlaceTypeEnum.Home) {
+            bei {{game.place.locationLabel}}
+          } @else if (game.place.type === PlaceTypeEnum.Away) {
+            @if (isMobile$ | async) {
+              {{game.place.type | placeTypeToLabel}}
+            } @else {
+              {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
             }
           } @else {
-            <span>-</span>
+            {{game.place.type | placeTypeToLabel}}
           }
         </div>
-      </ng-template>
-      <ng-template matStepContent>
-        @if ('game-events' | isLoading | async) {
-          <hop-loading-mask></hop-loading-mask>
-        }
-        <hop-event-list
-          [context]="Context.Game"
-          [players]="(playersForGameEvents$ | async) || []"
-          [events]="game.events"
-          [disabled]="game.completed"
-          (onEventAdd)="handleGameEventAdd($event)"
-          (onEventRemove)="handleGameEventRemove($event)"
-        ></hop-event-list>
-      </ng-template>
-    </mat-step>
 
-    @for (round of rounds$ | async; track round.id) {
-      <mat-step completed="true">
+        @if (!game.completed) {
+          <div class="game-info-item">
+            <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
+          </div>
+        } @else {
+          <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
+        }
+
+        @if (game.excludeFromStatistics) {
+          <div class="game-info-item">
+            <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
+          </div>
+        }
+
+        @if (warnings$ | async; as warnings) {
+          <div class="game-info-item">
+            <mat-icon
+              aria-hidden="false"
+              style="margin: 10px 0; color: #ffa700;"
+              [matBadge]="warnings"
+              matBadgeSize="large"
+            >warning</mat-icon>
+          </div>
+        }
+      </div>
+      <div class="game-info-block">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="handleUpdateGame()">
+            <mat-icon>edit</mat-icon>
+            <span>bearbeiten</span>
+          </button>
+          <button mat-menu-item (click)="handleRemoveGame()">
+            <mat-icon>delete</mat-icon>
+            <span>Spiel löschen</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <mat-stepper orientation="vertical" #stepper>
+      <ng-template matStepperIcon="edit" let-index="index">
+        <span *ngIf="index > 0">{{index}}</span>
+        <mat-icon *ngIf="index === 0">gavel</mat-icon>
+      </ng-template>
+      <ng-template matStepperIcon="number" let-index="index">
+        <span *ngIf="index > 0">{{index}}</span>
+        <mat-icon *ngIf="index === 0">gavel</mat-icon>
+      </ng-template>
+
+      <mat-step>
         <ng-template matStepLabel>
-          <div class="round-marker-list">
-            @if (round.hasFinal) {
-              <mat-icon>sports_score</mat-icon>
-            }
-            @if (round.schockAusCount > 0) {
-              <mat-icon aria-hidden="false" style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
-            }
-            @if (round.warnings?.length) {
-              <mat-icon
-                aria-hidden="false"
-                style="margin: 10px 0;
-                color: #ffa700;"
-                [matBadge]="round.warnings!.length"
-                matBadgeSize="large"
-                [matBadgeHidden]="round.warnings!.length === 1"
-              >warning</mat-icon>
-            }
+          <div>
+            Feststellungen
           </div>
           <div class="penalty-sum-container">
-            @if (round.id | isLoading | async) {
+            @if ('game-events' | isLoading | async) {
               <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
-            } @else if (round.penalties && round.penalties.length) {
-              @for (penalty of round.penalties; track penalty.unit; let idx = $index) {
+            }
+            @else if (game.penalties && game.penalties.length) {
+              @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
                 @if (idx > 0) {
                   <span>/</span>
                 }
@@ -139,43 +96,87 @@
           </div>
         </ng-template>
         <ng-template matStepContent>
-          @if (round.id | isLoading | async) {
+          @if ('game-events' | isLoading | async) {
             <hop-loading-mask></hop-loading-mask>
           }
-          <hop-round
-            [round]="round"
-            [players]="(players$ | async) || []"
+          <hop-event-list
+            [context]="Context.Game"
+            [players]="(playersForGameEvents$ | async) || []"
+            [events]="game.events"
             [disabled]="game.completed"
-            (onEventAdd)="handleRoundEventAdd($event)"
-            (onEventRemove)="handleRoundEventRemove($event)"
-            (onRoundRemove)="handleRoundRemove($event)"
-            (onFinalistsChange)="handleFinalistsChange($event)"
-            (onAttendanceChange)="handleAttendanceChange($event)"
-          ></hop-round>
+            (onEventAdd)="handleGameEventAdd($event)"
+            (onEventRemove)="handleGameEventRemove($event)"
+          ></hop-event-list>
         </ng-template>
       </mat-step>
-    }
-  </mat-stepper>
 
-  <div class="game-bottom-row">
-    @if (!game.completed) {
-      <button mat-button class="new-round" (click)="startNewRound()">
-        @if ('start-new-round' | isLoading | async) {
-          <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
-        } @else {
+      @for (round of rounds$ | async; track round.id) {
+        <mat-step completed="true">
+          <ng-template matStepLabel>
+            <div class="round-marker-list">
+              @if (round.hasFinal) {
+                <mat-icon>sports_score</mat-icon>
+              }
+              @if (round.schockAusCount > 0) {
+                <mat-icon aria-hidden="false" style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
+              }
+              @if (round.warnings?.length) {
+                <mat-icon
+                  aria-hidden="false"
+                  style="margin: 10px 0;
+                  color: #ffa700;"
+                  [matBadge]="round.warnings!.length"
+                  matBadgeSize="large"
+                  [matBadgeHidden]="round.warnings!.length === 1"
+                >warning</mat-icon>
+              }
+            </div>
+            <div class="penalty-sum-container">
+              @if (round.id | isLoading | async) {
+                <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
+              } @else if (round.penalties && round.penalties.length) {
+                @for (penalty of round.penalties; track penalty.unit; let idx = $index) {
+                  @if (idx > 0) {
+                    <span>/</span>
+                  }
+                  <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                }
+              } @else {
+                <span>-</span>
+              }
+            </div>
+          </ng-template>
+          <ng-template matStepContent>
+            @if (round.id | isLoading | async) {
+              <hop-loading-mask></hop-loading-mask>
+            }
+            <hop-round
+              [round]="round"
+              [players]="(players$ | async) || []"
+              [disabled]="game.completed"
+              (onEventAdd)="handleRoundEventAdd($event)"
+              (onEventRemove)="handleRoundEventRemove($event)"
+              (onRoundRemove)="handleRoundRemove($event)"
+              (onFinalistsChange)="handleFinalistsChange($event)"
+              (onAttendanceChange)="handleAttendanceChange($event)"
+            ></hop-round>
+          </ng-template>
+        </mat-step>
+      }
+    </mat-stepper>
+
+    <div class="game-bottom-row">
+      @if (!game.completed) {
+        <button mat-button class="new-round" (click)="startNewRound()" [loading]="!!('start-new-round' | isLoading | async)">
           <mat-icon>add</mat-icon>
-        }
-        Neue Runde
-      </button>
+          Neue Runde
+        </button>
 
-      <button hopCelebration mat-flat-button class="complete-game" (click)="setGameCompleted()">
-        @if ('complete-game' | isLoading | async) {
-          <mat-icon><mat-spinner class="white-spinner" diameter="15"></mat-spinner></mat-icon>
-        } @else {
+        <button hopCelebration mat-flat-button class="complete-game" (click)="setGameCompleted()" [loading]="!!('complete-game' | isLoading | async)">
           <mat-icon>check</mat-icon>
-        }
-        Spiel abschließen
-      </button>
-    }
+          Spiel abschließen
+        </button>
+      }
+    </div>
   </div>
 }

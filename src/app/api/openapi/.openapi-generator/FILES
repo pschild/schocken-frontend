@@ -38,6 +38,7 @@ model/gameDetailDto.ts
 model/gameDetailFullDto.ts
 model/gameDto.ts
 model/gameOverviewDto.ts
+model/gameOverviewOfYearDto.ts
 model/models.ts
 model/penaltyDto.ts
 model/placeDto.ts

@@ -1,3 +1,10 @@
+$line-height: 40px;
+
+.scroll-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 .event-table {
   width: 100%;
   text-align: left;
@@ -5,7 +12,7 @@
   white-space: nowrap;
 
   tr {
-    height: 50px;
+    height: $line-height;
 
     &:nth-child(even) {
       background-color: #eff2e5;
@@ -14,24 +21,34 @@
     td {
       // Checkbox and player's name
       &:first-child {
-        width: 140px;
+        width: 100px;
         padding-left: 7px;
         vertical-align: top;
-        line-height: 40px;
+        line-height: $line-height;
+        padding-top: 8px;
       }
 
       // add-Button
       &:nth-child(2) {
         width: 70px;
+        min-width: 70px;
         vertical-align: top;
-        line-height: 40px;
+        line-height: $line-height;
+        text-align: center;
+        padding-top: 8px;
       }
 
       // events with penalties
       &:last-child {
         padding-right: 5px;
         vertical-align: top;
-        line-height: 40px;
+        line-height: $line-height;
+        padding-top: 8px;
+      }
+
+      &.empty {
+        width: 0;
+        min-width: 0;
       }
 
       .event-row {
@@ -50,6 +67,7 @@
 
         .right-col {
           text-align: right;
+          margin-left: 5px;
         }
       }
     }

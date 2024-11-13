@@ -18,7 +18,7 @@
       }
     </div>
 
-    <button mat-stroked-button [disabled]="!form.valid" (click)="saveEvent()">
+    <button mat-stroked-button [disabled]="!form.valid || (eventType().multiplicatorUnit && !form.value.multiplicatorValue)" (click)="saveEvent()">
       <mat-icon>add</mat-icon>
       <hop-penalty-with-unit [unit]="eventType().penaltyUnit!" [penalty]="eventType().penaltyValue! * (form.value.multiplicatorValue || 1)"></hop-penalty-with-unit>
     </button>

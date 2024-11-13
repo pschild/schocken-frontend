@@ -1,19 +1,25 @@
+.game-container {
+  max-width: 900px;
+}
+
 .game-info-container {
   display: flex;
+  flex-flow: wrap;
+  justify-content: space-between;
   margin-bottom: 10px;
 
-  .game-info-item {
+  .game-info-block {
     display: flex;
     align-items: center;
 
-    &:not(:last-of-type):after {
-      content: "•";
-      padding: 0 10px;
+    & > * {
+      margin: 0 5px;
     }
-  }
 
-  button {
-    margin-left: 10px;
+    .game-info-item {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 
@@ -33,9 +39,9 @@
   }
 }
 
-mat-stepper {
-  max-width: 900px;
-}
+//mat-stepper {
+//  max-width: 900px;
+//}
 
 .round-marker-list {
   mat-icon:not(:first-child) {

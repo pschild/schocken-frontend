@@ -1,44 +1,46 @@
-<table class="event-table">
-  @for (player of players(); track player.id) {
-    <tr>
-      <td>
-        @if (context() === Context.Game) {
-          <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
-        } @else {
-          <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled()">
+<div class="scroll-wrapper">
+  <table class="event-table">
+    @for (player of players(); track player.id) {
+      <tr>
+        <td>
+          @if (context() === Context.Game) {
             <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
-          </mat-checkbox>
-        }
-      </td>
-      <td>
-        @if (!this.disabled()) {
-          <button mat-icon-button class="hop-icon-button primary" (click)="openAddEventDialog(player)">
-            <mat-icon>add</mat-icon>
-          </button>
-        }
-      </td>
-      <td>
-        @for (event of events() | eventsByPlayerId:player.id; track event.id) {
-          <div class="event-row">
-            <div class="left-col">
-              @if (!disabled()) {
-                <button mat-icon-button class="hop-icon-button danger" (click)="removeEvent(event.id)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              }
-              <span>{{ event.eventType.description }}</span>
-              @if (event.comment) {
-                <mat-icon [matTooltip]="event.comment" style="margin-left: 10px;">comment</mat-icon>
-              }
+          } @else {
+            <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled()">
+              <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
+            </mat-checkbox>
+          }
+        </td>
+        <td [ngClass]="{ empty: this.disabled() }">
+          @if (!this.disabled()) {
+            <button mat-icon-button class="hop-icon-button primary" (click)="openAddEventDialog(player)">
+              <mat-icon>add</mat-icon>
+            </button>
+          }
+        </td>
+        <td>
+          @for (event of events() | eventsByPlayerId:player.id; track event.id) {
+            <div class="event-row">
+              <div class="left-col">
+                @if (!disabled()) {
+                  <button mat-icon-button class="hop-icon-button danger" (click)="removeEvent(event.id)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+                <span>{{ event.eventType.description }}</span>
+                @if (event.comment) {
+                  <mat-icon [matTooltip]="event.comment" style="margin-left: 10px;">comment</mat-icon>
+                }
+              </div>
+              <div class="right-col">
+                @if (event.calculatedPenalty.sum) {
+                  <hop-penalty-with-unit [unit]="event.calculatedPenalty.unit" [penalty]="event.calculatedPenalty.sum"></hop-penalty-with-unit>
+                }
+              </div>
             </div>
-            <div class="right-col">
-              @if (event.calculatedPenalty.sum) {
-                <hop-penalty-with-unit [unit]="event.calculatedPenalty.unit" [penalty]="event.calculatedPenalty.sum"></hop-penalty-with-unit>
-              }
-            </div>
-          </div>
-        }
-      </td>
-    </tr>
-  }
-</table>
+          }
+        </td>
+      </tr>
+    }
+  </table>
+</div>

@@ -1,18 +1,22 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, delay, Observable, Subject, switchMap, tap } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CreateGameDto, EventDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
+import { ButtonSpinnerDirective } from '../shared/button-spinner.directive';
 import { CelebrationDirective } from '../shared/celebration.directive';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
 import { LoadingMaskComponent } from '../shared/loading/loading-mask/loading-mask.component';
@@ -46,6 +50,9 @@ import ContextEnum = EventDto.ContextEnum;
     CelebrationDirective,
     MatTooltip,
     LiveIndicatorComponent,
+    MatFabButton,
+    ButtonSpinnerDirective,
+    MatMenuModule,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -55,6 +62,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   @ViewChild('stepper') private stepper!: MatStepper;
 
+  readonly breakpointObserver = inject(BreakpointObserver);
   readonly dialog = inject(MatDialog);
   readonly destroyRef = inject(DestroyRef);
 
@@ -69,6 +77,10 @@ export class GameComponent implements OnInit, OnDestroy {
   players$: Observable<PlayerDto[]> = this.state.players$;
   playersForGameEvents$: Observable<PlayerDto[]> = this.state.playersForGameEvents$;
   warnings$: Observable<number> = this.state.warnings$;
+
+  isMobile$ = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
+    map(state => state.matches)
+  );
 
   private updateFinalistsDebouncer$ = new Subject<{ roundId: string; finalistIds: string[] }>();
 

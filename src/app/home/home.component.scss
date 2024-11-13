@@ -3,6 +3,15 @@ mat-accordion {
   max-width: 600px;
 }
 
+mat-panel-description {
+  font-size: 12px;
+
+  & > div:not(:last-of-type):after {
+    content: "•";
+    padding: 0 10px;
+  }
+}
+
 .game-item-container {
   display: flex;
   justify-content: space-between;

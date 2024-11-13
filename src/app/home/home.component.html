@@ -11,10 +11,23 @@
         <mat-expansion-panel-header>
           <mat-panel-title>{{ item.year }}</mat-panel-title>
           <mat-panel-description>
-            @if (item.games.length === 1) {
-              <span>1 Spiel</span>
-            } @else {
-              <span>{{item.games.length}} Spiele</span>
+            <div>
+              @if (item.games.length === 1) {
+                <span>1 Spiel</span>
+              } @else {
+                <span>{{item.games.length}} Spiele</span>
+              }
+            </div>
+
+            @if (item.penaltySum.length) {
+              <div>
+                @for (penalty of item.penaltySum; track penalty.unit; let idx = $index) {
+                  @if (idx > 0) {
+                    <span>/</span>
+                  }
+                  <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                }
+              </div>
             }
           </mat-panel-description>
         </mat-expansion-panel-header>

@@ -30,13 +30,11 @@
       </mat-form-field>
     }
 
-    <div>
-      <mat-slide-toggle formControlName="excludeFromStatistics">ohne Wertung</mat-slide-toggle>
-    </div>
+    <mat-slide-toggle formControlName="excludeFromStatistics">ohne Wertung</mat-slide-toggle>
 
-    <div>
+    @if (!data.hideCompleteControl) {
       <mat-slide-toggle formControlName="completed">abgeschlossen</mat-slide-toggle>
-    </div>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

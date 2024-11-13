@@ -112,3 +112,26 @@ hop-game {
     --mat-badge-large-size-container-overlap-offset: -10px;
   }
 }
+
+.button-loading {
+  mat-icon, .mdc-button__label {
+    visibility: hidden;
+  }
+
+  mat-progress-spinner {
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+  }
+}
+
+.mobile-button {
+  mat-icon {
+    --mat-outlined-button-icon-spacing: 0;
+    --mat-outlined-button-icon-offset: 0;
+  }
+
+  .mdc-button__label {
+    display: none;
+  }
+}

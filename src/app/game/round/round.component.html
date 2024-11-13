@@ -18,17 +18,16 @@
   (onEventAdd)="handleEventAdd($event)"
   (onEventRemove)="handleEventRemove($event)"
 ></hop-event-list>
-<div class="edit-round-buttons">
-  <button mat-stroked-button (click)="openEditAttendanceDialog()" [disabled]="disabled()">
-    <mat-icon>people</mat-icon>
-    Teilnahmen anpassen
-  </button>
-  <button mat-stroked-button class="danger" (click)="removeRound()" [disabled]="disabled()">
-    @if ('remove-round-' + round().id | isLoading | async) {
-      <mat-icon><mat-spinner diameter="15"></mat-spinner></mat-icon>
-    } @else {
+
+@if (!disabled()) {
+  <div class="edit-round-buttons">
+    <button mat-stroked-button hopResponsiveButton (click)="openEditAttendanceDialog()">
+      <mat-icon>people</mat-icon>
+      Teilnahmen anpassen
+    </button>
+    <button mat-stroked-button hopResponsiveButton class="danger" (click)="removeRound()" [loading]="!!('remove-round-' + round().id | isLoading | async)">
       <mat-icon>delete</mat-icon>
-    }
-    Runde löschen
-  </button>
-</div>
+      Runde löschen
+    </button>
+  </div>
+}
