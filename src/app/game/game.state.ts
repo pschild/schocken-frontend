@@ -80,7 +80,7 @@ export class GameState extends StateService<IGameState> {
   }
 
   init(gameId: string): void {
-    this.gameDetailsService.getDetails(gameId).subscribe(gameDetails => this.setState({ gameDetails }));
+    this.gameDetailsService.findOne(gameId).subscribe(gameDetails => this.setState({ gameDetails }));
     this.roundDetailsService.getByGameId(gameId).subscribe(rounds => this.setState({ rounds }));
     this.playerService.findAll().subscribe(players => this.setState({ players }));
     this.eventTypeService.findAll().subscribe(eventTypes => this.setState({ eventTypes }));
@@ -178,7 +178,7 @@ export class GameState extends StateService<IGameState> {
 
   private reloadGameOrRound(context: ContextEnum, roundId?: string): Observable<GameDetailDto | RoundDetailDto> {
     if (context === ContextEnum.Game) {
-      return this.gameDetailsService.getDetails(this.state.gameDetails!.id).pipe(
+      return this.gameDetailsService.findOne(this.state.gameDetails!.id).pipe(
         tap((gameDetails: GameDetailDto) => this.setState({ gameDetails })),
       );
     } else if (context === ContextEnum.Round) {

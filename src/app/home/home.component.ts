@@ -8,7 +8,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { switchMap, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { GameOverviewOfYearDto, GameOverviewService, GameService, PlayerService } from '../api/openapi';
+import { GameDetailsService, GameOverviewOfYearDto, GameOverviewService, PlayerService } from '../api/openapi';
 import { GameDetailsFormComponent } from '../game/game-details-form/game-details-form.component';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
   gameOverview: GameOverviewOfYearDto[] = [];
 
   private openApiGameOverviewService = inject(GameOverviewService);
-  private gameService = inject(GameService);
+  private gameDetailsService = inject(GameDetailsService);
   private playerService = inject(PlayerService);
   private successMessageService = inject(SuccessMessageService);
   private router = inject(Router);
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
         }).afterClosed();
       }),
       filter(result => !!result),
-      switchMap(({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics }) => this.gameService.create({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics })),
+      switchMap(({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics }) => this.gameDetailsService.create({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics })),
       tap(game => this.router.navigate(['game', game.id])),
       tap(() => this.successMessageService.showSuccess(`Spiel erstellt`)),
     ).subscribe();
