@@ -154,11 +154,11 @@ export class GameState extends StateService<IGameState> {
       const round = findRoundById(this.state.rounds, roundId);
       return this.gameDialogService.schockAusStrafeDialog(round, this.state.players, playerId).pipe(
         switchMap((playerIds: string[]) => {
-          const schockAusStrafeEventType = findEventTypeByTrigger(this.state.eventTypes, TriggerEnum.SchockAusPenalty);
+          const schockAusStrafeEventType = findEventTypeByTrigger(this.state.eventTypes, TriggerEnum.SchockAusStrafe);
           return this.eventDetailsService.createMany({eventTypeId: schockAusStrafeEventType.id, context: ContextEnum.Round, roundId, playerIds})
         }),
       );
-    } else if (event.trigger === TriggerEnum.StartNewRound) {
+    } else if (event.trigger === TriggerEnum.Verloren) {
       return this.gameDialogService.verlorenDialog(findPlayerNameById(this.state.players, playerId)).pipe(
         switchMap(result => result ? this.startNewRound().pipe(map(res => [{ celebration: res.celebration }])) : EMPTY),
       );

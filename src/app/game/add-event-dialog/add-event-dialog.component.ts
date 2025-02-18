@@ -45,7 +45,7 @@ export class AddEventDialogComponent implements OnInit {
   selectedEventType: EventTypeOverviewDto | null = null;
 
   ngOnInit(): void {
-    const schockAusPenaltyEventType = this.data.eventTypes.find(eventType => eventType.trigger === TriggerEnum.SchockAusPenalty);
+    const schockAusPenaltyEventType = this.data.eventTypes.find(eventType => eventType.trigger === TriggerEnum.SchockAusStrafe);
     const cleanedEventTypes = this.data.eventTypes.filter(eventType => ![schockAusPenaltyEventType?.id].includes(eventType.id));
     this.favoriteEventTypes = cleanedEventTypes.slice(0, 3);
     this.otherEventTypes = [

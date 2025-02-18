@@ -1,1 +1,86 @@
-<p>statistics works!</p>
+<form [formGroup]="filterForm">
+  <mat-form-field>
+    <mat-label>Zeitraum auswählen</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [min]="minDate$ | async" [max]="maxDate$ | async">
+      <input matStartDate formControlName="fromDate" placeholder="TT.MM.JJJJ">
+      <input matEndDate formControlName="toDate" placeholder="TT.MM.JJJJ">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker [dateClass]="(dateClass$ | async)!"></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-checkbox formControlName="onlyActivePlayers">nur aktive Spieler</mat-checkbox>
+
+  <button mat-stroked-button color="primary" [matMenuTriggerFor]="quickfilterDatesMenu" [disabled]="'filter-form' | isLoading | async">
+    @if (isMobile$ | async) {
+      <span>
+      <mat-icon>filter_alt</mat-icon>
+    </span>
+    } @else {
+      <span>Schnellfilter</span>
+    }
+    <mat-icon>expand_more</mat-icon>
+  </button>
+  <mat-menu #quickfilterDatesMenu="matMenu">
+    <button mat-menu-item (click)="resetDateRange()">Gesamt</button>
+    <button mat-menu-item (click)="setDateRangeForLatestGame()">Letztes Spiel</button>
+    @for (year of years$ | async; track year) {
+      <button mat-menu-item (click)="applyYearToFilter(year)">{{year}}</button>
+    }
+  </mat-menu>
+</form>
+
+<mat-tab-group mat-stretch-tabs="true">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>casino</mat-icon>
+      Spiele & Runden
+    </ng-template>
+    <mat-tab-group mat-stretch-tabs="false">
+      <mat-tab label="Allgemein">
+        Allgemein
+      </mat-tab>
+      <mat-tab label="Teilnahmen">
+        <hop-attendance-table [data]="attendancesStatistics$ | async" [loading]="'attendance-statistics' | isLoading | async"></hop-attendance-table>
+      </mat-tab>
+      <mat-tab label="Austragungsorte">
+        <hop-host-table [data]="hostStatistics$ | async" [loading]="'host-statistics' | isLoading | async"></hop-host-table>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>emoji_events</mat-icon>
+      Punkte
+    </ng-template>
+    Punkte
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>star</mat-icon>
+      Rekorde & Streaks
+    </ng-template>
+    <mat-tab-group mat-stretch-tabs="false">
+      <mat-tab label="Spielübergreifend">Spielübergreifend</mat-tab>
+      <mat-tab label="pro Spiel">pro Spiel</mat-tab>
+    </mat-tab-group>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>savings</mat-icon>
+      Kasse
+    </ng-template>
+    Kasse
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon svgIcon="schock_aus"></mat-icon>
+      Ereignisse
+    </ng-template>
+    <mat-tab-group mat-stretch-tabs="false">
+      <mat-tab label="Schock-Aus">Schock-Aus</mat-tab>
+      <mat-tab label="pro Spieler">pro Spieler</mat-tab>
+      <mat-tab label="Anzahlen">Anzahlen</mat-tab>
+    </mat-tab-group>
+</mat-tab>
+</mat-tab-group>

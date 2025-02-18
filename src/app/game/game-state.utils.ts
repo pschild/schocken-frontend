@@ -13,7 +13,7 @@ export function validateArguments(context: ContextEnum, gameId?: string, roundId
 }
 
 export function findEventTypeByTrigger(eventTypes: EventTypeOverviewDto[], trigger: TriggerEnum): EventTypeOverviewDto {
-  const eventType = eventTypes.find(type => type.trigger === TriggerEnum.SchockAusPenalty);
+  const eventType = eventTypes.find(type => type.trigger === TriggerEnum.SchockAusStrafe);
   if (!eventType) {
     throw new InvalidArgumentError(`Could not find an event type with trigger ${trigger}`);
   }

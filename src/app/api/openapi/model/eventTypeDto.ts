@@ -31,11 +31,13 @@ export namespace EventTypeDto {
         Game: 'GAME' as ContextEnum,
         Round: 'ROUND' as ContextEnum
     };
-    export type TriggerEnum = 'START_NEW_ROUND' | 'SCHOCK_AUS' | 'SCHOCK_AUS_PENALTY';
+    export type TriggerEnum = 'VERLOREN' | 'SCHOCK_AUS' | 'SCHOCK_AUS_STRAFE' | 'ZWEI_ZWEI_EINS' | 'LUSTWURF';
     export const TriggerEnum = {
-        StartNewRound: 'START_NEW_ROUND' as TriggerEnum,
+        Verloren: 'VERLOREN' as TriggerEnum,
         SchockAus: 'SCHOCK_AUS' as TriggerEnum,
-        SchockAusPenalty: 'SCHOCK_AUS_PENALTY' as TriggerEnum
+        SchockAusStrafe: 'SCHOCK_AUS_STRAFE' as TriggerEnum,
+        ZweiZweiEins: 'ZWEI_ZWEI_EINS' as TriggerEnum,
+        Lustwurf: 'LUSTWURF' as TriggerEnum
     };
     export type PenaltyUnitEnum = 'EURO' | 'BEER_CRATE';
     export const PenaltyUnitEnum = {

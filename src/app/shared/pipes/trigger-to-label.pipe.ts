@@ -3,9 +3,11 @@ import { EventTypeDto } from '../../api/openapi';
 import TriggerEnum = EventTypeDto.TriggerEnum;
 
 const enumToValueMap = {
-  [TriggerEnum.StartNewRound]: 'neue Runde starten',
+  [TriggerEnum.Verloren]: 'neue Runde starten',
   [TriggerEnum.SchockAus]: 'Schock Aus',
-  [TriggerEnum.SchockAusPenalty]: 'Schock Aus Strafe',
+  [TriggerEnum.SchockAusStrafe]: 'Schock Aus Strafe',
+  [TriggerEnum.Lustwurf]: 'Lustwurf',
+  [TriggerEnum.ZweiZweiEins]: '2-2-1',
 };
 
 @Pipe({
