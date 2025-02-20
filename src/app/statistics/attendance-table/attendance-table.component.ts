@@ -1,5 +1,5 @@
 import { DecimalPipe, PercentPipe } from '@angular/common';
-import { AfterViewInit, Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, viewChild } from '@angular/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { QuoteByNameDto } from '../../api/openapi';
@@ -10,30 +10,34 @@ import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-
   standalone: true,
   imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe],
   templateUrl: './attendance-table.component.html',
-  styleUrl: './attendance-table.component.scss'
+  styleUrl: './attendance-table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AttendanceTableComponent implements OnChanges, AfterViewInit {
+export class AttendanceTableComponent implements AfterViewInit {
 
-  @ViewChild(MatSort) sort!: MatSort;
+  sort = viewChild.required(MatSort);
+
+  data = input<QuoteByNameDto[], QuoteByNameDto[] | null>([], {
+    transform: (value: QuoteByNameDto[] | null) => !!value ? value : []
+  });
+  loading = input<boolean, boolean | null>(false, {
+    transform: (value: boolean | null) => !!value
+  });
 
   displayedColumns: string[] = ['rank', 'name', 'count', 'quote'];
-  dataSource: MatTableDataSource<QuoteByNameDto>;
+  dataSource: MatTableDataSource<QuoteByNameDto> = new MatTableDataSource();
 
-  @Input() data: QuoteByNameDto[] | null = null;
-  @Input() loading: boolean | null = false;
+  private cdr = inject(ChangeDetectorRef);
 
   constructor() {
-    this.dataSource = new MatTableDataSource(this.data || []);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data']) {
-      this.dataSource.data = changes['data'].currentValue;
-    }
+    effect(() => {
+      this.dataSource.data = this.data();
+      this.cdr.markForCheck();
+    });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
+    this.dataSource.sort = this.sort();
   }
 
 }

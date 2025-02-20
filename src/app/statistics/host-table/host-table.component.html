@@ -1,6 +1,7 @@
-@if (loading) {
+@if (loading()) {
   <hop-loading-mask></hop-loading-mask>
 }
+
 <table
   mat-table
   [dataSource]="dataSource"
@@ -30,4 +31,9 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+      Es gibt keine Daten für die ausgewählten Filter.
+    </td>
+  </tr>
 </table>

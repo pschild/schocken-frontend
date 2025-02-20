@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, input, output, signal, untracked } from '@angular/core';
-import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -18,8 +18,6 @@ import ContextEnum = EventDto.ContextEnum;
     MatCheckbox,
     MatIcon,
     MatIconButton,
-    MatMiniFabButton,
-    MatButton,
     MatTooltipModule,
     PenaltyWithUnitComponent
   ],

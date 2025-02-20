@@ -13,11 +13,19 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { format, getYear, max, min, set } from 'date-fns';
 import { combineLatest, debounceTime, delay, Observable, shareReplay } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
-import { HostsTableDto, QuoteByNameDto, StatisticsService, GameIdsWithDatetimeDto } from '../api/openapi';
+import {
+  HostsTableDto,
+  QuoteByNameDto,
+  StatisticsService,
+  GameIdsWithDatetimeDto,
+  GamesAndRoundsStatisticsResponseDto
+} from '../api/openapi';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
 import { LoadingState } from '../shared/loading/loading.state';
 import { doWithLoading } from '../shared/operators';
 import { AttendanceTableComponent } from './attendance-table/attendance-table.component';
+import { FinalsAttendanceTableComponent } from './finals-attendance-table/finals-attendance-table.component';
+import { GameAndRoundsComponent } from './game-and-rounds/game-and-rounds.component';
 import { HostTableComponent } from './host-table/host-table.component';
 
 @Component({
@@ -35,7 +43,9 @@ import { HostTableComponent } from './host-table/host-table.component';
     HostTableComponent,
     IsLoadingPipe,
     MatButtonModule,
-    AttendanceTableComponent
+    AttendanceTableComponent,
+    FinalsAttendanceTableComponent,
+    GameAndRoundsComponent
   ],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
@@ -99,12 +109,17 @@ export class StatisticsComponent implements OnInit {
     distinctUntilChanged((prev, curr) =>
       prev.fromDate === curr.fromDate && prev.toDate === curr.toDate && prev.onlyActivePlayers === curr.onlyActivePlayers
     ),
-    tap(console.log),
     map(({ fromDate, toDate, onlyActivePlayers }) => ({
       fromDate: set(fromDate!, { hours: 0, minutes: 0, seconds: 0 }).toISOString(),
       toDate: set(toDate!, { hours: 23, minutes: 59, seconds: 59 }).toISOString(),
-      onlyActivePlayers,
+      onlyActivePlayers: onlyActivePlayers!,
     })),
+  );
+
+  gamesAndRoundsStatistics$: Observable<GamesAndRoundsStatisticsResponseDto> = this.filterChanges$.pipe(
+    switchMap(config => this.statisticsService.gamesAndRoundsStatistics(config).pipe(
+      doWithLoading(this.loadingState, 'games-and-rounds-statistics'),
+    )),
   );
 
   hostStatistics$: Observable<HostsTableDto[]> = this.filterChanges$.pipe(
@@ -121,7 +136,13 @@ export class StatisticsComponent implements OnInit {
     )),
   );
 
-  // gamesAndRoundsStatistics: this.statisticsService.gamesAndRoundsStatistics(defaultOptions),
+  finalAttendancesStatistics$: Observable<QuoteByNameDto[]> = this.filterChanges$.pipe(
+    switchMap(config => this.statisticsService.attendancesStatistics(config).pipe(
+      doWithLoading(this.loadingState, 'final-attendance-statistics'),
+      map(response => response.finalsTable)
+    )),
+  );
+
   // eventTypeStatistics: this.statisticsService.eventTypeStatistics(defaultOptions),
   // // eventTypeCountsByPlayer: this.statisticsService.eventTypeCountsByPlayer(),
   // pointsStatistics: this.statisticsService.pointsStatistics(defaultOptions),

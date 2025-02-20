@@ -16,7 +16,7 @@ export class OdometerComponent implements OnInit, OnChanges  {
 
   countTo = input.required<number>();
   precision = input(0);
-  type = input<'number' | 'currency'>('number');
+  type = input<'number' | 'currency' | 'average'>('number');
 
   targetValue$: ReplaySubject<number> = new ReplaySubject(1);
   currentValue$: Observable<string> | undefined;
@@ -43,6 +43,8 @@ export class OdometerComponent implements OnInit, OnChanges  {
       && !isNaN(changes['countTo'].currentValue)
     ) {
       this.targetValue$.next(+changes['countTo'].currentValue);
+    } else {
+      this.targetValue$.next(0);
     }
   }
 

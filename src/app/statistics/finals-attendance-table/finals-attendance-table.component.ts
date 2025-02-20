@@ -1,31 +1,31 @@
+import { DecimalPipe, PercentPipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, viewChild } from '@angular/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { HostsTableDto } from '../../api/openapi';
+import { QuoteByNameDto } from '../../api/openapi';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
-import { PlaceTypeToLabelPipe } from '../../shared/pipes/place-type-to-label.pipe';
 
 @Component({
-  selector: 'hop-host-table',
+  selector: 'hop-finals-attendance-table',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe],
-  templateUrl: './host-table.component.html',
-  styleUrl: './host-table.component.scss',
+  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe],
+  templateUrl: './finals-attendance-table.component.html',
+  styleUrl: './finals-attendance-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HostTableComponent implements AfterViewInit {
+export class FinalsAttendanceTableComponent implements AfterViewInit {
 
   sort = viewChild.required(MatSort);
 
-  data = input<HostsTableDto[], HostsTableDto[] | null>([], {
-    transform: (value: HostsTableDto[] | null) => !!value ? value : []
+  data = input<QuoteByNameDto[], QuoteByNameDto[] | null>([], {
+    transform: (value: QuoteByNameDto[] | null) => !!value ? value : []
   });
   loading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
 
-  displayedColumns: string[] = ['rank', 'placeType', 'name', 'count'];
-  dataSource: MatTableDataSource<HostsTableDto> = new MatTableDataSource();
+  displayedColumns: string[] = ['rank', 'name', 'count', 'quote'];
+  dataSource: MatTableDataSource<QuoteByNameDto> = new MatTableDataSource();
 
   private cdr = inject(ChangeDetectorRef);
 
@@ -39,4 +39,5 @@ export class HostTableComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort();
   }
+
 }

@@ -1,4 +1,4 @@
-<h2>Teilnahmen</h2>
+<h2>Finalteilnahmen</h2>
 
 @if (loading()) {
   <hop-loading-mask></hop-loading-mask>
@@ -22,7 +22,7 @@
   </ng-container>
 
   <ng-container matColumnDef="count">
-    <th mat-header-cell mat-sort-header *matHeaderCellDef>Runden</th>
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Finals</th>
     <td mat-cell *matCellDef="let element">{{ element.count | number }}</td>
   </ng-container>
 

@@ -5,7 +5,10 @@
   @case ('currency') {
     <span>{{currentValue$ | async | currency}}</span>
   }
+  @case ('average') {
+    <span>⌀ {{currentValue$ | async | number:precisionExpr}}</span>
+  }
 }
 <!-- <div>
-  <small style="font-size: 12px">({{countTo?.toFixed(2)}})</small>
-</div> -->
+  <small style="font-size: 12px">({{countTo()?.toFixed(2)}})</small>
+</div>-->

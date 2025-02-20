@@ -38,10 +38,20 @@
     </ng-template>
     <mat-tab-group mat-stretch-tabs="false">
       <mat-tab label="Allgemein">
-        Allgemein
+        <hop-game-and-rounds
+          [data]="gamesAndRoundsStatistics$ | async"
+          [loading]="'games-and-rounds-statistics' | isLoading | async"
+        ></hop-game-and-rounds>
       </mat-tab>
       <mat-tab label="Teilnahmen">
-        <hop-attendance-table [data]="attendancesStatistics$ | async" [loading]="'attendance-statistics' | isLoading | async"></hop-attendance-table>
+        <hop-attendance-table
+          [data]="attendancesStatistics$ | async"
+          [loading]="'attendance-statistics' | isLoading | async"
+        ></hop-attendance-table>
+        <hop-finals-attendance-table
+          [data]="finalAttendancesStatistics$ | async"
+          [loading]="'final-attendance-statistics' | isLoading | async"
+        ></hop-finals-attendance-table>
       </mat-tab>
       <mat-tab label="Austragungsorte">
         <hop-host-table [data]="hostStatistics$ | async" [loading]="'host-statistics' | isLoading | async"></hop-host-table>
@@ -67,7 +77,7 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>savings</mat-icon>
+      <mat-icon>euro</mat-icon>
       Kasse
     </ng-template>
     Kasse
