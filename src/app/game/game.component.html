@@ -111,7 +111,7 @@
       </mat-step>
 
       @for (round of rounds$ | async; track round.id) {
-        <mat-step completed="true">
+        <mat-step completed="true" [state]="round.id">
           <ng-template matStepLabel>
             <div class="round-marker-list">
               @if (round.hasFinal) {

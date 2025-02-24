@@ -1,19 +1,28 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute } from '@angular/router';
-import { debounceTime, delay, Observable, Subject, switchMap, tap } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, delay, Observable, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { CreateGameDto, EventDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
 import { ButtonSpinnerDirective } from '../shared/button-spinner.directive';
@@ -48,9 +57,7 @@ import ContextEnum = EventDto.ContextEnum;
     IsLoadingPipe,
     LoadingMaskComponent,
     CelebrationDirective,
-    MatTooltip,
     LiveIndicatorComponent,
-    MatFabButton,
     ButtonSpinnerDirective,
     MatMenuModule,
   ],
@@ -58,9 +65,9 @@ import ContextEnum = EventDto.ContextEnum;
   styleUrl: './game.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameComponent implements OnInit, OnDestroy {
+export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild('stepper') private stepper!: MatStepper;
+  @ViewChildren('stepper') private steppers!: QueryList<MatStepper>;
 
   readonly breakpointObserver = inject(BreakpointObserver);
   readonly dialog = inject(MatDialog);
@@ -99,6 +106,29 @@ export class GameComponent implements OnInit, OnDestroy {
       delay(500), // wait for stepper being updated before activating the last step
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => this.openLastRound());
+  }
+
+  ngAfterViewInit(): void {
+    this.steppers.changes.pipe(
+      withLatestFrom(this.route.queryParams),
+      filter(([_, { roundId }]: [QueryList<MatStepper>, { roundId?: string }]) => !!roundId),
+      map(([steppers, { roundId }]: [QueryList<MatStepper>, { roundId?: string }]) => ({
+        stepList: steppers.first,
+        roundId
+      })),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ stepList, roundId }) => {
+      const idx = stepList.steps.toArray().findIndex(step => step.state === roundId);
+      if (idx >= 0) {
+        stepList.selectedIndex = idx;
+        const element = document.getElementById(stepList._getStepLabelId(idx));
+        if (element) {
+          setTimeout(() => {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 500);
+        }
+      }
+    });
   }
 
   handleUpdateGame(): void {
@@ -171,7 +201,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private openLastRound(): void {
-    this.stepper.selectedIndex = this.stepper.steps.length - 1;
+    this.steppers.first.selectedIndex = this.steppers.first.steps.length - 1;
   }
 
   ngOnDestroy(): void {
