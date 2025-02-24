@@ -1,0 +1,34 @@
+.carousel-container {
+  position: relative;
+}
+
+.arrow-container {
+  button {
+    position: absolute;
+    top: -10px;
+
+    &.next {
+      right: -10px;
+    }
+
+    &.previous {
+      left: -10px;
+    }
+  }
+}
+
+.dot-container {
+  .dot {
+    display: inline-block;
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    margin: 0 2px;
+
+    &.active {
+      background-color: #bbb;
+    }
+  }
+}
