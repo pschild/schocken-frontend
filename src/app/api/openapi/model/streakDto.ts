@@ -13,9 +13,11 @@
 export interface StreakDto { 
     rank: number;
     name: string;
-    streak: number;
+    maxStreak: number;
+    currentStreak: number;
     isCurrent: boolean;
     lastRoundIdOfStreak: string;
+    gameId: string;
     datetime: string;
 }
 

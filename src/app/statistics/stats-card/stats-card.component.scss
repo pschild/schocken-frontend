@@ -1,6 +1,7 @@
 $cards-margin: 10px;
 
 :host ::ng-deep hop-odometer {
+  font-weight: 100;
   font-size: 50px;
   line-height: 50px;
 }
@@ -9,9 +10,10 @@ mat-card {
   display: inline-flex;
   margin: $cards-margin;
   box-sizing: border-box;
-  height: 150px;
+  height: 180px;
   padding: 16px;
-  min-width: 200px;
+  min-width: 300px;
+  overflow: hidden;
   vertical-align: top;
 
   .card-content {
@@ -21,5 +23,21 @@ mat-card {
     align-items: center;
     justify-content: space-between;
     text-align: center;
+
+    .description {
+      font-size: 22px;
+      padding-bottom: 10px;
+    }
+
+    .details {
+      height: 25px;
+      font-size: small;
+    }
+  }
+
+  button.info {
+    position: absolute;
+    right: 16px;
+    top: 16px;
   }
 }

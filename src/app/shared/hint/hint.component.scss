@@ -1,0 +1,12 @@
+.hint {
+  display: flex;
+  margin: 10px 0;
+  align-items: start;
+  color: #888;
+
+  mat-icon {
+    position: relative;
+    top: -3px;
+    min-width: 30px;
+  }
+}

@@ -11,7 +11,9 @@
 >
   <ng-container matColumnDef="rank">
     <th mat-header-cell mat-sort-header *matHeaderCellDef>Platz</th>
-    <td mat-cell *matCellDef="let element">{{ element.rank }}</td>
+    <td mat-cell *matCellDef="let element">
+      <hop-rank [rank]="element.rank"></hop-rank>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="placeType">
@@ -37,3 +39,7 @@
     </td>
   </tr>
 </table>
+
+<hop-hint>
+  Christian und Tobias waren zusätzlich je 1x Gastgeber im Sept./Okt. 2018.
+</hop-hint>

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { GamesAndRoundsStatisticsResponseDto } from '../../api/openapi';
@@ -8,7 +7,7 @@ import { StatsCardComponent } from '../stats-card/stats-card.component';
 @Component({
   selector: 'hop-game-and-rounds',
   standalone: true,
-  imports: [OdometerComponent, MatCardModule, DatePipe, StatsCardComponent],
+  imports: [OdometerComponent, MatCardModule, StatsCardComponent],
   templateUrl: './game-and-rounds.component.html',
   styleUrl: './game-and-rounds.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

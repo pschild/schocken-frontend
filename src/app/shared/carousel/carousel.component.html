@@ -1,19 +1,19 @@
 <div class="carousel-container">
   @for (ref of templateRefs; track ref; let idx = $index) {
-    @if (idx === cur) {
+    @if (idx === currentIndex) {
       <ng-container [ngTemplateOutlet]="ref"></ng-container>
     }
   }
 
   <div class="arrow-container">
-    @if (cur > 0) {
-      <button mat-icon-button class="previous" (click)="cur = cur > 0 ? cur - 1 : cur">
+    @if (currentIndex > 0) {
+      <button mat-icon-button class="previous" (click)="currentIndex = currentIndex > 0 ? currentIndex - 1 : currentIndex">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
     }
 
-    @if (cur < templateRefs.length - 1) {
-      <button mat-icon-button class="next" (click)="cur = cur < templateRefs.length - 1 ? cur + 1 : cur">
+    @if (currentIndex < templateRefs.length - 1) {
+      <button mat-icon-button class="next" (click)="currentIndex = currentIndex < templateRefs.length - 1 ? currentIndex + 1 : currentIndex">
         <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
     }
@@ -23,8 +23,8 @@
     @for (ref of templateRefs; track ref; let idx = $index) {
       <div
         class="dot"
-        [class.active]="idx === cur"
-        (click)="cur = idx"
+        [class.active]="idx === currentIndex"
+        (click)="currentIndex = idx"
       ></div>
     }
   </div>

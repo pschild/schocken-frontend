@@ -13,6 +13,6 @@
 export interface SchockAusStreakDto { 
     gameId: string;
     datetime: string;
-    streak: number;
+    maxStreak: number;
 }
 

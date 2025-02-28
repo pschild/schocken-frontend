@@ -1,0 +1,39 @@
+@for (record of recordsPerGame(); track record.eventTypeId) {
+  @if (record.records.length > 0) {
+    <hop-stats-card [loading]="recordsPerGameLoading()">
+      <ng-template #value>
+        <hop-odometer [countTo]="record.records[0].count"></hop-odometer>
+      </ng-template>
+      <ng-template #description>
+        <span>{{record.description}}</span>
+      </ng-template>
+      <ng-template #details>
+        @if (record.records.length === 1) {
+          von {{record.records[0].name}} am <a [href]="'game/' + record.records[0].gameId">{{record.records[0].datetime | date:'dd.MM.yyyy'}}</a>
+        } @else {
+          <hop-carousel>
+            @for (item of record.records; track item) {
+              <ng-template #carouselItem>
+                von {{item.name}} am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
+              </ng-template>
+            }
+          </hop-carousel>
+        }
+      </ng-template>
+    </hop-stats-card>
+  }
+}
+
+@if (maxRoundsPerGame()) {
+  <hop-stats-card [loading]="maxRoundsPerGameLoading()">
+    <ng-template #value>
+      <hop-odometer [countTo]="maxRoundsPerGame()!.roundCount"></hop-odometer>
+    </ng-template>
+    <ng-template #description>
+      <span>Die meisten Runden</span>
+    </ng-template>
+    <ng-template #details>
+      am <a [href]="'game/' + maxRoundsPerGame()!.id">{{maxRoundsPerGame()!.datetime | date:'dd.MM.yyyy'}}</a>
+    </ng-template>
+  </hop-stats-card>
+}

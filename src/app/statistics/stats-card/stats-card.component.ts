@@ -1,6 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, ContentChild, input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, input, TemplateRef } from '@angular/core';
+import { MatIconButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 
 @Component({
@@ -9,10 +12,14 @@ import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-
   imports: [
     MatCard,
     NgTemplateOutlet,
-    LoadingMaskComponent
+    LoadingMaskComponent,
+    MatIcon,
+    MatTooltip,
+    MatIconButton,
   ],
   templateUrl: './stats-card.component.html',
-  styleUrl: './stats-card.component.scss'
+  styleUrl: './stats-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatsCardComponent {
 
@@ -23,5 +30,7 @@ export class StatsCardComponent {
   loading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
+
+  infoText = input<string>();
 
 }

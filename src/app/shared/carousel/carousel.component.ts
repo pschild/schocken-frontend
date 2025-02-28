@@ -18,6 +18,6 @@ export class CarouselComponent {
 
   @ContentChildren('carouselItem') templateRefs!: QueryList<TemplateRef<Element>>;
 
-  cur = 0;
+  currentIndex = 0;
 
 }

@@ -111,6 +111,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     this.steppers.changes.pipe(
       withLatestFrom(this.route.queryParams),
+      delay(100),
       filter(([_, { roundId }]: [QueryList<MatStepper>, { roundId?: string }]) => !!roundId),
       map(([steppers, { roundId }]: [QueryList<MatStepper>, { roundId?: string }]) => ({
         stepList: steppers.first,
@@ -125,8 +126,10 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
         if (element) {
           setTimeout(() => {
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 500);
+          }, 250);
         }
+      } else {
+        console.warn(`Could not find round with id ${roundId}`);
       }
     });
   }

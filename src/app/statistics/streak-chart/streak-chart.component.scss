@@ -1,0 +1,51 @@
+@use '@angular/material' as mat;
+
+@mixin gradient-striped($color: rgba(255,255,255,.15), $angle: 45deg) {
+  background-image: linear-gradient($angle, $color 25%, transparent 25%, transparent 50%, $color 50%, $color 75%, transparent 75%, transparent);
+}
+
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
+
+@mixin animation($animation) {
+  animation: $animation;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: max-content auto max-content;
+
+  & > div {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 8px 4px;
+  }
+}
+
+.bar-container {
+  position: relative;
+  width: 100%;
+
+  .outer-bar {
+    height: 20px;
+  }
+
+  .inner-bar {
+    height: 20px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+
+    @include animation(progress-bar-stripes 2s linear infinite);
+    @include gradient-striped;
+    background-size: 40px 40px;
+  }
+}

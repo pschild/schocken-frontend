@@ -1,0 +1,9 @@
+<div class="badge-wrapper">
+  @if (rank() <= 3) {
+    <span [ngClass]="{'gold': rank() === 1, 'silver': rank() === 2, 'bronze': rank() === 3}">
+      <mat-icon>military_tech</mat-icon>
+    </span>
+  } @else {
+    <span>{{rank()}}</span>
+  }
+</div>

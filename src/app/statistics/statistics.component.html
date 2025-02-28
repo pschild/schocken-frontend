@@ -14,8 +14,8 @@
   <button mat-stroked-button color="primary" [matMenuTriggerFor]="quickfilterDatesMenu" [disabled]="'filter-form' | isLoading | async">
     @if (isMobile$ | async) {
       <span>
-      <mat-icon>filter_alt</mat-icon>
-    </span>
+        <mat-icon>filter_alt</mat-icon>
+      </span>
     } @else {
       <span>Schnellfilter</span>
     }
@@ -45,12 +45,12 @@
       </mat-tab>
       <mat-tab label="Teilnahmen">
         <hop-attendance-table
-          [data]="attendancesStatistics$ | async"
+          [data]="attendanceTable$ | async"
           [loading]="'attendance-statistics' | isLoading | async"
         ></hop-attendance-table>
         <hop-finals-attendance-table
-          [data]="finalAttendancesStatistics$ | async"
-          [loading]="'final-attendance-statistics' | isLoading | async"
+          [data]="finalsTable$ | async"
+          [loading]="'attendance-statistics' | isLoading | async"
         ></hop-finals-attendance-table>
       </mat-tab>
       <mat-tab label="Austragungsorte">
@@ -70,9 +70,21 @@
       <mat-icon>star</mat-icon>
       Rekorde & Streaks
     </ng-template>
-    <mat-tab-group mat-stretch-tabs="false">
-      <mat-tab label="Spielübergreifend">Spielübergreifend</mat-tab>
-      <mat-tab label="pro Spiel">pro Spiel</mat-tab>
+    <mat-tab-group mat-stretch-tabs="false" id="records-streaks" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
+      <mat-tab label="Spielübergreifend">
+        <hop-streaks
+          [data]="streakStatistics$ | async"
+          [loading]="'streak-statistics' | isLoading | async"
+        ></hop-streaks>
+      </mat-tab>
+      <mat-tab label="pro Spiel">
+        <hop-records
+          [recordsPerGame]="recordsPerGame$ | async"
+          [recordsPerGameLoading]="'event-type-statistics' | isLoading | async"
+          [maxRoundsPerGame]="maxRoundsPerGame$ | async"
+          [maxRoundsPerGameLoading]="'games-and-rounds-statistics' | isLoading | async"
+        ></hop-records>
+      </mat-tab>
     </mat-tab-group>
   </mat-tab>
   <mat-tab>

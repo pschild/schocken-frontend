@@ -1,0 +1,27 @@
+<form [formGroup]="filterForm">
+  <h2>
+    Aufeinanderfolgende Runden
+    <mat-button-toggle-group formControlName="type">
+      <mat-button-toggle value="with">mit</mat-button-toggle>
+      <mat-button-toggle value="without">ohne</mat-button-toggle>
+    </mat-button-toggle-group>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Ereignis</mat-label>
+      <mat-select formControlName="eventTypeId">
+        @for (option of eventTypeOptions(); track option.id) {
+          <mat-option [value]="option.id">{{option.description}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </h2>
+</form>
+
+<div class="streak-container">
+  <hop-streak-chart [streaks]="visibleStreaks() || []"></hop-streak-chart>
+</div>
+
+<hop-hint>
+  <div>Grauer Balken: Persönlicher Rekord, inkl. Höhe und Zeitpunkt der Aufstellung (bei gleicher Anzahl wird der neuere "eingestellte" Rekord als besser bewertet)</div>
+  <div>Grüner Balken: Aktueller Lauf</div>
+  <div>Leuchtender Balken: Aktueller Lauf entspricht persönlichem Rekord, der somit ggf. weiter ausgebaut werden kann</div>
+</hop-hint>

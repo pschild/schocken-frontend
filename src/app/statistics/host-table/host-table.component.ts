@@ -2,13 +2,15 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, e
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { HostsTableDto } from '../../api/openapi';
+import { HintComponent } from '../../shared/hint/hint.component';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 import { PlaceTypeToLabelPipe } from '../../shared/pipes/place-type-to-label.pipe';
+import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-host-table',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe],
+  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe, RankComponent, HintComponent],
   templateUrl: './host-table.component.html',
   styleUrl: './host-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

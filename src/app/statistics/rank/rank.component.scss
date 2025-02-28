@@ -1,0 +1,29 @@
+$gold: #f2be1d;
+$silver: #c3cfd7;
+$bronze: #d77941;
+
+.badge-wrapper {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+
+  & > .gold {
+    color: $gold;
+    text-shadow: 0 0 5px $gold;
+  }
+
+  & > .silver {
+    color: $silver;
+  }
+
+  & > .bronze {
+    color: $bronze;
+  }
+
+  mat-icon {
+    position: relative;
+    top: 5px;
+  }
+}

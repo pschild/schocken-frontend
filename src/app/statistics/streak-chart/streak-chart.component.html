@@ -1,0 +1,37 @@
+@if (!streaks() || streaks().length === 0) {
+  Keine Statistiken vorhanden.
+} @else {
+  <div class="grid">
+    @for (streak of streaks(); track streak.name) {
+      @let outerWidth = (streak.maxStreak / overallMaxStreak()) * 100;
+      @let innerWidth = (streak.currentStreak / streak.maxStreak) * outerWidth;
+      <div>
+        <hop-rank [rank]="streak.rank"></hop-rank>
+        {{streak.name}}
+      </div>
+      <div>
+        @if (outerWidth > 0) {
+          <div class="bar-container">
+            <div
+              class="outer-bar"
+              [style.width.%]="outerWidth"
+            ></div>
+            <div
+              class="inner-bar"
+              [class.shine]="streak.isCurrent"
+              [style.width.%]="innerWidth"
+              [matTooltip]="streak.currentStreak.toString()"
+            >
+            </div>
+          </div>
+        }
+      </div>
+      <div style="justify-content: end;">
+        <hop-odometer [countTo]="streak.maxStreak"></hop-odometer>
+        @if (streak.lastRoundIdOfStreak && streak.gameId) {
+          (<a [href]="'game/' + streak.gameId + '?roundId=' + streak.lastRoundIdOfStreak">{{streak.datetime | date:'MM/yyyy'}}</a>)
+        }
+      </div>
+    }
+  </div>
+}

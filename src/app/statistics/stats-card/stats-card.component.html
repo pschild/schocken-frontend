@@ -4,13 +4,25 @@
   }
   <div class="card-content">
     <ng-container [ngTemplateOutlet]="value"></ng-container>
-    <div>
-      <div>
+    <div style="width: 100%">
+      <div class="description">
         <ng-container [ngTemplateOutlet]="description"></ng-container>
       </div>
-      <small>
+      <div class="details">
         <ng-container [ngTemplateOutlet]="details"></ng-container>
-      </small>
+      </div>
     </div>
   </div>
+
+  @if (infoText()) {
+    <button mat-icon-button class="info" (click)="tooltip.show()">
+      <mat-icon
+        #tooltip="matTooltip"
+        [matTooltip]="infoText()"
+        [matTooltipPosition]="'right'"
+        (mouseenter)="$event.stopImmediatePropagation()"
+        (mouseleave)="$event.stopImmediatePropagation()"
+      >info</mat-icon>
+    </button>
+  }
 </mat-card>

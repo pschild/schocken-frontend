@@ -11,14 +11,19 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { format, getYear, max, min, set } from 'date-fns';
-import { combineLatest, debounceTime, delay, Observable, shareReplay } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, debounceTime, delay, Observable, share, shareReplay } from 'rxjs';
+import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import {
+  AttendancesStatisticsResponseDto,
+  EventTypesStatisticsResponseDto,
+  GameIdsWithDatetimeDto,
+  GamesAndRoundsStatisticsResponseDto,
   HostsTableDto,
   QuoteByNameDto,
+  RecordsPerGameDto,
+  RoundCountByGameIdDto,
   StatisticsService,
-  GameIdsWithDatetimeDto,
-  GamesAndRoundsStatisticsResponseDto
+  StreakStatisticsResponseDto
 } from '../api/openapi';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
 import { LoadingState } from '../shared/loading/loading.state';
@@ -27,6 +32,8 @@ import { AttendanceTableComponent } from './attendance-table/attendance-table.co
 import { FinalsAttendanceTableComponent } from './finals-attendance-table/finals-attendance-table.component';
 import { GameAndRoundsComponent } from './game-and-rounds/game-and-rounds.component';
 import { HostTableComponent } from './host-table/host-table.component';
+import { RecordsComponent } from './records/records.component';
+import { StreaksComponent } from './streaks/streaks.component';
 
 @Component({
   selector: 'hop-statistics',
@@ -45,7 +52,9 @@ import { HostTableComponent } from './host-table/host-table.component';
     MatButtonModule,
     AttendanceTableComponent,
     FinalsAttendanceTableComponent,
-    GameAndRoundsComponent
+    GameAndRoundsComponent,
+    RecordsComponent,
+    StreaksComponent
   ],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
@@ -120,6 +129,11 @@ export class StatisticsComponent implements OnInit {
     switchMap(config => this.statisticsService.gamesAndRoundsStatistics(config).pipe(
       doWithLoading(this.loadingState, 'games-and-rounds-statistics'),
     )),
+    share(),
+  );
+
+  maxRoundsPerGame$: Observable<RoundCountByGameIdDto> = this.gamesAndRoundsStatistics$.pipe(
+    map(({ maxRoundsPerGame }) => maxRoundsPerGame)
   );
 
   hostStatistics$: Observable<HostsTableDto[]> = this.filterChanges$.pipe(
@@ -129,25 +143,41 @@ export class StatisticsComponent implements OnInit {
     )),
   );
 
-  attendancesStatistics$: Observable<QuoteByNameDto[]> = this.filterChanges$.pipe(
+  attendancesStatistics$: Observable<AttendancesStatisticsResponseDto> = this.filterChanges$.pipe(
     switchMap(config => this.statisticsService.attendancesStatistics(config).pipe(
       doWithLoading(this.loadingState, 'attendance-statistics'),
-      map(response => response.attendancesTable)
+    )),
+    share(),
+  );
+
+  attendanceTable$: Observable<QuoteByNameDto[]> = this.attendancesStatistics$.pipe(
+    map(({ attendancesTable }) => attendancesTable)
+  );
+
+  finalsTable$: Observable<QuoteByNameDto[]> = this.attendancesStatistics$.pipe(
+    map(({ finalsTable }) => finalsTable)
+  );
+
+  eventTypesStatistics$: Observable<EventTypesStatisticsResponseDto> = this.filterChanges$.pipe(
+    switchMap(config => this.statisticsService.eventTypeStatistics(config).pipe(
+      doWithLoading(this.loadingState, 'event-type-statistics'),
+    )),
+    share(),
+  );
+
+  recordsPerGame$: Observable<RecordsPerGameDto[]> = this.eventTypesStatistics$.pipe(
+    map(({ recordsPerGame }) => recordsPerGame)
+  );
+
+  streakStatistics$: Observable<StreakStatisticsResponseDto> = this.filterChanges$.pipe(
+    switchMap(config => this.statisticsService.streakStatistics(config).pipe(
+      doWithLoading(this.loadingState, 'streak-statistics'),
     )),
   );
 
-  finalAttendancesStatistics$: Observable<QuoteByNameDto[]> = this.filterChanges$.pipe(
-    switchMap(config => this.statisticsService.attendancesStatistics(config).pipe(
-      doWithLoading(this.loadingState, 'final-attendance-statistics'),
-      map(response => response.finalsTable)
-    )),
-  );
-
-  // eventTypeStatistics: this.statisticsService.eventTypeStatistics(defaultOptions),
   // // eventTypeCountsByPlayer: this.statisticsService.eventTypeCountsByPlayer(),
   // pointsStatistics: this.statisticsService.pointsStatistics(defaultOptions),
   // penaltyStatistics: this.statisticsService.penaltyStatistics(defaultOptions),
-  // streakStatistics: this.statisticsService.streakStatistics(defaultOptions),
 
   ngOnInit(): void {
     this.minDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({ fromDate: date }));

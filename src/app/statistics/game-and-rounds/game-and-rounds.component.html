@@ -25,21 +25,4 @@
       <span>Runden pro Spiel</span>
     </ng-template>
   </hop-stats-card>
-
-
-  <hop-stats-card [loading]="loading()">
-    <ng-template #value>
-      <hop-odometer [countTo]="data()!.maxRoundsPerGame.roundCount"></hop-odometer>
-    </ng-template>
-    <ng-template #description>
-      <span>Die meisten Runden</span>
-    </ng-template>
-    <ng-template #details>
-      <div>
-        am <a [href]="'game/' + data()!.maxRoundsPerGame.id">{{data()!.maxRoundsPerGame.datetime | date:'dd.MM.yyyy'}}</a>
-      </div>
-    </ng-template>
-  </hop-stats-card>
 }
-
-
