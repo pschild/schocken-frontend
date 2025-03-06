@@ -7,6 +7,7 @@ export interface MenuItem {
   label: string;
   icon: string;
   url?: string;
+  role?: string;
   subItems?: MenuItem[];
 }
 

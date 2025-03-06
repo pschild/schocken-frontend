@@ -1,20 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { EventDto, PlayerDto, RoundDetailDto } from '../../api/openapi';
+import { HasPermissionDirective } from '../../auth/has-permission.directive';
 import { ButtonSpinnerDirective } from '../../shared/button-spinner.directive';
+import { InfoBoxComponent } from '../../shared/info-box/info-box.component';
 import { IsLoadingPipe } from '../../shared/loading/is-loading.pipe';
-import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
 import { ResponsiveButtonDirective } from '../../shared/responsive-button.directive';
 import { EventListComponent } from '../event-list/event-list.component';
 import ContextEnum = EventDto.ContextEnum;
+import { Permission } from '../../auth/model/permission.enum';
 
 @Component({
   selector: 'hop-round',
   standalone: true,
-  imports: [CommonModule, EventsByPlayerIdPipe, EventListComponent, MatButton, MatIconModule, IsLoadingPipe, MatProgressSpinner, ButtonSpinnerDirective, ResponsiveButtonDirective],
+  imports: [CommonModule, EventListComponent, MatButton, MatIconModule, IsLoadingPipe, ButtonSpinnerDirective, ResponsiveButtonDirective, InfoBoxComponent, HasPermissionDirective, HasPermissionDirective],
   templateUrl: './round.component.html',
   styleUrl: './round.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +35,7 @@ export class RoundComponent {
   attendees = computed(() => this.players().filter(player => this.round().attendees.includes(player.id)));
 
   Context = ContextEnum;
+  Permission = Permission;
 
   handleSelectionChange(selectedIds: string[]): void {
     this.onFinalistsChange.emit({ roundId: this.round().id, finalistIds: selectedIds });

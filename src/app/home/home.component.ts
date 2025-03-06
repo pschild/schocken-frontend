@@ -9,6 +9,8 @@ import { Router, RouterModule } from '@angular/router';
 import { switchMap, tap } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { GameDetailsService, GameOverviewOfYearDto, GameOverviewService, PlayerService } from '../api/openapi';
+import { HasPermissionDirective } from '../auth/has-permission.directive';
+import { Permission } from '../auth/model/permission.enum';
 import { GameDetailsFormComponent } from '../game/game-details-form/game-details-form.component';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
@@ -20,7 +22,7 @@ import { SuccessMessageService } from '../shared/success-message.service';
 @Component({
   selector: 'hop-home',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatButton, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner],
+  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatButton, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner, HasPermissionDirective, HasPermissionDirective],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +39,8 @@ export class HomeComponent implements OnInit {
   private successMessageService = inject(SuccessMessageService);
   private router = inject(Router);
   private loadingState = inject(LoadingState);
+
+  Permission = Permission;
 
   ngOnInit(): void {
     this.openApiGameOverviewService.getOverview().pipe(
