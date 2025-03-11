@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RecordsPerGameDto, RoundCountByGameIdDto } from '../../api/openapi';
 import { OdometerComponent } from '../../odometer/odometer.component';
 import { CarouselComponent } from '../../shared/carousel/carousel.component';
+import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { StatsCardComponent } from '../stats-card/stats-card.component';
 
 @Component({
@@ -12,7 +13,8 @@ import { StatsCardComponent } from '../stats-card/stats-card.component';
     StatsCardComponent,
     OdometerComponent,
     DatePipe,
-    CarouselComponent
+    CarouselComponent,
+    CurrentUserDirective
   ],
   templateUrl: './records.component.html',
   styleUrl: './records.component.scss',

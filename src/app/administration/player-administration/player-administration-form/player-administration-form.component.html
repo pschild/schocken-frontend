@@ -1,10 +1,23 @@
 <h2 mat-dialog-title>{{title}}</h2>
 <mat-dialog-content>
   <form [formGroup]="form">
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
-    </mat-form-field>
+    <div>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
+    <div *hopHasRole="Role.ADMIN">
+      <mat-form-field class="full-width">
+        <mat-label>Verbindung zu Nutzeraccount</mat-label>
+        <mat-select formControlName="auth0UserId">
+          <mat-option>nicht verbunden</mat-option>
+          @for (user of data.users; track user.id) {
+            <mat-option [value]="user.id">{{ user.name }} <small>({{ user.email }})</small></mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div>
       <mat-slide-toggle formControlName="active">aktiv</mat-slide-toggle>
     </div>

@@ -14,4 +14,6 @@ export * from './roundDetails.service';
 import { RoundDetailsService } from './roundDetails.service';
 export * from './statistics.service';
 import { StatisticsService } from './statistics.service';
-export const APIS = [EventDetailsService, EventTypeService, EventTypeOverviewService, GameDetailsService, GameOverviewService, PlayerService, RoundDetailsService, StatisticsService];
+export * from './user.service';
+import { UserService } from './user.service';
+export const APIS = [EventDetailsService, EventTypeService, EventTypeOverviewService, GameDetailsService, GameOverviewService, PlayerService, RoundDetailsService, StatisticsService, UserService];

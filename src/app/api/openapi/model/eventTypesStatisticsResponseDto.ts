@@ -8,14 +8,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { CountByNameDto } from './countByNameDto';
+import { EventTypeCountsDto } from './eventTypeCountsDto';
 import { SchockAusEffectivityTableDto } from './schockAusEffectivityTableDto';
 import { RecordsPerGameDto } from './recordsPerGameDto';
 
 
 export interface EventTypesStatisticsResponseDto { 
     recordsPerGame: Array<RecordsPerGameDto>;
-    eventTypeCounts: Array<CountByNameDto>;
+    eventTypeCounts: Array<EventTypeCountsDto>;
     schockAusEffectivityTable: Array<SchockAusEffectivityTableDto>;
 }
 

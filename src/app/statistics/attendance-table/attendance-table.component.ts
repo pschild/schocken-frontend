@@ -3,13 +3,14 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, e
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { QuoteByNameDto } from '../../api/openapi';
+import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-attendance-table',
   standalone: true,
-  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe, RankComponent],
+  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe, RankComponent, CurrentUserDirective],
   templateUrl: './attendance-table.component.html',
   styleUrl: './attendance-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

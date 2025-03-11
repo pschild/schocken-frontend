@@ -21,15 +21,15 @@
 
 @if (!disabled()) {
   <div class="edit-round-buttons">
-    <button mat-stroked-button hopResponsiveButton (click)="openEditAttendanceDialog()">
+    <button mat-stroked-button hopResponsiveButton *hopHasPermission="Permission.UPDATE_ROUNDS" (click)="openEditAttendanceDialog()">
       <mat-icon>people</mat-icon>
       Teilnahmen anpassen
     </button>
-    <button mat-stroked-button hopResponsiveButton class="danger" (click)="removeRound()" [loading]="!!('remove-round-' + round().id | isLoading | async)">
+    <button mat-stroked-button hopResponsiveButton *hopHasPermission="Permission.DELETE_ROUNDS" class="danger" (click)="removeRound()" [loading]="!!('remove-round-' + round().id | isLoading | async)">
       <mat-icon>delete</mat-icon>
       Runde löschen
     </button>
   </div>
 }
 
-<hop-info-box *hopHasPermission="Permission.READ_DEBUGGING_INFO" [message]="round().id"></hop-info-box>
+<hop-info-box *hopHasPermission="Permission.READ_DEBUGGING_INFO" [message]="'roundId: ' + round().id"></hop-info-box>

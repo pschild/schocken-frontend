@@ -12,6 +12,7 @@
 
 export interface PenaltyByPlayerTableDto { 
     rank: number;
+    playerId: string;
     name: string;
     gameEventEuroSum: number;
     roundEventEuroSum: number;

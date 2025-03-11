@@ -9,12 +9,12 @@
       </ng-template>
       <ng-template #details>
         @if (record.records.length === 1) {
-          von {{record.records[0].name}} am <a [href]="'game/' + record.records[0].gameId">{{record.records[0].datetime | date:'dd.MM.yyyy'}}</a>
+          von <span [hopCurrentUser]="record.records[0].playerId">{{ record.records[0].name }}</span> am <a [href]="'game/' + record.records[0].gameId">{{record.records[0].datetime | date:'dd.MM.yyyy'}}</a>
         } @else {
           <hop-carousel>
-            @for (item of record.records; track item) {
+            @for (item of record.records; track item.playerId) {
               <ng-template #carouselItem>
-                von {{item.name}} am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
+                von <span [hopCurrentUser]="item.playerId">{{item.name}}</span> am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
               </ng-template>
             }
           </hop-carousel>

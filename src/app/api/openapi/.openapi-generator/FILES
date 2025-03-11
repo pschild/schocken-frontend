@@ -10,6 +10,7 @@ api/gameOverview.service.ts
 api/player.service.ts
 api/roundDetails.service.ts
 api/statistics.service.ts
+api/user.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -30,6 +31,7 @@ model/createPlayerDto.ts
 model/createRoundDto.ts
 model/eventDetailDto.ts
 model/eventDto.ts
+model/eventTypeCountsDto.ts
 model/eventTypeDetailDto.ts
 model/eventTypeDto.ts
 model/eventTypeOverviewDto.ts
@@ -72,5 +74,6 @@ model/updateEventTypeDto.ts
 model/updateFinalistsDto.ts
 model/updateGameDto.ts
 model/updatePlayerDto.ts
+model/userDto.ts
 param.ts
 variables.ts

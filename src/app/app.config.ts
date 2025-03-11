@@ -23,10 +23,10 @@ import { authHttpInterceptorFn, AuthService, provideAuth0 } from '@auth0/auth0-a
 import { de } from 'date-fns/locale';
 import { defer, firstValueFrom, iif, of, switchMap, tap } from 'rxjs';
 import { ApiModule as NgOpenapiGenApiModule } from './api/ng-openapi-gen/api.module';
-import { ApiModule as OpenApiModule, Configuration } from './api/openapi';
+import { ApiModule as OpenApiModule, Configuration, PlayerService } from './api/openapi';
 import { routes } from './app.routes';
 import { GlobalErrorHandler } from './global-error-handler';
-import { de } from 'date-fns/locale';
+import { ConfigService, CURRENT_PLAYER_ID } from './shared/config.service';
 
 registerLocaleData(localeDe, 'de');
 
@@ -82,8 +82,34 @@ export const appConfig: ApplicationConfig = {
       },
     },
     {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [ConfigService, PlayerService, AuthService],
+      useFactory: (configService: ConfigService, playerService: PlayerService, auth: AuthService) => {
+        return () => {
+          return firstValueFrom(
+            auth.user$.pipe(
+              switchMap(user => {
+                return iif(
+                  () => !!user && !!user?.sub,
+                  defer(() => playerService.getPlayerIdByUserId(user!.sub!)),
+                  of(null)
+                );
+              }),
+              tap(id => configService.setCurrentPlayerId(id))
+            )
+          );
+        };
+      },
+    },
+    {
+      provide: CURRENT_PLAYER_ID,
+      deps: [ConfigService],
+      useFactory: (configService: ConfigService) => configService.getCurrentPlayerId(),
+    },
+    {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: {autoFocus: 'dialog'}
+      useValue: { autoFocus: 'dialog' }
     },
     {
       provide: DEFAULT_CURRENCY_CODE,

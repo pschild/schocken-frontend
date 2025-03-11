@@ -24,6 +24,9 @@ import { ActivatedRoute } from '@angular/router';
 import { debounceTime, delay, Observable, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { CreateGameDto, EventDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
+import { HasAllPermissionsDirective } from '../auth/has-all-permissions.directive';
+import { HasPermissionDirective } from '../auth/has-permission.directive';
+import { Permission } from '../auth/model/permission.enum';
 import { LiveIndicatorComponent } from '../live-indicator/live-indicator.component';
 import { ButtonSpinnerDirective } from '../shared/button-spinner.directive';
 import { CelebrationDirective } from '../shared/celebration.directive';
@@ -60,6 +63,8 @@ import ContextEnum = EventDto.ContextEnum;
     LiveIndicatorComponent,
     ButtonSpinnerDirective,
     MatMenuModule,
+    HasPermissionDirective,
+    HasAllPermissionsDirective,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -75,6 +80,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
   PlaceTypeEnum = PlaceTypeEnum;
   Context = ContextEnum;
+  Permission = Permission;
 
   private state = inject(GameState);
   private route = inject(ActivatedRoute);

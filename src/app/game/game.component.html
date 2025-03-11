@@ -48,7 +48,7 @@
         }
       </div>
       <div class="game-info-block">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        <button mat-icon-button *hopHasAllPermissions="[Permission.UPDATE_GAMES, Permission.DELETE_GAMES, Permission.DELETE_ROUNDS, Permission.DELETE_EVENTS]" [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
@@ -167,12 +167,12 @@
 
     <div class="game-bottom-row">
       @if (!game.completed) {
-        <button mat-button class="new-round" (click)="startNewRound()" [loading]="!!('start-new-round' | isLoading | async)">
+        <button mat-button *hopHasPermission="Permission.CREATE_ROUNDS" class="new-round" (click)="startNewRound()" [loading]="!!('start-new-round' | isLoading | async)">
           <mat-icon>add</mat-icon>
           Neue Runde
         </button>
 
-        <button hopCelebration mat-flat-button class="complete-game" (click)="setGameCompleted()" [loading]="!!('complete-game' | isLoading | async)">
+        <button hopCelebration *hopHasPermission="Permission.UPDATE_GAMES" mat-flat-button class="complete-game" (click)="setGameCompleted()" [loading]="!!('complete-game' | isLoading | async)">
           <mat-icon>check</mat-icon>
           Spiel abschließen
         </button>

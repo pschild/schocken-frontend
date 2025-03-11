@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, input, output, signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output, signal, untracked } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Observable } from 'rxjs';
 import { EventDetailDto, EventDto, PlayerDto } from '../../api/openapi';
+import { HasPermissionDirective } from '../../auth/has-permission.directive';
+import { PermissionsService } from '../../auth/permissions.service';
+import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
 import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
 import ContextEnum = EventDto.ContextEnum;
+import { Permission } from '../../auth/model/permission.enum';
 
 @Component({
   selector: 'hop-event-list',
@@ -19,7 +24,9 @@ import ContextEnum = EventDto.ContextEnum;
     MatIcon,
     MatIconButton,
     MatTooltipModule,
-    PenaltyWithUnitComponent
+    PenaltyWithUnitComponent,
+    HasPermissionDirective,
+    CurrentUserDirective,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
@@ -40,6 +47,9 @@ export class EventListComponent {
   private selection = signal(this.selectedPlayers());
 
   Context = ContextEnum;
+  Permission = Permission;
+
+  hasUpdatePermission$: Observable<boolean> = inject(PermissionsService).hasPermission(Permission.UPDATE_ROUNDS);
 
   constructor() {
     effect(() => {

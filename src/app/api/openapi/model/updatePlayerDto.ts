@@ -14,5 +14,6 @@ export interface UpdatePlayerDto {
     name?: string;
     registered?: string;
     active?: boolean;
+    auth0UserId?: string;
 }
 

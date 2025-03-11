@@ -10,12 +10,9 @@
  */
 
 
-export interface SchockAusEffectivityTableDto { 
-    rank: number;
-    playerId: string;
+export interface UserDto { 
+    id: string;
     name: string;
-    saCount: number;
-    sasCount: number;
-    quote: number;
+    email: string;
 }
 

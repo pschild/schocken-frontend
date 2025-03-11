@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { MatTooltip } from '@angular/material/tooltip';
 import { StreakDto } from '../../api/openapi';
 import { OdometerComponent } from '../../odometer/odometer.component';
+import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { RankComponent } from '../rank/rank.component';
 
 @Component({
@@ -13,6 +14,7 @@ import { RankComponent } from '../rank/rank.component';
     OdometerComponent,
     RankComponent,
     MatTooltip,
+    CurrentUserDirective,
 
   ],
   templateUrl: './streak-chart.component.html',

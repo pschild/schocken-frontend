@@ -12,6 +12,7 @@
 
 export interface StreakDto { 
     rank: number;
+    playerId: string;
     name: string;
     maxStreak: number;
     currentStreak: number;

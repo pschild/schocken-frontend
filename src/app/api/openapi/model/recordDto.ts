@@ -13,6 +13,7 @@
 export interface RecordDto { 
     gameId: string;
     datetime: string;
+    playerId: string;
     name: string;
     count: number;
 }

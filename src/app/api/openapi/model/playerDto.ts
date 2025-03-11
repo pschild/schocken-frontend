@@ -19,6 +19,7 @@ export interface PlayerDto {
     name: string;
     registered: string;
     active: boolean;
+    auth0UserId?: string | null;
     hostedGames?: Array<GameDto>;
 }
 

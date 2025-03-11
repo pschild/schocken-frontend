@@ -12,6 +12,7 @@
 
 export interface QuoteByNameDto { 
     rank: number;
+    playerId: string;
     name: string;
     count: number;
     quote: number;

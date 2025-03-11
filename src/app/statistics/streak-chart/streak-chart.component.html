@@ -2,12 +2,12 @@
   Keine Statistiken vorhanden.
 } @else {
   <div class="grid">
-    @for (streak of streaks(); track streak.name) {
+    @for (streak of streaks(); track streak.playerId) {
       @let outerWidth = (streak.maxStreak / overallMaxStreak()) * 100;
       @let innerWidth = (streak.currentStreak / streak.maxStreak) * outerWidth;
       <div>
         <hop-rank [rank]="streak.rank"></hop-rank>
-        {{streak.name}}
+        <span [hopCurrentUser]="streak.playerId">{{streak.name}}</span>
       </div>
       <div>
         @if (outerWidth > 0) {

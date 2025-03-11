@@ -4,16 +4,16 @@
       <tr>
         <td>
           @if (context() === Context.Game) {
-            <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
+            <strong [hopCurrentUser]="player.id" [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
           } @else {
-            <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled()">
-              <strong [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
+            <mat-checkbox [checked]="selectedPlayers().includes(player.id)" (change)="handleCheckboxChange($event, player.id)" [disabled]="disabled() || !(hasUpdatePermission$ | async)">
+              <strong [hopCurrentUser]="player.id" [ngClass]="{ 'inactive': !player.active || player.isDeleted }">{{player.name}}</strong>
             </mat-checkbox>
           }
         </td>
         <td [ngClass]="{ empty: this.disabled() }">
           @if (!this.disabled()) {
-            <button mat-icon-button class="hop-icon-button primary" (click)="openAddEventDialog(player)">
+            <button mat-icon-button *hopHasPermission="Permission.CREATE_EVENTS" class="hop-icon-button primary" (click)="openAddEventDialog(player)">
               <mat-icon>add</mat-icon>
             </button>
           }
@@ -23,7 +23,7 @@
             <div class="event-row">
               <div class="left-col">
                 @if (!disabled()) {
-                  <button mat-icon-button class="hop-icon-button danger" (click)="removeEvent(event.id)">
+                  <button mat-icon-button *hopHasPermission="Permission.DELETE_EVENTS" class="hop-icon-button danger" (click)="removeEvent(event.id)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 }

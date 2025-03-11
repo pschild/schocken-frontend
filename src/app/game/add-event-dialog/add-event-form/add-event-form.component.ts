@@ -43,7 +43,7 @@ export class AddEventFormComponent {
   form = new FormGroup({
     id: new FormControl<string>('', {nonNullable: true}),
     comment: new FormControl<string | null>(null),
-    multiplicatorValue: new FormControl<number>(1, Validators.min(1)),
+    multiplicatorValue: new FormControl<number>(1, Validators.min(0)),
   });
 
   constructor() {
