@@ -30,13 +30,13 @@
   </mat-menu>
 </form>
 
-<mat-tab-group mat-stretch-tabs="true">
+<mat-tab-group mat-stretch-tabs="true" (selectedTabChange)="handleTabChange($event)" #outerTabGroup>
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>casino</mat-icon>
       Spiele & Runden
     </ng-template>
-    <mat-tab-group mat-stretch-tabs="false">
+    <mat-tab-group mat-stretch-tabs="false" id="games-rounds" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
       <mat-tab label="Allgemein">
         <hop-game-and-rounds
           [data]="gamesAndRoundsStatistics$ | async"
@@ -99,7 +99,7 @@
       <mat-icon svgIcon="schock_aus"></mat-icon>
       Ereignisse
     </ng-template>
-    <mat-tab-group mat-stretch-tabs="false">
+    <mat-tab-group mat-stretch-tabs="false" id="event-types" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
       <mat-tab label="Schock-Aus">Schock-Aus</mat-tab>
       <mat-tab label="pro Spieler">pro Spieler</mat-tab>
       <mat-tab label="Anzahlen">Anzahlen</mat-tab>

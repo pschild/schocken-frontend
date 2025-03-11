@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, viewChild, viewChildren, ViewEncapsulation } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,8 @@ import { MatCalendarCellClassFunction, MatDatepickerModule } from '@angular/mate
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { format, getYear, max, min, set } from 'date-fns';
 import { combineLatest, debounceTime, delay, Observable, share, shareReplay } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
@@ -68,6 +69,11 @@ export class StatisticsComponent implements OnInit {
   private loadingState = inject(LoadingState);
   private statisticsService = inject(StatisticsService);
   private breakpointObserver = inject(BreakpointObserver);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
+  outerTabGroup = viewChild<MatTabGroup>('outerTabGroup');
+  innerTabGroups = viewChildren<MatTabGroup>('innerTabGroup');
 
   filterForm = new FormGroup({
     fromDate: new FormControl<Date | null>(null, { validators: Validators.required }),
@@ -186,6 +192,8 @@ export class StatisticsComponent implements OnInit {
     this.loadingState.isLoading('filter-form').pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(isLoading => isLoading ? this.filterForm.disable() : this.filterForm.enable());
+
+    this.navigateToActiveTab();
   }
 
   applyYearToFilter(year: number): void {
@@ -222,4 +230,30 @@ export class StatisticsComponent implements OnInit {
     });
   }
 
+  handleTabChange($event: MatTabChangeEvent) {
+    const context = $event.tab._closestTabGroup._elementRef.nativeElement.id;
+    this.router.navigate(
+      ['.'],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: {
+          outerIdx: this.outerTabGroup()?.selectedIndex,
+          ...(context && $event.index ? { innerId: context, innerIdx: $event.index } : {})
+        }
+      });
+  }
+
+  private navigateToActiveTab() {
+    const { outerIdx, innerId, innerIdx } = this.activatedRoute.snapshot.queryParams;
+    if (this.outerTabGroup() && outerIdx) {
+      this.outerTabGroup()!.selectedIndex = outerIdx;
+    }
+
+    if (this.innerTabGroups() && innerId) {
+      const group = this.innerTabGroups()!.find(group => group._elementRef.nativeElement.id === innerId);
+      if (group && innerIdx) {
+        group!.selectedIndex = innerIdx;
+      }
+    }
+  }
 }
