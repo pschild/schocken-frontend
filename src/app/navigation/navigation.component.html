@@ -8,11 +8,34 @@
 
   <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="(isMobile$ | async) === true ? 56 : 0">
     <mat-sidenav #snav [mode]="(isMobile$ | async) === true ? 'over' : 'side'" [fixedInViewport]="(isMobile$ | async) === true" fixedTopGap="56">
-      <mat-nav-list>
-        @for (item of navigationItems; track item.label) {
-          <hop-menu-item [item]="item"></hop-menu-item>
-        }
-      </mat-nav-list>
+      <div class="inner-sidenav-container">
+        <mat-nav-list>
+          @for (item of navigationItems; track item.label) {
+            <hop-menu-item *hopHasRole="item.role" [item]="item"></hop-menu-item>
+          }
+        </mat-nav-list>
+
+        <div class="bottom-container">
+          @if (auth.isAuthenticated$ | async) {
+            <div class="profile-container">
+              @if (auth.user$ | async; as user) {
+                <div class="profile-details">
+                  <img [src]="user.picture" />
+                  <div>{{user.name}}</div>
+                </div>
+                <button mat-icon-button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
+                  <mat-icon>logout</mat-icon>
+                </button>
+              }
+            </div>
+          } @else {
+            <button mat-flat-button class="btn-login" (click)="auth.loginWithRedirect()">
+              <mat-icon>login</mat-icon>
+              anmelden
+            </button>
+          }
+        </div>
+      </div>
     </mat-sidenav>
 
     <mat-sidenav-content>

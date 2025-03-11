@@ -15,6 +15,43 @@
 
 .sidenav-container {
   flex: 1;
+
+  .inner-sidenav-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    mat-nav-list {
+      overflow-y: auto;
+    }
+
+    .bottom-container {
+      padding: 8px 16px;
+
+      .btn-login {
+        width: 100%;
+      }
+
+      .profile-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .profile-details {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+
+          img {
+            border-radius: 50%;
+            width: 30px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .is-mobile .sidenav-container {
