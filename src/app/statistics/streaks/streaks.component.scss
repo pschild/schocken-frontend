@@ -1,3 +1,5 @@
+@import '../streak-chart/chart-theme';
+
 h2 {
   display: flex;
   align-items: center;
@@ -10,4 +12,21 @@ form {
 
 .streak-container {
   padding: 5px 0;
+}
+
+.legend-row {
+  display: flex;
+  padding: 2px 0;
+
+  & > .bar {
+    height: 15px;
+    width: 30px;
+    margin-right: 5px;
+
+    &.inner-bar {
+      @include animation(progress-bar-stripes 2s linear infinite);
+      @include gradient-striped;
+      background-size: 40px 40px;
+    }
+  }
 }

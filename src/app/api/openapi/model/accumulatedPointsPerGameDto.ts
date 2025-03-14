@@ -15,6 +15,5 @@ export interface AccumulatedPointsPerGameDto {
     gameId: string;
     datetime: string;
     points: Array<PointsDto>;
-    tendency: number;
 }
 

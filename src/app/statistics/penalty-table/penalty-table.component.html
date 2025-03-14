@@ -1,5 +1,3 @@
-<h2>Teilnahmen</h2>
-
 @if (loading()) {
   <hop-loading-mask></hop-loading-mask>
 }
@@ -25,14 +23,29 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="count">
-    <th mat-header-cell mat-sort-header *matHeaderCellDef>Runden</th>
-    <td mat-cell *matCellDef="let element">{{ element.count | number }}</td>
+  <ng-container matColumnDef="gameEventEuroSum">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Feststellungen</th>
+    <td mat-cell *matCellDef="let element">{{ element.gameEventEuroSum | currency }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="roundEventEuroSum">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Rundenstrafen</th>
+    <td mat-cell *matCellDef="let element">{{ element.roundEventEuroSum | currency }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="euroSum">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Summe</th>
+    <td mat-cell *matCellDef="let element">{{ element.euroSum | currency }}</td>
   </ng-container>
 
   <ng-container matColumnDef="quote">
     <th mat-header-cell mat-sort-header *matHeaderCellDef>Quote</th>
     <td mat-cell *matCellDef="let element">{{ element.quote | percent: '1.1' }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="euroPerRound">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>€ / Runde</th>
+    <td mat-cell *matCellDef="let element">{{ element.euroPerRound | currency }}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

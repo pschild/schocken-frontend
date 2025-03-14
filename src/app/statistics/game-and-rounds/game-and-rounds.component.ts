@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { GamesAndRoundsStatisticsResponseDto } from '../../api/openapi';
+import { CountDto, GamesAndRoundsStatisticsResponseDto } from '../../api/openapi';
 import { OdometerComponent } from '../../odometer/odometer.component';
 import { StatsCardComponent } from '../stats-card/stats-card.component';
 
@@ -14,8 +14,13 @@ import { StatsCardComponent } from '../stats-card/stats-card.component';
 })
 export class GameAndRoundsComponent {
 
-  data = input<GamesAndRoundsStatisticsResponseDto | null>();
-  loading = input<boolean, boolean | null>(false, {
+  gamesAndRoundsData = input<GamesAndRoundsStatisticsResponseDto | null>();
+  gamesAndRoundsLoading = input<boolean, boolean | null>(false, {
+    transform: (value: boolean | null) => !!value
+  });
+
+  penaltyData = input<{ euroPerGame: CountDto, euroPerRound: CountDto } | null>();
+  penaltyLoading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
 

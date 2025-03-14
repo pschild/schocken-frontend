@@ -1,28 +1,48 @@
-@if (data()) {
-  <hop-stats-card [loading]="loading()">
+@if (gamesAndRoundsData()) {
+  <hop-stats-card [loading]="gamesAndRoundsLoading()">
     <ng-template #value>
-      <hop-odometer [countTo]="data()!.countGames.count"></hop-odometer>
+      <hop-odometer [countTo]="gamesAndRoundsData()!.countGames.count"></hop-odometer>
     </ng-template>
     <ng-template #description>
       <span>Spiele</span>
     </ng-template>
   </hop-stats-card>
 
-  <hop-stats-card [loading]="loading()">
+  <hop-stats-card [loading]="gamesAndRoundsLoading()">
     <ng-template #value>
-      <hop-odometer [countTo]="data()!.countRounds.count"></hop-odometer>
+      <hop-odometer [countTo]="gamesAndRoundsData()!.countRounds.count"></hop-odometer>
     </ng-template>
     <ng-template #description>
       <span>Runden</span>
     </ng-template>
   </hop-stats-card>
 
-  <hop-stats-card [loading]="loading()">
+  <hop-stats-card [loading]="gamesAndRoundsLoading()">
     <ng-template #value>
-      <hop-odometer [countTo]="data()!.averageRoundsPerGame.count" [precision]="1" type="average"></hop-odometer>
+      <hop-odometer [countTo]="gamesAndRoundsData()!.averageRoundsPerGame.count" [precision]="1" type="number" [showAverage]="true"></hop-odometer>
     </ng-template>
     <ng-template #description>
       <span>Runden pro Spiel</span>
+    </ng-template>
+  </hop-stats-card>
+}
+
+@if (penaltyData()) {
+  <hop-stats-card [loading]="penaltyLoading()">
+    <ng-template #value>
+      <hop-odometer [countTo]="penaltyData()!.euroPerGame.count" type="currency" [showAverage]="true"></hop-odometer>
+    </ng-template>
+    <ng-template #description>
+      <span>Strafen pro Spiel</span>
+    </ng-template>
+  </hop-stats-card>
+
+  <hop-stats-card [loading]="penaltyLoading()">
+    <ng-template #value>
+      <hop-odometer [countTo]="penaltyData()!.euroPerRound.count" type="currency" [showAverage]="true"></hop-odometer>
+    </ng-template>
+    <ng-template #description>
+      <span>Strafen pro Runde</span>
     </ng-template>
   </hop-stats-card>
 }

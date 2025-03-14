@@ -144,10 +144,23 @@ hop-game {
   }
 }
 
+p.no-data {
+  margin: 10px;
+  font-style: italic;
+}
+
 .text-highlight {
-  margin: 0 -0.4em;
-  padding: 0.5em 0.4em;
-  border-radius: 0.8em 0.3em;
-  background: transparent;
-  background-image: linear-gradient(to right, rgba(255, 225, 0, 0.1), rgba(255, 225, 0, 0.7) 4%, rgba(255, 225, 0, 0.3));
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    width: calc(100% + 0.8em);
+    height: 100%;
+    left: -0.4em;
+    top: 0;
+
+    background: linear-gradient(100deg, rgba(255, 221, 64, 0) 0.9%, rgba(255, 221, 64, 1) 2.4%, rgba(255, 221, 64, 0.5) 5.8%, rgba(255, 221, 64, 0.1) 93%, rgba(255, 221, 64, 0.7) 96%, rgba(255, 221, 64, 0) 98%), linear-gradient(180deg, rgba(255, 221, 64, 0) 0%, rgba(255, 221, 64, 0.3) 7.9%, rgba(255, 221, 64, 0) 15%);
+    border-radius: 0.125em;
+  }
 }

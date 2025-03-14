@@ -1,6 +1,11 @@
-$gold: #f2be1d;
-$silver: #c3cfd7;
-$bronze: #d77941;
+$gold: #f7d638;
+$silver: #c7d6eb;
+$bronze: #eda35f;
+
+:host {
+  z-index: 1;
+  display: flex;
+}
 
 .badge-wrapper {
   display: inline-flex;
@@ -9,21 +14,55 @@ $bronze: #d77941;
   width: 24px;
   height: 24px;
 
-  & > .gold {
-    color: $gold;
-    text-shadow: 0 0 5px $gold;
-  }
+  .medal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    border-radius: 50%;
+    font-weight: bold;
 
-  & > .silver {
-    color: $silver;
-  }
+    &.gold {
+      background: $gold;
+      color: darken($gold, 20%);
+      border: 2px solid darken($gold, 20%);
+      box-shadow: 0 0 5px 1px $gold;
+    }
 
-  & > .bronze {
-    color: $bronze;
+    &.silver {
+      background: $silver;
+      color: darken($silver, 30%);
+      border: 2px solid darken($silver, 30%);
+    }
+
+    &.bronze {
+      background: $bronze;
+      color: darken($bronze, 30%);
+      border: 2px solid darken($bronze, 30%);
+    }
   }
+}
+
+.tendency {
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
 
   mat-icon {
-    position: relative;
-    top: 5px;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    padding-left: 5px;
+  }
+
+  &.eq {
+    color: #989898;
+  }
+  &.up {
+    color: #34a134;
+  }
+  &.down {
+    color: #c11c1c;
   }
 }

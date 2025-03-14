@@ -11,7 +11,6 @@
 
 
 export interface HostsTableDto { 
-    rank: number;
     hostedById: string | null;
     name?: string;
     placeType: HostsTableDto.PlaceTypeEnum;

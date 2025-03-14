@@ -16,10 +16,17 @@ import { combineLatest, debounceTime, delay, Observable, share, shareReplay } fr
 import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import {
   AttendancesStatisticsResponseDto,
+  CountDto,
   EventTypesStatisticsResponseDto,
   GameIdsWithDatetimeDto,
   GamesAndRoundsStatisticsResponseDto,
   HostsTableDto,
+  MostExpensiveGameDto,
+  MostExpensiveRoundAveragePerGameDto,
+  MostExpensiveRoundDto,
+  PenaltyByPlayerTableDto,
+  PenaltyDto,
+  PenaltyStatisticsResponseDto, PointsStatisticsResponseDto,
   QuoteByNameDto,
   RecordsPerGameDto,
   RoundCountByGameIdDto,
@@ -33,6 +40,9 @@ import { AttendanceTableComponent } from './attendance-table/attendance-table.co
 import { FinalsAttendanceTableComponent } from './finals-attendance-table/finals-attendance-table.component';
 import { GameAndRoundsComponent } from './game-and-rounds/game-and-rounds.component';
 import { HostTableComponent } from './host-table/host-table.component';
+import { PenaltySumsComponent } from './penalty-sums/penalty-sums.component';
+import { PenaltyTableComponent } from './penalty-table/penalty-table.component';
+import { PointsComponent } from './points/points.component';
 import { RecordsComponent } from './records/records.component';
 import { StreaksComponent } from './streaks/streaks.component';
 
@@ -55,7 +65,10 @@ import { StreaksComponent } from './streaks/streaks.component';
     FinalsAttendanceTableComponent,
     GameAndRoundsComponent,
     RecordsComponent,
-    StreaksComponent
+    StreaksComponent,
+    PenaltyTableComponent,
+    PenaltySumsComponent,
+    PointsComponent
   ],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
@@ -175,15 +188,48 @@ export class StatisticsComponent implements OnInit {
     map(({ recordsPerGame }) => recordsPerGame)
   );
 
+  penaltyStatistics$: Observable<PenaltyStatisticsResponseDto> = this.filterChanges$.pipe(
+    switchMap(config => this.statisticsService.penaltyStatistics(config).pipe(
+      doWithLoading(this.loadingState, 'penalty-statistics'),
+    )),
+    share(),
+  );
+
+  penaltyByPlayerTable$: Observable<PenaltyByPlayerTableDto[]> = this.penaltyStatistics$.pipe(
+    map(({ penaltyByPlayerTable }) => penaltyByPlayerTable)
+  );
+
+  penaltySums$: Observable<PenaltyDto[]> = this.penaltyStatistics$.pipe(
+    map(({ penaltySum }) => penaltySum)
+  );
+
+  euroPerGameAndRound$: Observable<{ euroPerGame: CountDto, euroPerRound: CountDto }> = this.penaltyStatistics$.pipe(
+    map(({ euroPerGame, euroPerRound }) => ({ euroPerGame, euroPerRound }))
+  );
+
+  mostExpensiveGameAndRound$: Observable<{
+    mostExpensiveGame: MostExpensiveGameDto;
+    mostExpensiveRound: MostExpensiveRoundDto;
+    mostExpensiveRoundAveragePerGame: MostExpensiveRoundAveragePerGameDto
+  }> = this.penaltyStatistics$.pipe(
+    map(({ mostExpensiveGame, mostExpensiveRound, mostExpensiveRoundAveragePerGame }) => ({
+      mostExpensiveGame, mostExpensiveRound, mostExpensiveRoundAveragePerGame
+    }))
+  );
+
   streakStatistics$: Observable<StreakStatisticsResponseDto> = this.filterChanges$.pipe(
     switchMap(config => this.statisticsService.streakStatistics(config).pipe(
       doWithLoading(this.loadingState, 'streak-statistics'),
     )),
   );
 
+  pointsStatistics$: Observable<PointsStatisticsResponseDto> = this.filterChanges$.pipe(
+    switchMap(config => this.statisticsService.pointsStatistics(config).pipe(
+      doWithLoading(this.loadingState, 'points-statistics'),
+    )),
+  );
+
   // // eventTypeCountsByPlayer: this.statisticsService.eventTypeCountsByPlayer(),
-  // pointsStatistics: this.statisticsService.pointsStatistics(defaultOptions),
-  // penaltyStatistics: this.statisticsService.penaltyStatistics(defaultOptions),
 
   ngOnInit(): void {
     this.minDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({ fromDate: date }));

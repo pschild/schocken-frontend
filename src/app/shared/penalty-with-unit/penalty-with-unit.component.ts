@@ -1,4 +1,4 @@
-import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { EventTypeDto } from '../../api/openapi';
 import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
@@ -7,7 +7,6 @@ import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
   selector: 'hop-penalty-with-unit',
   standalone: true,
   imports: [
-    DecimalPipe,
     CurrencyPipe
   ],
   templateUrl: './penalty-with-unit.component.html',

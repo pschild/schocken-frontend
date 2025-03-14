@@ -1,6 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { RecordsPerGameDto, RoundCountByGameIdDto } from '../../api/openapi';
+import {
+  MostExpensiveGameDto,
+  MostExpensiveRoundAveragePerGameDto,
+  MostExpensiveRoundDto,
+  RecordsPerGameDto,
+  RoundCountByGameIdDto
+} from '../../api/openapi';
 import { OdometerComponent } from '../../odometer/odometer.component';
 import { CarouselComponent } from '../../shared/carousel/carousel.component';
 import { CurrentUserDirective } from '../../shared/current-user.directive';
@@ -31,6 +37,15 @@ export class RecordsComponent {
 
   maxRoundsPerGame = input<RoundCountByGameIdDto | null>();
   maxRoundsPerGameLoading = input<boolean, boolean | null>(false, {
+    transform: (value: boolean | null) => !!value
+  });
+
+  mostExpensiveGameAndRound = input<{
+    mostExpensiveGame: MostExpensiveGameDto;
+    mostExpensiveRound: MostExpensiveRoundDto;
+    mostExpensiveRoundAveragePerGame: MostExpensiveRoundAveragePerGameDto
+  } | null>();
+  mostExpensiveGameAndRoundLoading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
 }

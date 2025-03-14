@@ -39,8 +39,10 @@
     <mat-tab-group mat-stretch-tabs="false" id="games-rounds" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
       <mat-tab label="Allgemein">
         <hop-game-and-rounds
-          [data]="gamesAndRoundsStatistics$ | async"
-          [loading]="'games-and-rounds-statistics' | isLoading | async"
+          [gamesAndRoundsData]="gamesAndRoundsStatistics$ | async"
+          [gamesAndRoundsLoading]="'games-and-rounds-statistics' | isLoading | async"
+          [penaltyData]="euroPerGameAndRound$ | async"
+          [penaltyLoading]="'penalty-statistics' | isLoading | async"
         ></hop-game-and-rounds>
       </mat-tab>
       <mat-tab label="Teilnahmen">
@@ -63,7 +65,7 @@
       <mat-icon>emoji_events</mat-icon>
       Punkte
     </ng-template>
-    Punkte
+    <hop-points [data]="pointsStatistics$ | async" [loading]="'points-statistics' | isLoading | async"></hop-points>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
@@ -83,6 +85,8 @@
           [recordsPerGameLoading]="'event-type-statistics' | isLoading | async"
           [maxRoundsPerGame]="maxRoundsPerGame$ | async"
           [maxRoundsPerGameLoading]="'games-and-rounds-statistics' | isLoading | async"
+          [mostExpensiveGameAndRound]="mostExpensiveGameAndRound$ | async"
+          [mostExpensiveGameAndRoundLoading]="'penalty-statistics' | isLoading | async"
         ></hop-records>
       </mat-tab>
     </mat-tab-group>
@@ -92,7 +96,8 @@
       <mat-icon>euro</mat-icon>
       Kasse
     </ng-template>
-    Kasse
+    <hop-penalty-sums [data]="penaltySums$ | async" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-sums>
+    <hop-penalty-table [data]="penaltyByPlayerTable$ | async" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-table>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
@@ -104,5 +109,5 @@
       <mat-tab label="pro Spieler">pro Spieler</mat-tab>
       <mat-tab label="Anzahlen">Anzahlen</mat-tab>
     </mat-tab-group>
-</mat-tab>
+  </mat-tab>
 </mat-tab-group>

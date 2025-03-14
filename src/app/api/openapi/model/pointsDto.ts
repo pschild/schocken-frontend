@@ -14,11 +14,11 @@ export interface PointsDto {
     rank: number;
     playerId: string;
     name: string;
-    attended: boolean;
-    gamePoints: number;
+    roundPoints: number;
     bonusPoints: number;
     penaltyPoints: number;
-    gamePointsSum: number;
+    gamePoints: number;
     points: number;
+    tendency?: number;
 }
 

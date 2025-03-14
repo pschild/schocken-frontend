@@ -1,12 +1,12 @@
+@if (showAverage()) {
+  <span class="average-sign">⌀</span>
+}
 @switch (type()) {
   @case ('number') {
     <span>{{currentValue$ | async | number:precisionExpr}}</span>
   }
   @case ('currency') {
     <span>{{currentValue$ | async | currency}}</span>
-  }
-  @case ('average') {
-    <span>⌀ {{currentValue$ | async | number:precisionExpr}}</span>
   }
 }
 <!-- <div>

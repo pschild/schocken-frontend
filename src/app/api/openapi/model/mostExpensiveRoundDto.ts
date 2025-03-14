@@ -11,7 +11,8 @@
 
 
 export interface MostExpensiveRoundDto { 
-    id: string;
+    gameId: string;
+    roundId: string;
     datetime: string;
     sum: number;
 }

@@ -1,9 +1,29 @@
 <div class="badge-wrapper">
   @if (rank() <= 3) {
-    <span [ngClass]="{'gold': rank() === 1, 'silver': rank() === 2, 'bronze': rank() === 3}">
-      <mat-icon>military_tech</mat-icon>
+    <span class="medal" [ngClass]="{'gold': rank() === 1, 'silver': rank() === 2, 'bronze': rank() === 3}">
+      {{rank()}}
     </span>
   } @else {
     <span>{{rank()}}</span>
   }
 </div>
+
+@if (tendencyInfo()) {
+  @switch (tendencyInfo()!.type) {
+    @case ('eq') {
+      <span class="tendency eq">
+        <mat-icon>remove</mat-icon>
+      </span>
+    }
+    @case ('up') {
+      <span class="tendency up">
+        <mat-icon>keyboard_arrow_up</mat-icon>
+      </span>
+    }
+    @case ('down') {
+      <span class="tendency down">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </span>
+    }
+  }
+}

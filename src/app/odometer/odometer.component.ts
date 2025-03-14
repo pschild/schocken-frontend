@@ -16,7 +16,8 @@ export class OdometerComponent implements OnInit, OnChanges  {
 
   countTo = input.required<number>();
   precision = input(0);
-  type = input<'number' | 'currency' | 'average'>('number');
+  type = input<'number' | 'currency'>('number');
+  showAverage = input(false);
 
   targetValue$: ReplaySubject<number> = new ReplaySubject(1);
   currentValue$: Observable<string> | undefined;

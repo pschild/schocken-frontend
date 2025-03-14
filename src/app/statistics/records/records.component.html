@@ -12,7 +12,7 @@
           von <span [hopCurrentUser]="record.records[0].playerId">{{ record.records[0].name }}</span> am <a [href]="'game/' + record.records[0].gameId">{{record.records[0].datetime | date:'dd.MM.yyyy'}}</a>
         } @else {
           <hop-carousel>
-            @for (item of record.records; track item.playerId) {
+            @for (item of record.records; track item) {
               <ng-template #carouselItem>
                 von <span [hopCurrentUser]="item.playerId">{{item.name}}</span> am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
               </ng-template>
@@ -24,8 +24,8 @@
   }
 }
 
-@if (maxRoundsPerGame()) {
-  <hop-stats-card [loading]="maxRoundsPerGameLoading()">
+<hop-stats-card [loading]="maxRoundsPerGameLoading()">
+  @if (maxRoundsPerGame()) {
     <ng-template #value>
       <hop-odometer [countTo]="maxRoundsPerGame()!.roundCount"></hop-odometer>
     </ng-template>
@@ -35,5 +35,47 @@
     <ng-template #details>
       am <a [href]="'game/' + maxRoundsPerGame()!.id">{{maxRoundsPerGame()!.datetime | date:'dd.MM.yyyy'}}</a>
     </ng-template>
-  </hop-stats-card>
-}
+  }
+</hop-stats-card>
+
+<hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()" infoText="Feststellungen und Rundenstrafen">
+  @if (mostExpensiveGameAndRound() && mostExpensiveGameAndRound()!.mostExpensiveGame) {
+    <ng-template #value>
+      <hop-odometer [countTo]="mostExpensiveGameAndRound()!.mostExpensiveGame.sum" type="currency"></hop-odometer>
+    </ng-template>
+    <ng-template #description>
+      <span>Teuerstes Spiel</span>
+    </ng-template>
+    <ng-template #details>
+      am <a [href]="'game/' + mostExpensiveGameAndRound()!.mostExpensiveGame.id">{{mostExpensiveGameAndRound()!.mostExpensiveGame.datetime | date:'dd.MM.yyyy'}}</a>
+    </ng-template>
+  }
+</hop-stats-card>
+
+<hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()">
+  @if (mostExpensiveGameAndRound() && mostExpensiveGameAndRound()!.mostExpensiveRound) {
+    <ng-template #value>
+      <hop-odometer [countTo]="mostExpensiveGameAndRound()!.mostExpensiveRound.sum" type="currency"></hop-odometer>
+    </ng-template>
+    <ng-template #description>
+      <span>Teuerste Runde</span>
+    </ng-template>
+    <ng-template #details>
+      am <a [href]="'game/' + mostExpensiveGameAndRound()!.mostExpensiveRound.gameId + '?roundId=' + mostExpensiveGameAndRound()!.mostExpensiveRound.roundId">{{mostExpensiveGameAndRound()!.mostExpensiveRound.datetime | date:'dd.MM.yyyy'}}</a>
+    </ng-template>
+  }
+</hop-stats-card>
+
+<hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()">
+  @if (mostExpensiveGameAndRound() && mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame) {
+    <ng-template #value>
+      <hop-odometer [countTo]="mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame.roundAverage" type="currency" [showAverage]="true"></hop-odometer>
+    </ng-template>
+    <ng-template #description>
+      <span>Maximaler Rundenschnitt</span>
+    </ng-template>
+    <ng-template #details>
+      am <a [href]="'game/' + mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame.id">{{mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame.datetime | date:'dd.MM.yyyy'}}</a>
+    </ng-template>
+  }
+</hop-stats-card>

@@ -1,0 +1,58 @@
+@if (loading()) {
+  <hop-loading-mask></hop-loading-mask>
+}
+
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive="rank"
+  matSortDirection="asc"
+>
+  <ng-container matColumnDef="rank">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Platz</th>
+    <td mat-cell *matCellDef="let element">
+      <hop-rank [rank]="element.rank" [tendency]="element.tendency"></hop-rank>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Spieler</th>
+    <td mat-cell *matCellDef="let element">
+      <span [hopCurrentUser]="element.playerId">{{ element.name }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="roundPoints">
+    <th class="detail-column" mat-header-cell mat-sort-header *matHeaderCellDef>Rundenpkt.</th>
+    <td class="detail-column" mat-cell *matCellDef="let element">{{ element.roundPoints | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="bonusPoints">
+    <th class="detail-column" mat-header-cell mat-sort-header *matHeaderCellDef>Bonuspkt.</th>
+    <td class="detail-column" mat-cell *matCellDef="let element">{{ element.bonusPoints | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="penaltyPoints">
+    <th class="detail-column" mat-header-cell mat-sort-header *matHeaderCellDef>Strafpkt.</th>
+    <td class="detail-column" mat-cell *matCellDef="let element">{{ element.penaltyPoints | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="gamePoints">
+    <th class="detail-column" mat-header-cell mat-sort-header *matHeaderCellDef>Σ Spielpkt.</th>
+    <td class="detail-column" mat-cell *matCellDef="let element">{{ element.gamePoints | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="points">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Punkte</th>
+    <td mat-cell *matCellDef="let element">{{ element.points | number }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" [attr.colspan]="displayedColumns().length">
+      <p class="no-data">Es gibt keine Daten für die ausgewählten Filter.</p>
+    </td>
+  </tr>
+</table>

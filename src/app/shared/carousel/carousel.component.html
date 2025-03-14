@@ -1,5 +1,5 @@
 <div class="carousel-container">
-  @for (ref of templateRefs; track ref; let idx = $index) {
+  @for (ref of templateRefs; track ref.elementRef; let idx = $index) {
     @if (idx === currentIndex) {
       <ng-container [ngTemplateOutlet]="ref"></ng-container>
     }
@@ -20,7 +20,7 @@
   </div>
 
   <div class="dot-container">
-    @for (ref of templateRefs; track ref; let idx = $index) {
+    @for (ref of templateRefs; track ref.elementRef; let idx = $index) {
       <div
         class="dot"
         [class.active]="idx === currentIndex"
