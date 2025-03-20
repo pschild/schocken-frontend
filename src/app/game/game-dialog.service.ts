@@ -49,7 +49,7 @@ export class GameDialogService {
 
   addEventDialog(eventTypes: EventTypeOverviewDto[]): Observable<AddEventModel> {
     return this.dialog.open(AddEventDialogComponent, {
-      minWidth: 450,
+      width: '90vw',
       data: { eventTypes }
     }).afterClosed().pipe(
       filter(result => !!result),

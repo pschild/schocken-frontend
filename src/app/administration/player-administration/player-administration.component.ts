@@ -64,7 +64,7 @@ export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
     this.users$!.pipe(
       switchMap(users => {
         return this.dialog.open(PlayerAdministrationFormComponent, {
-          minWidth: 400,
+          width: '90vw',
           height: '300px',
           data: {
             player,

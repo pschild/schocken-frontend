@@ -51,7 +51,7 @@ export class EventTypeAdministrationComponent implements OnInit, AfterViewInit {
 
   openDialog(eventType?: EventTypeDto): void {
     const dialogRef = this.dialog.open(EventTypeAdministrationFormComponent, {
-      minWidth: 500,
+      width: '90vw',
       height: '500px',
       data: {
         eventType,

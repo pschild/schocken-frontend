@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
     this.playerService.findAll().pipe(
       switchMap(players => {
         return this.dialog.open(GameDetailsFormComponent, {
-          minWidth: 500,
+          width: '90vw',
           height: 'auto',
           data: {
             players,
