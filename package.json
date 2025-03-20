@@ -27,7 +27,6 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@auth0/auth0-angular": "^2.2.3",
-    "angular-oauth2-oidc": "^19.0.0",
     "canvas-confetti": "^1.9.3",
     "date-fns": "4.0.0",
     "jwt-decode": "^4.0.0",
