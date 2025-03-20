@@ -7,7 +7,11 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate:api": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-angular -o src/app/api/openapi --skip-validate-spec"
+    "generate:api": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-angular -o src/app/api/openapi --skip-validate-spec",
+    "docker:build": "docker build -t schocken-frontend .",
+    "docker:retag": "docker tag schocken-frontend:latest philippeschild/hoptimisten-frontend:latest",
+    "docker:push": "docker push philippeschild/hoptimisten-frontend:latest",
+    "docker:release": "npm run docker:build && npm run docker:retag && npm run docker:push"
   },
   "private": true,
   "dependencies": {

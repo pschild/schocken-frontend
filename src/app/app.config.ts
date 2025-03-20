@@ -33,7 +33,6 @@ registerLocaleData(localeDe, 'de');
 const auth0Domain = 'dev-c-7e-fhc.eu.auth0.com';
 const auth0ClientId = 'O9kriQaXDofZeJZzCcR8Iafj7WC8BuWh';
 const auth0Audience = 'http://localhost:3001';
-const backendUrl = 'http://localhost:3000';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -51,7 +50,7 @@ export const appConfig: ApplicationConfig = {
       httpInterceptor: {
         allowedList: [
           {
-            uri: `${backendUrl}/*`,
+            uri: `/api/*`,
             tokenOptions: {
               authorizationParams: {
                 audience: auth0Audience,
@@ -66,8 +65,8 @@ export const appConfig: ApplicationConfig = {
     { provide: MAT_DATE_FORMATS, useValue: MAT_DATE_FNS_FORMATS },
     provideDateFnsAdapter(),
     importProvidersFrom(
-      NgOpenapiGenApiModule.forRoot({rootUrl: backendUrl}),
-      OpenApiModule.forRoot(() => new Configuration({basePath: backendUrl})),
+      NgOpenapiGenApiModule.forRoot({rootUrl: `/api`}),
+      OpenApiModule.forRoot(() => new Configuration({basePath: `/api`})),
     ),
     provideAnimationsAsync(),
     {
