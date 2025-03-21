@@ -2,13 +2,13 @@ import { registerLocaleData } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import localeDe from '@angular/common/locales/de';
 import {
-  APP_INITIALIZER,
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,
   ErrorHandler,
   importProvidersFrom,
   inject,
   LOCALE_ID,
+  provideAppInitializer,
   provideZoneChangeDetection
 } from '@angular/core';
 import { DateFnsAdapter, MAT_DATE_FNS_FORMATS, provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
@@ -60,31 +60,27 @@ export const appConfig: ApplicationConfig = {
         ]
       }
     }),
-    { provide: MAT_DATE_LOCALE, useValue: de },
-    { provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_DATE_FNS_FORMATS },
+    {provide: MAT_DATE_LOCALE, useValue: de},
+    {provide: DateAdapter, useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_DATE_FNS_FORMATS},
     provideDateFnsAdapter(),
     importProvidersFrom(
       NgOpenapiGenApiModule.forRoot({rootUrl: `/api`}),
       OpenApiModule.forRoot(() => new Configuration({basePath: `/api`})),
     ),
     provideAnimationsAsync(),
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      useFactory: () => {
+    provideAppInitializer(() => {
+      const initializerFn = (() => {
         const iconRegistry = inject(MatIconRegistry);
         const sanitizer = inject(DomSanitizer);
         return () => {
           iconRegistry.addSvgIcon('schock_aus', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/schock-aus.svg'));
         };
-      },
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [ConfigService, PlayerService, AuthService],
-      useFactory: (configService: ConfigService, playerService: PlayerService, auth: AuthService) => {
+      })();
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = ((configService: ConfigService, playerService: PlayerService, auth: AuthService) => {
         return () => {
           return firstValueFrom(
             auth.user$.pipe(
@@ -99,8 +95,9 @@ export const appConfig: ApplicationConfig = {
             )
           );
         };
-      },
-    },
+      })(inject(ConfigService), inject(PlayerService), inject(AuthService));
+      return initializerFn();
+    }),
     {
       provide: CURRENT_PLAYER_ID,
       deps: [ConfigService],
@@ -108,7 +105,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
-      useValue: { autoFocus: 'dialog' }
+      useValue: {autoFocus: 'dialog'}
     },
     {
       provide: DEFAULT_CURRENCY_CODE,
@@ -120,7 +117,7 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-      useValue: { duration: 2500 }
+      useValue: {duration: 2500}
     },
     {
       provide: ErrorHandler,

@@ -9,14 +9,12 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { PlayerDto } from '../../api/openapi';
 import { InfoBoxComponent } from '../../shared/info-box/info-box.component';
 
 @Component({
   selector: 'hop-choose-player-dialog',
-  standalone: true,
   imports: [
     MatSelectionList,
     MatListOption,
@@ -26,12 +24,11 @@ import { InfoBoxComponent } from '../../shared/info-box/info-box.component';
     MatButton,
     MatDialogActions,
     MatDialogClose,
-    MatIcon,
     InfoBoxComponent
   ],
   templateUrl: './choose-player-dialog.component.html',
   styleUrl: './choose-player-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChoosePlayerDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<ChoosePlayerDialogComponent>);

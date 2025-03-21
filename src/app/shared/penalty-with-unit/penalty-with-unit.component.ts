@@ -5,7 +5,6 @@ import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
 
 @Component({
   selector: 'hop-penalty-with-unit',
-  standalone: true,
   imports: [
     CurrencyPipe
   ],

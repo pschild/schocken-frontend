@@ -4,11 +4,10 @@ import { NavigationComponent } from './navigation/navigation.component';
 
 @Component({
   selector: 'hop-root',
-  standalone: true,
   imports: [RouterOutlet, NavigationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
 }

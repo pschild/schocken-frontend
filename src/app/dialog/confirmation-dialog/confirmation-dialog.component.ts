@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
 
 @Component({
   selector: 'hop-confirmation-dialog',
-  standalone: true,
   imports: [
     MatButton,
     MatDialogActions,

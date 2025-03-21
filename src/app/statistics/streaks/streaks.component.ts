@@ -10,7 +10,6 @@ import { StreakChartComponent } from '../streak-chart/streak-chart.component';
 
 @Component({
   selector: 'hop-streaks',
-  standalone: true,
   imports: [
     StreakChartComponent,
     MatButtonToggleModule,
@@ -39,13 +38,13 @@ export class StreaksComponent implements OnInit {
 
   eventTypeOptions = computed(() => {
     if (this.data()) {
-      const eventTypes = this.data()!.eventTypeStreaks.map(streak => ({ id: streak.eventTypeId, description: streak.description }));
-      return [...eventTypes, { id: 'penalty', description: 'Strafe' }, { id: 'attendance', description: 'Teilnahme' }];
+      const eventTypes = this.data()!.eventTypeStreaks.map(streak => ({id: streak.eventTypeId, description: streak.description}));
+      return [...eventTypes, {id: 'penalty', description: 'Strafe'}, {id: 'attendance', description: 'Teilnahme'}];
     }
     return [];
   });
 
-  formValue = toSignal(this.filterForm.valueChanges, { initialValue: null });
+  formValue = toSignal(this.filterForm.valueChanges, {initialValue: null});
 
   visibleStreaks = computed(() => {
     const formValue = this.formValue();

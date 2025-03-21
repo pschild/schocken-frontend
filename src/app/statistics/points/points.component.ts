@@ -14,7 +14,6 @@ import { PointsTableComponent } from '../points-table/points-table.component';
 
 @Component({
   selector: 'hop-points',
-  standalone: true,
   imports: [
     PointsTableComponent,
     DatePipe,
@@ -31,7 +30,7 @@ import { PointsTableComponent } from '../points-table/points-table.component';
   ],
   templateUrl: './points.component.html',
   styleUrl: './points.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PointsComponent {
 

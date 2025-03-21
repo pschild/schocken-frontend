@@ -6,7 +6,6 @@ import { StatsCardComponent } from '../stats-card/stats-card.component';
 
 @Component({
   selector: 'hop-game-and-rounds',
-  standalone: true,
   imports: [OdometerComponent, MatCardModule, StatsCardComponent],
   templateUrl: './game-and-rounds.component.html',
   styleUrl: './game-and-rounds.component.scss',

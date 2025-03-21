@@ -4,27 +4,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDivider } from '@angular/material/divider';
-import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
-import { EventTypeDetailDto, EventTypeOverviewDto, PlayerDto } from '../../api/openapi';
-import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
+import { EventTypeDetailDto, EventTypeOverviewDto } from '../../api/openapi';
 import { AddEventFormComponent, AddEventModel } from './add-event-form/add-event-form.component';
 import TriggerEnum = EventTypeDetailDto.TriggerEnum;
 
 @Component({
   selector: 'hop-add-event-dialog',
-  standalone: true,
   imports: [
     CommonModule,
     MatDialogModule,
     MatButtonModule,
     ReactiveFormsModule,
-    PenaltyWithUnitComponent,
     MatFormField,
-    MatInput,
     MatLabel,
-    MatSuffix,
     AddEventFormComponent,
     MatSelect,
     MatOption,
@@ -33,7 +27,7 @@ import TriggerEnum = EventTypeDetailDto.TriggerEnum;
   ],
   templateUrl: './add-event-dialog.component.html',
   styleUrl: './add-event-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddEventDialogComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<AddEventDialogComponent>);

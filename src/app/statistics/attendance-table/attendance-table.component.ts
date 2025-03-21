@@ -9,7 +9,6 @@ import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-attendance-table',
-  standalone: true,
   imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe, RankComponent, CurrentUserDirective],
   templateUrl: './attendance-table.component.html',
   styleUrl: './attendance-table.component.scss',

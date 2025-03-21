@@ -4,21 +4,20 @@ import { MatButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { EventDto, PlayerDto, RoundDetailDto } from '../../api/openapi';
 import { HasPermissionDirective } from '../../auth/has-permission.directive';
+import { Permission } from '../../auth/model/permission.enum';
 import { ButtonSpinnerDirective } from '../../shared/button-spinner.directive';
 import { InfoBoxComponent } from '../../shared/info-box/info-box.component';
 import { IsLoadingPipe } from '../../shared/loading/is-loading.pipe';
 import { ResponsiveButtonDirective } from '../../shared/responsive-button.directive';
 import { EventListComponent } from '../event-list/event-list.component';
 import ContextEnum = EventDto.ContextEnum;
-import { Permission } from '../../auth/model/permission.enum';
 
 @Component({
   selector: 'hop-round',
-  standalone: true,
   imports: [CommonModule, EventListComponent, MatButton, MatIconModule, IsLoadingPipe, ButtonSpinnerDirective, ResponsiveButtonDirective, InfoBoxComponent, HasPermissionDirective, HasPermissionDirective],
   templateUrl: './round.component.html',
   styleUrl: './round.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoundComponent {
 
@@ -38,15 +37,15 @@ export class RoundComponent {
   Permission = Permission;
 
   handleSelectionChange(selectedIds: string[]): void {
-    this.onFinalistsChange.emit({ roundId: this.round().id, finalistIds: selectedIds });
+    this.onFinalistsChange.emit({roundId: this.round().id, finalistIds: selectedIds});
   }
 
   handleEventAdd(payload: { context: ContextEnum; playerId: string }): void {
-    this.onEventAdd.emit({ ...payload, roundId: this.round().id });
+    this.onEventAdd.emit({...payload, roundId: this.round().id});
   }
 
   handleEventRemove(id: string): void {
-    this.onEventRemove.emit({ id, roundId: this.round().id });
+    this.onEventRemove.emit({id, roundId: this.round().id});
   }
 
   openEditAttendanceDialog(): void {

@@ -43,7 +43,6 @@ import ContextEnum = EventDto.ContextEnum;
 
 @Component({
   selector: 'hop-game',
-  standalone: true,
   imports: [
     CommonModule,
     MatStepperModule,
@@ -68,7 +67,7 @@ import ContextEnum = EventDto.ContextEnum;
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -106,7 +105,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.route.params.pipe(
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(({ id }) => this.state.init(id));
+    ).subscribe(({id}) => this.state.init(id));
 
     this.state.openLastRound$.pipe(
       delay(500), // wait for stepper being updated before activating the last step
@@ -118,20 +117,20 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
     this.steppers.changes.pipe(
       withLatestFrom(this.route.queryParams),
       delay(100),
-      filter(([_, { roundId }]: [QueryList<MatStepper>, { roundId?: string }]) => !!roundId),
-      map(([steppers, { roundId }]: [QueryList<MatStepper>, { roundId?: string }]) => ({
+      filter(([_, {roundId}]: [QueryList<MatStepper>, { roundId?: string }]) => !!roundId),
+      map(([steppers, {roundId}]: [QueryList<MatStepper>, { roundId?: string }]) => ({
         stepList: steppers.first,
         roundId
       })),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(({ stepList, roundId }) => {
+    ).subscribe(({stepList, roundId}) => {
       const idx = stepList.steps.toArray().findIndex(step => step.state === roundId);
       if (idx >= 0) {
         stepList.selectedIndex = idx;
         const element = document.getElementById(stepList._getStepLabelId(idx));
         if (element) {
           setTimeout(() => {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            element.scrollIntoView({behavior: 'smooth', block: 'start'});
           }, 250);
         }
       } else {
@@ -152,13 +151,13 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe();
   }
 
-  handleGameEventAdd({ context, playerId }: { context: ContextEnum; playerId: string }): void {
+  handleGameEventAdd({context, playerId}: { context: ContextEnum; playerId: string }): void {
     this.state.addEvent(context, playerId).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }
 
-  handleRoundEventAdd({ context, playerId, roundId }: { context: ContextEnum; playerId: string; roundId: string }): void {
+  handleRoundEventAdd({context, playerId, roundId}: { context: ContextEnum; playerId: string; roundId: string }): void {
     this.state.addEvent(context, playerId, roundId).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
@@ -170,7 +169,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe();
   }
 
-  handleRoundEventRemove({ id, roundId }: { id: string; roundId: string }): void {
+  handleRoundEventRemove({id, roundId}: { id: string; roundId: string }): void {
     this.state.removeEvent(ContextEnum.Round, id, roundId).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
@@ -196,7 +195,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
     this.state.startNewRound().pipe(
       tap(response => {
         if (response.celebration) {
-          this.dialog.open(CelebrationDialogComponent, { data: { celebration: response.celebration } });
+          this.dialog.open(CelebrationDialogComponent, {data: {celebration: response.celebration}});
         }
       }),
       takeUntilDestroyed(this.destroyRef)

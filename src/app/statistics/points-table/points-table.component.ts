@@ -3,7 +3,8 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, computed,
+  Component,
+  computed,
   effect,
   inject,
   input,
@@ -18,7 +19,6 @@ import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-points-table',
-  standalone: true,
   imports: [
     LoadingMaskComponent,
     MatTableModule,
@@ -29,7 +29,7 @@ import { RankComponent } from '../rank/rank.component';
   ],
   templateUrl: './points-table.component.html',
   styleUrl: './points-table.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PointsTableComponent implements AfterViewInit {
 

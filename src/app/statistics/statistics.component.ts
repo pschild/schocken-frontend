@@ -26,7 +26,8 @@ import {
   MostExpensiveRoundDto,
   PenaltyByPlayerTableDto,
   PenaltyDto,
-  PenaltyStatisticsResponseDto, PointsStatisticsResponseDto,
+  PenaltyStatisticsResponseDto,
+  PointsStatisticsResponseDto,
   QuoteByNameDto,
   RecordsPerGameDto,
   RoundCountByGameIdDto,
@@ -48,7 +49,6 @@ import { StreaksComponent } from './streaks/streaks.component';
 
 @Component({
   selector: 'hop-statistics',
-  standalone: true,
   imports: [
     MatTabsModule,
     MatIcon,
@@ -73,7 +73,7 @@ import { StreaksComponent } from './streaks/streaks.component';
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class StatisticsComponent implements OnInit {
 
@@ -89,9 +89,9 @@ export class StatisticsComponent implements OnInit {
   innerTabGroups = viewChildren<MatTabGroup>('innerTabGroup');
 
   filterForm = new FormGroup({
-    fromDate: new FormControl<Date | null>(null, { validators: Validators.required }),
-    toDate: new FormControl<Date | null>(null, { validators: Validators.required }),
-    onlyActivePlayers: new FormControl<boolean>(true, { nonNullable: true, validators: Validators.required }),
+    fromDate: new FormControl<Date | null>(null, {validators: Validators.required}),
+    toDate: new FormControl<Date | null>(null, {validators: Validators.required}),
+    onlyActivePlayers: new FormControl<boolean>(true, {nonNullable: true, validators: Validators.required}),
   });
 
   isMobile$ = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
@@ -107,7 +107,7 @@ export class StatisticsComponent implements OnInit {
   dateClass$: Observable<MatCalendarCellClassFunction<Date>> = this.allGames$.pipe(
     map(games => (cellDate, view) => {
       if (view === 'month') {
-        return games.map(({ datetime }) => format(datetime, 'yyyy-MM-dd')).includes(format(cellDate, 'yyyy-MM-dd'))
+        return games.map(({datetime}) => format(datetime, 'yyyy-MM-dd')).includes(format(cellDate, 'yyyy-MM-dd'))
           ? 'game-day'
           : '';
       }
@@ -137,9 +137,9 @@ export class StatisticsComponent implements OnInit {
     distinctUntilChanged((prev, curr) =>
       prev.fromDate === curr.fromDate && prev.toDate === curr.toDate && prev.onlyActivePlayers === curr.onlyActivePlayers
     ),
-    map(({ fromDate, toDate, onlyActivePlayers }) => ({
-      fromDate: set(fromDate!, { hours: 0, minutes: 0, seconds: 0 }).toISOString(),
-      toDate: set(toDate!, { hours: 23, minutes: 59, seconds: 59 }).toISOString(),
+    map(({fromDate, toDate, onlyActivePlayers}) => ({
+      fromDate: set(fromDate!, {hours: 0, minutes: 0, seconds: 0}).toISOString(),
+      toDate: set(toDate!, {hours: 23, minutes: 59, seconds: 59}).toISOString(),
       onlyActivePlayers: onlyActivePlayers!,
     })),
   );
@@ -152,7 +152,7 @@ export class StatisticsComponent implements OnInit {
   );
 
   maxRoundsPerGame$: Observable<RoundCountByGameIdDto> = this.gamesAndRoundsStatistics$.pipe(
-    map(({ maxRoundsPerGame }) => maxRoundsPerGame)
+    map(({maxRoundsPerGame}) => maxRoundsPerGame)
   );
 
   hostStatistics$: Observable<HostsTableDto[]> = this.filterChanges$.pipe(
@@ -170,11 +170,11 @@ export class StatisticsComponent implements OnInit {
   );
 
   attendanceTable$: Observable<QuoteByNameDto[]> = this.attendancesStatistics$.pipe(
-    map(({ attendancesTable }) => attendancesTable)
+    map(({attendancesTable}) => attendancesTable)
   );
 
   finalsTable$: Observable<QuoteByNameDto[]> = this.attendancesStatistics$.pipe(
-    map(({ finalsTable }) => finalsTable)
+    map(({finalsTable}) => finalsTable)
   );
 
   eventTypesStatistics$: Observable<EventTypesStatisticsResponseDto> = this.filterChanges$.pipe(
@@ -185,7 +185,7 @@ export class StatisticsComponent implements OnInit {
   );
 
   recordsPerGame$: Observable<RecordsPerGameDto[]> = this.eventTypesStatistics$.pipe(
-    map(({ recordsPerGame }) => recordsPerGame)
+    map(({recordsPerGame}) => recordsPerGame)
   );
 
   penaltyStatistics$: Observable<PenaltyStatisticsResponseDto> = this.filterChanges$.pipe(
@@ -196,15 +196,15 @@ export class StatisticsComponent implements OnInit {
   );
 
   penaltyByPlayerTable$: Observable<PenaltyByPlayerTableDto[]> = this.penaltyStatistics$.pipe(
-    map(({ penaltyByPlayerTable }) => penaltyByPlayerTable)
+    map(({penaltyByPlayerTable}) => penaltyByPlayerTable)
   );
 
   penaltySums$: Observable<PenaltyDto[]> = this.penaltyStatistics$.pipe(
-    map(({ penaltySum }) => penaltySum)
+    map(({penaltySum}) => penaltySum)
   );
 
   euroPerGameAndRound$: Observable<{ euroPerGame: CountDto, euroPerRound: CountDto }> = this.penaltyStatistics$.pipe(
-    map(({ euroPerGame, euroPerRound }) => ({ euroPerGame, euroPerRound }))
+    map(({euroPerGame, euroPerRound}) => ({euroPerGame, euroPerRound}))
   );
 
   mostExpensiveGameAndRound$: Observable<{
@@ -212,7 +212,7 @@ export class StatisticsComponent implements OnInit {
     mostExpensiveRound: MostExpensiveRoundDto;
     mostExpensiveRoundAveragePerGame: MostExpensiveRoundAveragePerGameDto
   }> = this.penaltyStatistics$.pipe(
-    map(({ mostExpensiveGame, mostExpensiveRound, mostExpensiveRoundAveragePerGame }) => ({
+    map(({mostExpensiveGame, mostExpensiveRound, mostExpensiveRoundAveragePerGame}) => ({
       mostExpensiveGame, mostExpensiveRound, mostExpensiveRoundAveragePerGame
     }))
   );
@@ -232,8 +232,8 @@ export class StatisticsComponent implements OnInit {
   // // eventTypeCountsByPlayer: this.statisticsService.eventTypeCountsByPlayer(),
 
   ngOnInit(): void {
-    this.minDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({ fromDate: date }));
-    this.maxDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({ toDate: date }));
+    this.minDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({fromDate: date}));
+    this.maxDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({toDate: date}));
 
     this.loadingState.isLoading('filter-form').pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -270,8 +270,8 @@ export class StatisticsComponent implements OnInit {
     ).subscribe(games => {
       const latestGame = games[games.length - 1];
       this.filterForm.patchValue({
-        fromDate: set(latestGame.datetime, { hours: 0, minutes: 0, seconds: 0 }),
-        toDate: set(latestGame.datetime, { hours: 23, minutes: 59, seconds: 59 }),
+        fromDate: set(latestGame.datetime, {hours: 0, minutes: 0, seconds: 0}),
+        toDate: set(latestGame.datetime, {hours: 23, minutes: 59, seconds: 59}),
       });
     });
   }
@@ -284,13 +284,13 @@ export class StatisticsComponent implements OnInit {
         relativeTo: this.activatedRoute,
         queryParams: {
           outerIdx: this.outerTabGroup()?.selectedIndex,
-          ...(context && $event.index ? { innerId: context, innerIdx: $event.index } : {})
+          ...(context && $event.index ? {innerId: context, innerIdx: $event.index} : {})
         }
       });
   }
 
   private navigateToActiveTab() {
-    const { outerIdx, innerId, innerIdx } = this.activatedRoute.snapshot.queryParams;
+    const {outerIdx, innerId, innerIdx} = this.activatedRoute.snapshot.queryParams;
     if (this.outerTabGroup() && outerIdx) {
       this.outerTabGroup()!.selectedIndex = outerIdx;
     }

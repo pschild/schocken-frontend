@@ -14,7 +14,6 @@ import { StatsCardComponent } from '../stats-card/stats-card.component';
 
 @Component({
   selector: 'hop-records',
-  standalone: true,
   imports: [
     StatsCardComponent,
     OdometerComponent,

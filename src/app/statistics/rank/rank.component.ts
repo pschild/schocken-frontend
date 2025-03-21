@@ -4,7 +4,6 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'hop-rank',
-  standalone: true,
   imports: [
     NgClass,
     MatIcon,
@@ -22,10 +21,10 @@ export class RankComponent {
     const tend = Number(this.tendency());
     if (!isNaN(tend)) {
       return tend === 0
-        ? { type: 'eq' }
+        ? {type: 'eq'}
         : tend > 0
-        ? { type: 'up', count: Math.abs(tend) }
-        : { type: 'down', count: Math.abs(tend) }
+          ? {type: 'up', count: Math.abs(tend)}
+          : {type: 'down', count: Math.abs(tend)}
     }
     return undefined;
   });

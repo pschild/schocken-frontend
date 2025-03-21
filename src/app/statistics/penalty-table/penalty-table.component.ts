@@ -9,7 +9,6 @@ import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-penalty-table',
-  standalone: true,
   imports: [
     LoadingMaskComponent,
     MatTableModule,

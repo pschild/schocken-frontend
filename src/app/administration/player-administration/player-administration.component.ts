@@ -17,11 +17,10 @@ import { PlayerAdministrationFormComponent } from './player-administration-form/
 
 @Component({
   selector: 'hop-player-administration',
-  standalone: true,
   imports: [CommonModule, MatTableModule, MatSortModule, MatIconModule, MatIconButton, MatFabButton, CurrentUserDirective],
   templateUrl: './player-administration.component.html',
   styleUrl: './player-administration.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
 

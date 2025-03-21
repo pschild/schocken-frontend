@@ -8,7 +8,6 @@ import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-
 
 @Component({
   selector: 'hop-stats-card',
-  standalone: true,
   imports: [
     MatCard,
     NgTemplateOutlet,

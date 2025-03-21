@@ -6,7 +6,6 @@ import PenaltyUnitEnum = EventTypeDto.PenaltyUnitEnum;
 
 @Component({
   selector: 'hop-penalty-sums',
-  standalone: true,
   imports: [
     OdometerComponent,
     StatsCardComponent

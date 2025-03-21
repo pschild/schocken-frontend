@@ -3,7 +3,6 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'hop-hint',
-  standalone: true,
   imports: [
     MatIcon
   ],

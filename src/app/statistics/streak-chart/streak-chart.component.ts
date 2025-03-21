@@ -8,14 +8,12 @@ import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-streak-chart',
-  standalone: true,
   imports: [
     DatePipe,
     OdometerComponent,
     RankComponent,
     MatTooltip,
     CurrentUserDirective,
-
   ],
   templateUrl: './streak-chart.component.html',
   styleUrl: './streak-chart.component.scss',

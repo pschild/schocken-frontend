@@ -16,11 +16,10 @@ import { MenuItem, MenuItemComponent } from './menu-item/menu-item.component';
 
 @Component({
   selector: 'hop-navigation',
-  standalone: true,
   imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MenuItemComponent, AsyncPipe, HasRoleDirective],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationComponent {
 
@@ -38,19 +37,19 @@ export class NavigationComponent {
   );
 
   navigationItems: MenuItem[] = [
-    { label: 'Spiele', icon: 'casino', url: 'home' },
+    {label: 'Spiele', icon: 'casino', url: 'home'},
     {
       label: 'Verwaltung',
       icon: 'settings',
       role: Role.ADMIN,
       subItems: [
-        { label: 'Spieler', icon: 'people', url: 'administration/player' },
-        { label: 'Ereignisse', icon: 'euro_symbol', url: 'administration/event-type' },
+        {label: 'Spieler', icon: 'people', url: 'administration/player'},
+        {label: 'Ereignisse', icon: 'euro_symbol', url: 'administration/event-type'},
       ]
     },
-    { label: 'Statistiken', icon: 'bar_chart', url: 'statistics' },
-    { label: 'Satzung', icon: 'menu_book', url: 'constitution' },
-    { label: 'Über', icon: 'info', url: 'about' },
+    {label: 'Statistiken', icon: 'bar_chart', url: 'statistics'},
+    {label: 'Satzung', icon: 'menu_book', url: 'constitution'},
+    {label: 'Über', icon: 'info', url: 'about'},
   ];
 
   constructor() {

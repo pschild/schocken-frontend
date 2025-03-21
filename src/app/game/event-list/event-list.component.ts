@@ -7,16 +7,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable } from 'rxjs';
 import { EventDetailDto, EventDto, PlayerDto } from '../../api/openapi';
 import { HasPermissionDirective } from '../../auth/has-permission.directive';
+import { Permission } from '../../auth/model/permission.enum';
 import { PermissionsService } from '../../auth/permissions.service';
 import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
 import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
 import ContextEnum = EventDto.ContextEnum;
-import { Permission } from '../../auth/model/permission.enum';
 
 @Component({
   selector: 'hop-event-list',
-  standalone: true,
   imports: [
     CommonModule,
     EventsByPlayerIdPipe,
@@ -30,7 +29,7 @@ import { Permission } from '../../auth/model/permission.enum';
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventListComponent {
 
@@ -57,7 +56,7 @@ export class EventListComponent {
     });
   }
 
-  handleCheckboxChange({ checked }: MatCheckboxChange, playerId: string): void {
+  handleCheckboxChange({checked}: MatCheckboxChange, playerId: string): void {
     if (checked) {
       this.selection.update(ids => [...ids, playerId]);
     } else {
@@ -67,7 +66,7 @@ export class EventListComponent {
   }
 
   openAddEventDialog(player: PlayerDto): void {
-    this.onEventAdd.emit({ context: this.context(), playerId: player.id });
+    this.onEventAdd.emit({context: this.context(), playerId: player.id});
   }
 
   removeEvent(id: string): void {

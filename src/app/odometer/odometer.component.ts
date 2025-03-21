@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject, switchMap, takeWhile, tap, timer, map } from 'rxjs';
+import { BehaviorSubject, map, Observable, ReplaySubject, switchMap, takeWhile, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'hop-odometer',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './odometer.component.html',
   styleUrl: './odometer.component.scss'
 })
-export class OdometerComponent implements OnInit, OnChanges  {
+export class OdometerComponent implements OnInit, OnChanges {
 
   private COUNT_INTERVAL_MS = 50;
   private DURATION = 500;

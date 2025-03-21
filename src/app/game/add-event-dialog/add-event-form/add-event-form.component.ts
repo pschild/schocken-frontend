@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +18,6 @@ export interface AddEventModel {
 
 @Component({
   selector: 'hop-add-event-form',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -30,7 +29,7 @@ export interface AddEventModel {
   ],
   templateUrl: './add-event-form.component.html',
   styleUrl: './add-event-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddEventFormComponent {
 
@@ -48,15 +47,15 @@ export class AddEventFormComponent {
 
   constructor() {
     effect(() => {
-      this.form.reset({ id: this.eventType().id });
+      this.form.reset({id: this.eventType().id});
     });
   }
 
   saveEvent(): void {
     this.onAddEvent.emit({
       id: this.form.value.id!,
-      ...(this.form.value.multiplicatorValue ? { multiplicatorValue: this.form.value.multiplicatorValue } : {}),
-      ...(this.form.value.comment ? { comment: this.form.value.comment } : {}),
+      ...(this.form.value.multiplicatorValue ? {multiplicatorValue: this.form.value.multiplicatorValue} : {}),
+      ...(this.form.value.comment ? {comment: this.form.value.comment} : {}),
       trigger: this.eventType().trigger,
     });
   }

@@ -21,11 +21,10 @@ import { undefinedToNull } from '../../../dialog/dialog.utils';
 
 @Component({
   selector: 'hop-player-administration-form',
-  standalone: true,
   imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, ReactiveFormsModule, MatLabel, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatOption, MatSelect, HasRoleDirective],
   templateUrl: './player-administration-form.component.html',
   styleUrl: './player-administration-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlayerAdministrationFormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<PlayerAdministrationFormComponent>);

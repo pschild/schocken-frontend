@@ -3,7 +3,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'hop-loading-mask',
-  standalone: true,
   imports: [
     MatProgressSpinner
   ],

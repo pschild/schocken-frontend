@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, inject, OnInit, ViewChild } from '@angular/core';
-import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -16,11 +16,10 @@ import { EventTypeAdministrationFormComponent } from './event-type-administratio
 
 @Component({
   selector: 'hop-event-type-administration',
-  standalone: true,
-  imports: [CommonModule, MatTableModule, MatSortModule, MatIconModule, MatButton, MatIconButton, MatFabButton, PenaltyWithUnitComponent, ContextToLabelPipe],
+  imports: [CommonModule, MatTableModule, MatSortModule, MatIconModule, MatIconButton, MatFabButton, PenaltyWithUnitComponent, ContextToLabelPipe],
   templateUrl: './event-type-administration.component.html',
   styleUrl: './event-type-administration.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventTypeAdministrationComponent implements OnInit, AfterViewInit {
 

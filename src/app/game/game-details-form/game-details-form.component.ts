@@ -11,7 +11,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
-import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
@@ -22,7 +22,6 @@ import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
 
 @Component({
   selector: 'hop-game-details-form',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -33,7 +32,6 @@ import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
     MatOption,
     MatSelect,
     PlaceTypeToLabelPipe,
-    MatHint,
     MatSlideToggle,
     MatDialogTitle,
     MatDialogContent,
@@ -43,7 +41,7 @@ import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
   ],
   templateUrl: './game-details-form.component.html',
   styleUrl: './game-details-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameDetailsFormComponent implements OnInit {
 

@@ -6,12 +6,10 @@ import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { HintComponent } from '../../shared/hint/hint.component';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 import { PlaceTypeToLabelPipe } from '../../shared/pipes/place-type-to-label.pipe';
-import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-host-table',
-  standalone: true,
-  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe, RankComponent, HintComponent, CurrentUserDirective],
+  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe, HintComponent, CurrentUserDirective],
   templateUrl: './host-table.component.html',
   styleUrl: './host-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

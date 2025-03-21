@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,11 +21,10 @@ import { SuccessMessageService } from '../shared/success-message.service';
 
 @Component({
   selector: 'hop-home',
-  standalone: true,
-  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatButton, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner, HasPermissionDirective, HasPermissionDirective],
+  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner, HasPermissionDirective, HasPermissionDirective],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
 
@@ -61,7 +60,12 @@ export class HomeComponent implements OnInit {
         }).afterClosed();
       }),
       filter(result => !!result),
-      switchMap(({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics }) => this.gameDetailsService.create({ placeType, hostedById, placeOfAwayGame, excludeFromStatistics })),
+      switchMap(({placeType, hostedById, placeOfAwayGame, excludeFromStatistics}) => this.gameDetailsService.create({
+        placeType,
+        hostedById,
+        placeOfAwayGame,
+        excludeFromStatistics
+      })),
       tap(game => this.router.navigate(['game', game.id])),
       tap(() => this.successMessageService.showSuccess(`Spiel erstellt`)),
     ).subscribe();

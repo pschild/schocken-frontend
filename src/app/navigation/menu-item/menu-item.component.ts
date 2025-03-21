@@ -13,7 +13,6 @@ export interface MenuItem {
 
 @Component({
   selector: 'hop-menu-item',
-  standalone: true,
   imports: [
     MatIcon,
     MatListItem,
@@ -25,7 +24,7 @@ export interface MenuItem {
   ],
   templateUrl: './menu-item.component.html',
   styleUrl: './menu-item.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuItemComponent {
 

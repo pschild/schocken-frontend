@@ -31,11 +31,10 @@ import TriggerEnum = EventTypeDto.TriggerEnum;
 
 @Component({
   selector: 'hop-event-type-administration-form',
-  standalone: true,
   imports: [CommonModule, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule, ReactiveFormsModule, MatLabel, MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatRadioGroup, MatRadioButton, MatCheckbox, MatSelect, MatOption, MatIcon, MatDivider, MatExpansionModule, PenaltyWithUnitComponent, TriggerToLabelPipe, ContextToLabelPipe],
   templateUrl: './event-type-administration-form.component.html',
   styleUrl: './event-type-administration-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventTypeAdministrationFormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<EventTypeAdministrationFormComponent>);
