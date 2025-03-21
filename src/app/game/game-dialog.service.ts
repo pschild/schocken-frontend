@@ -41,6 +41,7 @@ export class GameDialogService {
       data: {
         title: `Spiel löschen`,
         message: `Beim Löschen des Spiels werden auch alle dazugehörigen Daten (Runden, Ereignisse, Teilnahmen etc.) gelöscht.\n\nBist du sicher, dass du dieses Spiel löschen möchtest?`,
+        yesButtonLabel: 'Spiel löschen'
       }
     }).afterClosed().pipe(
       filter(result => !!result),
@@ -97,6 +98,7 @@ export class GameDialogService {
       data: {
         title: `Ereignis löschen`,
         message: `Bist du sicher, dass du dieses Ereignis löschen möchtest?`,
+        yesButtonLabel: 'Ereignis löschen'
       }
     }).afterClosed().pipe(
       filter(result => !!result),
@@ -122,6 +124,7 @@ export class GameDialogService {
       data: {
         title: `Runde löschen`,
         message: `Beim Löschen der Runde werden auch alle dazugehörigen Daten (Ereignisse, Teilnahmen etc.) gelöscht.\n\nBist du sicher, dass du diese Runde löschen möchtest?`,
+        yesButtonLabel: 'Runde löschen'
       }
     }).afterClosed().pipe(
       filter(result => !!result),
@@ -132,7 +135,9 @@ export class GameDialogService {
     return this.dialog.open(ConfirmationDialogComponent, {
       data: {
         title: 'Achtung',
-        message: `Es gibt noch ${warningCount} Warnung(en). Soll das Spiel trotzdem abgeschlossen werden?` }
+        message: `Es gibt noch ${warningCount} Warnung(en). Soll das Spiel trotzdem abgeschlossen werden?`,
+        yesButtonLabel: 'Spiel abschließen'
+      }
     }).afterClosed().pipe(
       filter(result => !!result)
     );

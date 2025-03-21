@@ -4,5 +4,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button [mat-dialog-close]="false">Nein</button>
-  <button mat-flat-button [mat-dialog-close]="true">Ja</button>
+  <button mat-flat-button [mat-dialog-close]="true">{{data.yesButtonLabel || 'Ja'}}</button>
 </mat-dialog-actions>

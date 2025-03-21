@@ -85,6 +85,7 @@ export class PlayerAdministrationComponent implements OnInit, AfterViewInit {
       data: {
         title: `Spieler löschen`,
         message: `Beim Löschen eines Spielers bleiben dessen Ereignisse oder Teilnahmen erhalten. Der Spieler ist bei neuen Spielen jedoch nicht mehr auswählbar.\n\nBist du sicher, dass du "${name}" löschen möchtest?`,
+        yesButtonLabel: 'Spieler löschen'
       }
     });
     dialogRef.afterClosed().pipe(

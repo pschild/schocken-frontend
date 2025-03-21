@@ -15,5 +15,5 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
   styleUrl: './confirmation-dialog.component.scss'
 })
 export class ConfirmationDialogComponent {
-  data: { title: string; message: string; } = inject(MAT_DIALOG_DATA);
+  data: { title: string; message: string; yesButtonLabel?: string; } = inject(MAT_DIALOG_DATA);
 }

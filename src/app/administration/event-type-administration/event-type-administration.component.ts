@@ -71,6 +71,7 @@ export class EventTypeAdministrationComponent implements OnInit, AfterViewInit {
       data: {
         title: `Ereignis löschen`,
         message: `Beim Löschen eines Ereignisses bleiben Strafen erhalten.\n\nBist du sicher, dass du das Ereignis "${description}" löschen möchtest?`,
+        yesButtonLabel: 'Ereignis löschen'
       }
     });
     dialogRef.afterClosed().pipe(

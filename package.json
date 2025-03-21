@@ -15,6 +15,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/core": "^19.2.4",
     "@angular/animations": "^19.2.3",
     "@angular/cdk": "^19.2.5",
     "@angular/common": "^19.2.3",
@@ -31,6 +32,7 @@
     "date-fns": "4.0.0",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
+    "ngx-extended-pdf-viewer": "^23.0.0-alpha.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
