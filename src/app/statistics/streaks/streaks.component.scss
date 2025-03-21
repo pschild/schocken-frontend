@@ -1,4 +1,4 @@
-@import '../streak-chart/chart-theme';
+@use '../streak-chart/chart-theme' as chartTheme;
 
 h2 {
   display: flex;
@@ -22,10 +22,11 @@ form {
     height: 15px;
     width: 30px;
     margin-right: 5px;
+    flex-shrink: 0;
 
     &.inner-bar {
-      @include animation(progress-bar-stripes 2s linear infinite);
-      @include gradient-striped;
+      @include chartTheme.animation(progress-bar-stripes 2s linear infinite);
+      @include chartTheme.gradient-striped;
       background-size: 40px 40px;
     }
   }

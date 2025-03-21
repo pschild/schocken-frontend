@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $gold: #f7d638;
 $silver: #c7d6eb;
 $bronze: #eda35f;
@@ -25,21 +27,21 @@ $bronze: #eda35f;
 
     &.gold {
       background: $gold;
-      color: darken($gold, 20%);
-      border: 2px solid darken($gold, 20%);
+      color: color.adjust($gold, $lightness: -20%);
+      border: 2px solid color.adjust($gold, $lightness: -20%);
       box-shadow: 0 0 5px 1px $gold;
     }
 
     &.silver {
       background: $silver;
-      color: darken($silver, 30%);
-      border: 2px solid darken($silver, 30%);
+      color: color.adjust($silver, $lightness: -30%);
+      border: 2px solid color.adjust($silver, $lightness: -30%);
     }
 
     &.bronze {
       background: $bronze;
-      color: darken($bronze, 30%);
-      border: 2px solid darken($bronze, 30%);
+      color: color.adjust($bronze, $lightness: -30%);
+      border: 2px solid color.adjust($bronze, $lightness: -30%);
     }
   }
 }

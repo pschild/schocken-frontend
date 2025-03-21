@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
-
-@import './chart-theme';
+@use './chart-theme' as chartTheme;
 
 .grid {
   display: grid;
@@ -39,8 +38,8 @@
     top: 0;
     text-align: center;
 
-    @include animation(progress-bar-stripes 2s linear infinite);
-    @include gradient-striped;
+    @include chartTheme.animation(progress-bar-stripes 2s linear infinite);
+    @include chartTheme.gradient-striped;
     background-size: 40px 40px;
   }
 }
