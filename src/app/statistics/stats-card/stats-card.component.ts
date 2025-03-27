@@ -3,18 +3,18 @@ import { ChangeDetectionStrategy, Component, ContentChild, input, TemplateRef } 
 import { MatIconButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
-import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 
 @Component({
   selector: 'hop-stats-card',
   imports: [
     MatCard,
     NgTemplateOutlet,
-    LoadingMaskComponent,
     MatIcon,
     MatTooltip,
     MatIconButton,
+    MatProgressSpinner,
   ],
   templateUrl: './stats-card.component.html',
   styleUrl: './stats-card.component.scss',
@@ -26,10 +26,7 @@ export class StatsCardComponent {
   @ContentChild('description') description!: TemplateRef<any>;
   @ContentChild('details') details!: TemplateRef<any>;
 
-  loading = input<boolean, boolean | null>(false, {
-    transform: (value: boolean | null) => !!value
-  });
-
+  loading = input<boolean>(false);
   infoText = input<string>();
 
 }

@@ -19,6 +19,7 @@ export interface PointsDto {
     penaltyPoints: number;
     gamePoints: number;
     points: number;
+    attended?: boolean;
     tendency?: number;
 }
 

@@ -1,21 +1,23 @@
-@for (penalty of data(); track penalty.unit) {
-  @if (penalty.unit === PenaltyUnit.Euro) {
-    <hop-stats-card [loading]="loading()" infoText="exkl. Monatsbeiträge">
-      <ng-template #value>
-        <hop-odometer [countTo]="penalty.sum" type="number" [precision]="2"></hop-odometer>
-      </ng-template>
-      <ng-template #description>
-        <span>€</span>
-      </ng-template>
-    </hop-stats-card>
-  } @else if (penalty.unit === PenaltyUnit.BeerCrate) {
-    <hop-stats-card [loading]="loading()">
-      <ng-template #value>
-        <hop-odometer [countTo]="penalty.sum"></hop-odometer>
-      </ng-template>
-      <ng-template #description>
-        <span>Bierkiste(n)</span>
-      </ng-template>
-    </hop-stats-card>
+<div class="card-grid">
+  @for (penalty of data(); track penalty.unit) {
+    @if (penalty.unit === PenaltyUnit.Euro) {
+      <hop-stats-card [loading]="loading()" infoText="exkl. Monatsbeiträge">
+        <ng-template #value>
+          <hop-odometer [countTo]="penalty.sum" type="number" [precision]="2"></hop-odometer>
+        </ng-template>
+        <ng-template #description>
+          <span>€</span>
+        </ng-template>
+      </hop-stats-card>
+    } @else if (penalty.unit === PenaltyUnit.BeerCrate) {
+      <hop-stats-card [loading]="loading()">
+        <ng-template #value>
+          <hop-odometer [countTo]="penalty.sum"></hop-odometer>
+        </ng-template>
+        <ng-template #description>
+          <span>Bierkiste(n)</span>
+        </ng-template>
+      </hop-stats-card>
+    }
   }
-}
+</div>

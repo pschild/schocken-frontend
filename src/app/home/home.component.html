@@ -1,3 +1,5 @@
+@let isMobile = isMobile$ | async;
+
 <button *hopHasPermission="Permission.CREATE_GAMES" mat-fab class="hop-fab-button" (click)="createNewGame()">
   <mat-icon>add</mat-icon>
 </button>
@@ -11,13 +13,15 @@
         <mat-expansion-panel-header>
           <mat-panel-title>{{ item.year }}</mat-panel-title>
           <mat-panel-description>
-            <div>
-              @if (item.games.length === 1) {
-                <span>1 Spiel</span>
-              } @else {
-                <span>{{item.games.length}} Spiele</span>
-              }
-            </div>
+            @if (!isMobile) {
+              <div>
+                @if (item.games.length === 1) {
+                  <span>1 Spiel</span>
+                } @else {
+                  <span>{{item.games.length}} Spiele</span>
+                }
+              </div>
+            }
 
             @if (item.penaltySum.length) {
               <div>
@@ -42,7 +46,10 @@
                 @if (game.place.type === 'HOME') {
                   <span>&nbsp;bei {{game.place.locationLabel}}</span>
                 } @else if (game.place.type === 'AWAY') {
-                  <span>&nbsp;auswärts ({{game.place.locationLabel}})</span>
+                  <span>&nbsp;auswärts</span>
+                  @if (!isMobile) {
+                    ({{game.place.locationLabel}})
+                  }
                 } @else {
                   <span>&nbsp;Remote</span>
                 }

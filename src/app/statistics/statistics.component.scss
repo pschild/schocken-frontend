@@ -1,7 +1,12 @@
 form {
   display: flex;
   align-items: center;
-  gap: 20px;
+  flex-flow: row wrap;
+  padding-bottom: 30px;
+
+  button.quick-filter {
+    margin-left: 10px;
+  }
 }
 
 button.game-day {

@@ -1,7 +1,14 @@
-@if (gamesAndRoundsData()) {
+<div class="card-grid">
   <hop-stats-card [loading]="gamesAndRoundsLoading()">
+    @let countGames = gamesAndRoundsData()?.countGames;
+    @let countGamesValue = countGames?.count ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="gamesAndRoundsData()!.countGames.count"></hop-odometer>
+      @if (countGamesValue) {
+        <hop-odometer [countTo]="countGamesValue"></hop-odometer>
+      } @else if (!gamesAndRoundsLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Spiele</span>
@@ -9,8 +16,15 @@
   </hop-stats-card>
 
   <hop-stats-card [loading]="gamesAndRoundsLoading()">
+    @let countRounds = gamesAndRoundsData()?.countRounds;
+    @let countRoundsValue = countRounds?.count ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="gamesAndRoundsData()!.countRounds.count"></hop-odometer>
+      @if (countRoundsValue) {
+        <hop-odometer [countTo]="countRoundsValue"></hop-odometer>
+      } @else if (!gamesAndRoundsLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Runden</span>
@@ -18,19 +32,31 @@
   </hop-stats-card>
 
   <hop-stats-card [loading]="gamesAndRoundsLoading()">
+    @let averageRoundsPerGame = gamesAndRoundsData()?.averageRoundsPerGame;
+    @let averageRoundsPerGameCount = averageRoundsPerGame?.count ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="gamesAndRoundsData()!.averageRoundsPerGame.count" [precision]="1" type="number" [showAverage]="true"></hop-odometer>
+      @if (averageRoundsPerGameCount) {
+        <hop-odometer [countTo]="averageRoundsPerGameCount" [precision]="1" type="number" [showAverage]="true"></hop-odometer>
+      } @else if (!gamesAndRoundsLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Runden pro Spiel</span>
     </ng-template>
   </hop-stats-card>
-}
 
-@if (penaltyData()) {
   <hop-stats-card [loading]="penaltyLoading()">
+    @let euroPerGame = penaltyData()?.euroPerGame;
+    @let euroPerGameCount = euroPerGame?.count ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="penaltyData()!.euroPerGame.count" type="currency" [showAverage]="true"></hop-odometer>
+      @if (euroPerGameCount) {
+        <hop-odometer [countTo]="euroPerGameCount" type="currency" [showAverage]="true"></hop-odometer>
+      } @else if (!penaltyLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Strafen pro Spiel</span>
@@ -38,11 +64,18 @@
   </hop-stats-card>
 
   <hop-stats-card [loading]="penaltyLoading()">
+    @let euroPerRound = penaltyData()?.euroPerRound;
+    @let euroPerRoundCount = euroPerRound?.count ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="penaltyData()!.euroPerRound.count" type="currency" [showAverage]="true"></hop-odometer>
+      @if (euroPerRoundCount) {
+        <hop-odometer [countTo]="euroPerRoundCount" type="currency" [showAverage]="true"></hop-odometer>
+      } @else if (!penaltyLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Strafen pro Runde</span>
     </ng-template>
   </hop-stats-card>
-}
+</div>

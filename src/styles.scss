@@ -165,3 +165,9 @@ p.no-data {
     border-radius: 0.125em;
   }
 }
+
+.card-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}

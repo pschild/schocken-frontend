@@ -1,81 +1,173 @@
-@for (record of recordsPerGame(); track record.eventTypeId) {
-  @if (record.records.length > 0) {
-    <hop-stats-card [loading]="recordsPerGameLoading()">
-      <ng-template #value>
-        <hop-odometer [countTo]="record.records[0].count"></hop-odometer>
-      </ng-template>
-      <ng-template #description>
-        <span>{{record.description}}</span>
-      </ng-template>
-      <ng-template #details>
-        @if (record.records.length === 1) {
-          von <span [hopCurrentUser]="record.records[0].playerId">{{ record.records[0].name }}</span> am <a [href]="'game/' + record.records[0].gameId">{{record.records[0].datetime | date:'dd.MM.yyyy'}}</a>
-        } @else {
-          <hop-carousel>
-            @for (item of record.records; track item) {
-              <ng-template #carouselItem>
-                von <span [hopCurrentUser]="item.playerId">{{item.name}}</span> am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
-              </ng-template>
-            }
-          </hop-carousel>
-        }
-      </ng-template>
-    </hop-stats-card>
-  }
-}
+<div class="card-grid">
+  @for (record of recordsPerGame(); track record.eventTypeId) {
+    @if (record.records.length > 0) {
+      <hop-stats-card [loading]="recordsPerGameLoading()">
+        @let firstRecordItem = record.records[0];
 
-<hop-stats-card [loading]="maxRoundsPerGameLoading()">
-  @if (maxRoundsPerGame()) {
+        <ng-template #value>
+          <hop-odometer [countTo]="firstRecordItem.count"></hop-odometer>
+        </ng-template>
+        <ng-template #description>
+          <span>{{record.description}}</span>
+        </ng-template>
+        <ng-template #details>
+          @if (record.records.length === 1) {
+            von <span [hopCurrentUser]="firstRecordItem.playerId">{{ firstRecordItem.name }}</span> am <a [href]="'game/' + firstRecordItem.gameId">{{firstRecordItem.datetime | date:'dd.MM.yyyy'}}</a>
+          } @else {
+            <hop-carousel>
+              @for (item of record.records; track item) {
+                <ng-template #carouselItem>
+                  von <span [hopCurrentUser]="item.playerId">{{item.name}}</span> am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
+                </ng-template>
+              }
+            </hop-carousel>
+          }
+        </ng-template>
+      </hop-stats-card>
+    }
+  }
+
+  <hop-stats-card [loading]="maxRoundsPerGameLoading()">
+    @let maxRounds = maxRoundsPerGame();
+    @let maxRoundCount = maxRounds?.roundCount;
+
     <ng-template #value>
-      <hop-odometer [countTo]="maxRoundsPerGame()!.roundCount"></hop-odometer>
+      @if (maxRoundCount) {
+        <hop-odometer [countTo]="maxRoundCount"></hop-odometer>
+      } @else if (!maxRoundsPerGameLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Die meisten Runden</span>
     </ng-template>
     <ng-template #details>
-      am <a [href]="'game/' + maxRoundsPerGame()!.id">{{maxRoundsPerGame()!.datetime | date:'dd.MM.yyyy'}}</a>
+      @if (maxRounds) {
+        am <a [href]="'game/' + maxRounds.id">{{maxRounds.datetime | date:'dd.MM.yyyy'}}</a>
+      }
     </ng-template>
-  }
-</hop-stats-card>
+  </hop-stats-card>
 
-<hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()" infoText="Feststellungen und Rundenstrafen">
-  @if (mostExpensiveGameAndRound() && mostExpensiveGameAndRound()!.mostExpensiveGame) {
+  <hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()" infoText="Feststellungen und Rundenstrafen">
+    @let mostExpensiveGame = mostExpensiveGameAndRound()?.mostExpensiveGame;
+    @let mostExpensiveGameValue = mostExpensiveGame?.sum ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="mostExpensiveGameAndRound()!.mostExpensiveGame.sum" type="currency"></hop-odometer>
+      @if (mostExpensiveGameValue) {
+        <hop-odometer [countTo]="mostExpensiveGameValue" type="currency"></hop-odometer>
+      } @else if (!mostExpensiveGameAndRoundLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Teuerstes Spiel</span>
     </ng-template>
     <ng-template #details>
-      am <a [href]="'game/' + mostExpensiveGameAndRound()!.mostExpensiveGame.id">{{mostExpensiveGameAndRound()!.mostExpensiveGame.datetime | date:'dd.MM.yyyy'}}</a>
+      @if (mostExpensiveGame) {
+        am <a [href]="'game/' + mostExpensiveGame.id">{{mostExpensiveGame.datetime | date:'dd.MM.yyyy'}}</a>
+      }
     </ng-template>
-  }
-</hop-stats-card>
+  </hop-stats-card>
 
-<hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()">
-  @if (mostExpensiveGameAndRound() && mostExpensiveGameAndRound()!.mostExpensiveRound) {
+  <hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()">
+    @let mostExpensiveRound = mostExpensiveGameAndRound()?.mostExpensiveRound;
+    @let mostExpensiveRoundCount = mostExpensiveRound?.sum ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="mostExpensiveGameAndRound()!.mostExpensiveRound.sum" type="currency"></hop-odometer>
+      @if (mostExpensiveRoundCount) {
+        <hop-odometer [countTo]="mostExpensiveRoundCount" type="currency"></hop-odometer>
+      } @else if (!mostExpensiveGameAndRoundLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Teuerste Runde</span>
     </ng-template>
     <ng-template #details>
-      am <a [href]="'game/' + mostExpensiveGameAndRound()!.mostExpensiveRound.gameId + '?roundId=' + mostExpensiveGameAndRound()!.mostExpensiveRound.roundId">{{mostExpensiveGameAndRound()!.mostExpensiveRound.datetime | date:'dd.MM.yyyy'}}</a>
+      @if (mostExpensiveRound) {
+        am <a [href]="'game/' + mostExpensiveRound.gameId + '?roundId=' + mostExpensiveRound.roundId">{{mostExpensiveRound.datetime | date:'dd.MM.yyyy'}}</a>
+      }
     </ng-template>
-  }
-</hop-stats-card>
+  </hop-stats-card>
 
-<hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()">
-  @if (mostExpensiveGameAndRound() && mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame) {
+  <hop-stats-card [loading]="mostExpensiveGameAndRoundLoading()">
+    @let mostExpensiveRoundAveragePerGame = mostExpensiveGameAndRound()?.mostExpensiveRoundAveragePerGame;
+    @let mostExpensiveRoundAveragePerGameCount = mostExpensiveRoundAveragePerGame?.roundAverage ?? undefined;
+
     <ng-template #value>
-      <hop-odometer [countTo]="mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame.roundAverage" type="currency" [showAverage]="true"></hop-odometer>
+      @if (mostExpensiveRoundAveragePerGameCount) {
+        <hop-odometer [countTo]="mostExpensiveRoundAveragePerGameCount" type="currency" [showAverage]="true"></hop-odometer>
+      } @else if (!mostExpensiveGameAndRoundLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
     </ng-template>
     <ng-template #description>
       <span>Maximaler Rundenschnitt</span>
     </ng-template>
     <ng-template #details>
-      am <a [href]="'game/' + mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame.id">{{mostExpensiveGameAndRound()!.mostExpensiveRoundAveragePerGame.datetime | date:'dd.MM.yyyy'}}</a>
+      @if (mostExpensiveRoundAveragePerGame) {
+        am <a [href]="'game/' + mostExpensiveRoundAveragePerGame.id">{{mostExpensiveRoundAveragePerGame.datetime | date:'dd.MM.yyyy'}}</a>
+      }
     </ng-template>
-  }
-</hop-stats-card>
+  </hop-stats-card>
+
+  <hop-stats-card [loading]="minGamePointsLoading()">
+    @let minGamePointsItems = minGamePoints();
+    @let minGamePointsFirstItem = minGamePointsItems && minGamePointsItems.length ? minGamePointsItems![0] : undefined;
+    @let minGamePointsCount = minGamePointsItems && minGamePointsItems.length ? minGamePointsItems![0].count : undefined;
+
+    <ng-template #value>
+      @if (minGamePointsCount) {
+        <hop-odometer [countTo]="minGamePointsCount"></hop-odometer>
+      } @else if (!minGamePointsLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
+    </ng-template>
+    <ng-template #description>
+      <span>Die wenigsten Spielpunkte</span>
+    </ng-template>
+    <ng-template #details>
+      @if (minGamePointsItems && minGamePointsItems.length === 1) {
+        von <span [hopCurrentUser]="minGamePointsFirstItem!.playerId">{{ minGamePointsFirstItem!.name }}</span> am <a [href]="'game/' + minGamePointsFirstItem!.gameId">{{minGamePointsFirstItem!.datetime | date:'dd.MM.yyyy'}}</a>
+      } @else {
+        <hop-carousel>
+          @for (item of minGamePointsItems; track item) {
+            <ng-template #carouselItem>
+              von <span [hopCurrentUser]="item.playerId">{{item.name}}</span> am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
+            </ng-template>
+          }
+        </hop-carousel>
+      }
+    </ng-template>
+  </hop-stats-card>
+
+  <hop-stats-card [loading]="maxGamePointsLoading()">
+    @let maxGamePointsItems = maxGamePoints();
+    @let maxGamePointsFirstItem = maxGamePointsItems && maxGamePointsItems.length ? maxGamePointsItems![0] : undefined;
+    @let maxGamePointsCount = maxGamePointsItems && maxGamePointsItems.length ? maxGamePointsItems![0].count : undefined;
+
+    <ng-template #value>
+      @if (maxGamePointsCount) {
+        <hop-odometer [countTo]="maxGamePointsCount"></hop-odometer>
+      } @else if (!maxGamePointsLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
+    </ng-template>
+    <ng-template #description>
+      <span>Die meisten Spielpunkte</span>
+    </ng-template>
+    <ng-template #details>
+      @if (maxGamePointsItems && maxGamePointsItems.length === 1) {
+        von <span [hopCurrentUser]="maxGamePointsFirstItem!.playerId">{{ maxGamePointsFirstItem!.name }}</span> am <a [href]="'game/' + maxGamePointsFirstItem!.gameId">{{maxGamePointsFirstItem!.datetime | date:'dd.MM.yyyy'}}</a>
+      } @else {
+        <hop-carousel>
+          @for (item of maxGamePointsItems; track item) {
+            <ng-template #carouselItem>
+              von <span [hopCurrentUser]="item.playerId">{{item.name}}</span> am <a [href]="'game/' + item.gameId">{{item.datetime | date:'dd.MM.yyyy'}}</a>
+            </ng-template>
+          }
+        </hop-carousel>
+      }
+    </ng-template>
+  </hop-stats-card>
+</div>

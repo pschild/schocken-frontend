@@ -1,15 +1,25 @@
 <mat-card appearance="outlined">
-  @if (loading()) {
+  <!--@if (loading()) {
     <hop-loading-mask></hop-loading-mask>
-  }
+  }-->
   <div class="card-content">
-    <ng-container [ngTemplateOutlet]="value"></ng-container>
+    <div style="height: 50px">
+      @if (loading()) {
+        <mat-spinner diameter="50" strokeWidth="3"></mat-spinner>
+      } @else {
+        <ng-container [ngTemplateOutlet]="value"></ng-container>
+      }
+    </div>
     <div style="width: 100%">
       <div class="description">
         <ng-container [ngTemplateOutlet]="description"></ng-container>
       </div>
       <div class="details">
-        <ng-container [ngTemplateOutlet]="details"></ng-container>
+        @if (loading()) {
+          <mat-spinner diameter="20" strokeWidth="2" style="left: 50%; transform: translateX(-50%)"></mat-spinner>
+        } @else {
+          <ng-container [ngTemplateOutlet]="details"></ng-container>
+        }
       </div>
     </div>
   </div>

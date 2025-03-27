@@ -1,5 +1,7 @@
+@let isMobile = isMobile$ | async;
+
 <form [formGroup]="filterForm">
-  <mat-form-field>
+  <mat-form-field subscriptSizing="dynamic">
     <mat-label>Zeitraum auswählen</mat-label>
     <mat-date-range-input [rangePicker]="picker" [min]="minDate$ | async" [max]="maxDate$ | async">
       <input matStartDate formControlName="fromDate" placeholder="TT.MM.JJJJ">
@@ -9,10 +11,8 @@
     <mat-date-range-picker #picker [dateClass]="(dateClass$ | async)!"></mat-date-range-picker>
   </mat-form-field>
 
-  <mat-checkbox formControlName="onlyActivePlayers">nur aktive Spieler</mat-checkbox>
-
-  <button mat-stroked-button color="primary" [matMenuTriggerFor]="quickfilterDatesMenu" [disabled]="'filter-form' | isLoading | async">
-    @if (isMobile$ | async) {
+  <button mat-button color="primary" class="quick-filter" [matMenuTriggerFor]="quickfilterDatesMenu" [disabled]="'filter-form' | isLoading | async">
+    @if (isMobile) {
       <span>
         <mat-icon>filter_alt</mat-icon>
       </span>
@@ -28,13 +28,17 @@
       <button mat-menu-item (click)="applyYearToFilter(year)">{{year}}</button>
     }
   </mat-menu>
+
+  <mat-checkbox formControlName="onlyActivePlayers">nur aktive Spieler</mat-checkbox>
 </form>
 
 <mat-tab-group mat-stretch-tabs="true" (selectedTabChange)="handleTabChange($event)" #outerTabGroup>
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>casino</mat-icon>
-      Spiele & Runden
+      @if (!isMobile) {
+        Spiele & Runden
+      }
     </ng-template>
     <mat-tab-group mat-stretch-tabs="false" id="games-rounds" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
       <mat-tab label="Allgemein">
@@ -63,14 +67,18 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>emoji_events</mat-icon>
-      Punkte
+      @if (!isMobile) {
+        Punkte
+      }
     </ng-template>
     <hop-points [data]="pointsStatistics$ | async" [loading]="'points-statistics' | isLoading | async"></hop-points>
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>star</mat-icon>
-      Rekorde & Streaks
+      @if (!isMobile) {
+        Rekorde & Streaks
+      }
     </ng-template>
     <mat-tab-group mat-stretch-tabs="false" id="records-streaks" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
       <mat-tab label="Spielübergreifend">
@@ -87,6 +95,10 @@
           [maxRoundsPerGameLoading]="'games-and-rounds-statistics' | isLoading | async"
           [mostExpensiveGameAndRound]="mostExpensiveGameAndRound$ | async"
           [mostExpensiveGameAndRoundLoading]="'penalty-statistics' | isLoading | async"
+          [minGamePoints]="minGamePoints$ | async"
+          [minGamePointsLoading]="'points-statistics' | isLoading | async"
+          [maxGamePoints]="maxGamePoints$ | async"
+          [maxGamePointsLoading]="'points-statistics' | isLoading | async"
         ></hop-records>
       </mat-tab>
     </mat-tab-group>
@@ -94,7 +106,9 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>euro</mat-icon>
-      Kasse
+      @if (!isMobile) {
+        Kasse
+      }
     </ng-template>
     <hop-penalty-sums [data]="penaltySums$ | async" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-sums>
     <hop-penalty-table [data]="penaltyByPlayerTable$ | async" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-table>
@@ -102,7 +116,9 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon svgIcon="schock_aus"></mat-icon>
-      Ereignisse
+      @if (!isMobile) {
+        Ereignisse
+      }
     </ng-template>
     <mat-tab-group mat-stretch-tabs="false" id="event-types" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
       <mat-tab label="Schock-Aus">Schock-Aus</mat-tab>

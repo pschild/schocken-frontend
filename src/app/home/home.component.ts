@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { MatFabButton, MatIconButton } from '@angular/material/button';
@@ -7,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { switchMap, tap } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { GameDetailsService, GameOverviewOfYearDto, GameOverviewService, PlayerService } from '../api/openapi';
 import { HasPermissionDirective } from '../auth/has-permission.directive';
 import { Permission } from '../auth/model/permission.enum';
@@ -29,6 +30,7 @@ import { SuccessMessageService } from '../shared/success-message.service';
 export class HomeComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
+  private breakpointObserver = inject(BreakpointObserver);
 
   gameOverview: GameOverviewOfYearDto[] = [];
 
@@ -38,6 +40,10 @@ export class HomeComponent implements OnInit {
   private successMessageService = inject(SuccessMessageService);
   private router = inject(Router);
   private loadingState = inject(LoadingState);
+
+  isMobile$ = this.breakpointObserver.observe([Breakpoints.XSmall]).pipe(
+    map(state => state.matches)
+  );
 
   Permission = Permission;
 

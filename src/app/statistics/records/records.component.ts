@@ -4,7 +4,7 @@ import {
   MostExpensiveGameDto,
   MostExpensiveRoundAveragePerGameDto,
   MostExpensiveRoundDto,
-  RecordsPerGameDto,
+  RecordDto, RecordsPerGameDto,
   RoundCountByGameIdDto
 } from '../../api/openapi';
 import { OdometerComponent } from '../../odometer/odometer.component';
@@ -27,9 +27,7 @@ import { StatsCardComponent } from '../stats-card/stats-card.component';
 })
 export class RecordsComponent {
 
-  recordsPerGame = input<RecordsPerGameDto[], RecordsPerGameDto[] | null>([], {
-    transform: (value: RecordsPerGameDto[] | null) => !!value ? value : []
-  });
+  recordsPerGame = input<RecordsPerGameDto[] | null>();
   recordsPerGameLoading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
@@ -45,6 +43,16 @@ export class RecordsComponent {
     mostExpensiveRoundAveragePerGame: MostExpensiveRoundAveragePerGameDto
   } | null>();
   mostExpensiveGameAndRoundLoading = input<boolean, boolean | null>(false, {
+    transform: (value: boolean | null) => !!value
+  });
+
+  minGamePoints = input<RecordDto[] | null>();
+  minGamePointsLoading = input<boolean, boolean | null>(false, {
+    transform: (value: boolean | null) => !!value
+  });
+
+  maxGamePoints = input<RecordDto[] | null>();
+  maxGamePointsLoading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
 }

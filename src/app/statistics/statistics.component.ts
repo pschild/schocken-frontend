@@ -28,7 +28,7 @@ import {
   PenaltyDto,
   PenaltyStatisticsResponseDto,
   PointsStatisticsResponseDto,
-  QuoteByNameDto,
+  QuoteByNameDto, RecordDto,
   RecordsPerGameDto,
   RoundCountByGameIdDto,
   StatisticsService,
@@ -227,6 +227,15 @@ export class StatisticsComponent implements OnInit {
     switchMap(config => this.statisticsService.pointsStatistics(config).pipe(
       doWithLoading(this.loadingState, 'points-statistics'),
     )),
+    share(),
+  );
+
+  minGamePoints$: Observable<RecordDto[]> = this.pointsStatistics$.pipe(
+    map(({ minGamePoints }) => minGamePoints)
+  );
+
+  maxGamePoints$: Observable<RecordDto[]> = this.pointsStatistics$.pipe(
+    map(({ maxGamePoints }) => maxGamePoints)
   );
 
   // // eventTypeCountsByPlayer: this.statisticsService.eventTypeCountsByPlayer(),

@@ -9,11 +9,14 @@
  * Do not edit the class manually.
  */
 import { PointsPerGameDto } from './pointsPerGameDto';
+import { RecordDto } from './recordDto';
 import { AccumulatedPointsPerGameDto } from './accumulatedPointsPerGameDto';
 
 
 export interface PointsStatisticsResponseDto { 
     pointsPerGame: Array<PointsPerGameDto>;
     accumulatedPoints: Array<AccumulatedPointsPerGameDto>;
+    maxGamePoints: Array<RecordDto>;
+    minGamePoints: Array<RecordDto>;
 }
 
