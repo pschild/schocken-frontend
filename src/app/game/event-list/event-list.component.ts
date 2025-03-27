@@ -12,6 +12,7 @@ import { PermissionsService } from '../../auth/permissions.service';
 import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { PenaltyWithUnitComponent } from '../../shared/penalty-with-unit/penalty-with-unit.component';
 import { EventsByPlayerIdPipe } from '../../shared/pipes/events-by-player-id.pipe';
+import { ScrollWrapperDirective } from '../../shared/scroll-wrapper.directive';
 import ContextEnum = EventDto.ContextEnum;
 
 @Component({
@@ -26,6 +27,7 @@ import ContextEnum = EventDto.ContextEnum;
     PenaltyWithUnitComponent,
     HasPermissionDirective,
     CurrentUserDirective,
+    ScrollWrapperDirective,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',

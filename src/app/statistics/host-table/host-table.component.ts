@@ -6,10 +6,11 @@ import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { HintComponent } from '../../shared/hint/hint.component';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 import { PlaceTypeToLabelPipe } from '../../shared/pipes/place-type-to-label.pipe';
+import { ScrollWrapperDirective } from '../../shared/scroll-wrapper.directive';
 
 @Component({
   selector: 'hop-host-table',
-  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe, HintComponent, CurrentUserDirective],
+  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, PlaceTypeToLabelPipe, HintComponent, CurrentUserDirective, ScrollWrapperDirective],
   templateUrl: './host-table.component.html',
   styleUrl: './host-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

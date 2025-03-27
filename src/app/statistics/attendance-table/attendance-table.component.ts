@@ -5,11 +5,12 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { QuoteByNameDto } from '../../api/openapi';
 import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
+import { ScrollWrapperDirective } from '../../shared/scroll-wrapper.directive';
 import { RankComponent } from '../rank/rank.component';
 
 @Component({
   selector: 'hop-attendance-table',
-  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe, RankComponent, CurrentUserDirective],
+  imports: [MatTableModule, MatSortModule, LoadingMaskComponent, DecimalPipe, PercentPipe, RankComponent, CurrentUserDirective, ScrollWrapperDirective],
   templateUrl: './attendance-table.component.html',
   styleUrl: './attendance-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

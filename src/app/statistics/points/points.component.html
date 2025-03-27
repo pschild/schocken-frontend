@@ -1,52 +1,17 @@
+@let isMobile = isMobile$ | async;
+
 @if (data() && data()!.pointsPerGame.length > 0) {
   @let idx = currentIndex()();
   @let pointsPerGame = data()!.pointsPerGame;
   @let accumulatedPoints = data()!.accumulatedPoints;
   @let count = pointsPerGame.length;
 
-  <div class="control-elements">
-    <div>
-      <button mat-icon-button (click)="currentIndex().set(0)" [disabled]="idx === 0">
-        <mat-icon>first_page</mat-icon>
-      </button>
-      <button mat-icon-button (click)="currentIndex().set(idx > 0 ? idx - 1 : idx)" [disabled]="idx === 0">
-        <mat-icon>keyboard_arrow_left</mat-icon>
-      </button>
-
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>Spieltag</mat-label>
-        <mat-select [value]="idx" (selectionChange)="onSelectionChanged($event)">
-          @for (matchDay of pointsPerGame; track matchDay.gameId; let idx = $index) {
-            <mat-option [value]="idx">{{matchDay.datetime | date:'dd.MM.yyyy'}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      <button mat-icon-button (click)="currentIndex().set(count - 1 ? idx + 1 : idx)" [disabled]="idx >= count - 1">
-        <mat-icon>keyboard_arrow_right</mat-icon>
-      </button>
-      <button mat-icon-button (click)="currentIndex().set(count - 1)" [disabled]="idx >= count - 1">
-        <mat-icon>last_page</mat-icon>
-      </button>
-    </div>
-    <div>
-      <mat-button-toggle-group class="view-type-buttons" [formControl]="viewTypeControl" [hideSingleSelectionIndicator]="true">
-        <mat-button-toggle [value]="false">
-          <mat-icon>unfold_less</mat-icon>
-          kompakt
-        </mat-button-toggle>
-        <mat-button-toggle [value]="true">
-          <mat-icon>unfold_more</mat-icon>
-          detailliert
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+  <div class="help-button-row">
+    <button mat-button (click)="showHelpDialog()">
+      <mat-icon>help</mat-icon>
+      Wie funktioniert die Punktevergabe?
+    </button>
   </div>
-
-  <button mat-button (click)="showHelpDialog()">
-    <mat-icon>help</mat-icon>
-    Wie funktioniert die Punktevergabe?
-  </button>
 
   <ng-template #helpText>
     <p>Für jedes Spiel werden folgende Punkte vergeben:</p>
@@ -119,12 +84,46 @@
     <p>Sollte es dennoch zu einer Punktgleichheit kommen, teilen sich die jeweiligen Spieler die Platzierung.</p>
   </ng-template>
 
+  <div class="control-elements">
+    <div>
+      <button mat-icon-button (click)="currentIndex().set(0)" [disabled]="idx === 0">
+        <mat-icon>first_page</mat-icon>
+      </button>
+      @if (!isMobile) {
+        <button mat-icon-button (click)="currentIndex().set(idx > 0 ? idx - 1 : idx)" [disabled]="idx === 0">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+      }
+
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Spieltag</mat-label>
+        <mat-select [value]="idx" (selectionChange)="onSelectionChanged($event)">
+          @for (matchDay of pointsPerGame; track matchDay.gameId; let idx = $index) {
+            <mat-option [value]="idx">{{matchDay.datetime | date:'dd.MM.yyyy'}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (!isMobile) {
+        <button mat-icon-button (click)="currentIndex().set(count - 1 ? idx + 1 : idx)" [disabled]="idx >= count - 1">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      }
+      <button mat-icon-button (click)="currentIndex().set(count - 1)" [disabled]="idx >= count - 1">
+        <mat-icon>last_page</mat-icon>
+      </button>
+    </div>
+    <div>
+      <mat-slide-toggle [formControl]="showExpandedColums">Detailansicht</mat-slide-toggle>
+    </div>
+  </div>
+
   <h2>Punkte am {{pointsPerGame[idx].datetime | date:'dd.MM.yyyy'}}</h2>
-  <hop-points-table [data]="pointsPerGame[idx].points" [loading]="loading()" [isExpanded]="!!viewTypeControl.value"></hop-points-table>
+  <hop-points-table [data]="pointsPerGame[idx].points" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
 
   @if (count > 1 && idx > 0) {
     <h2>Punkte vom {{pointsPerGame[0].datetime | date:'dd.MM.yyyy'}} bis {{pointsPerGame[idx].datetime | date:'dd.MM.yyyy'}}</h2>
-    <hop-points-table [data]="accumulatedPoints[idx].points" [loading]="loading()" [isExpanded]="!!viewTypeControl.value"></hop-points-table>
+    <hop-points-table [data]="accumulatedPoints[idx].points" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
   }
 } @else if (!loading()) {
   <p class="no-data">Es gibt keine Daten für die ausgewählten Filter.</p>

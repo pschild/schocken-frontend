@@ -5,6 +5,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PenaltyByPlayerTableDto } from '../../api/openapi';
 import { CurrentUserDirective } from '../../shared/current-user.directive';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
+import { ScrollWrapperDirective } from '../../shared/scroll-wrapper.directive';
 import { RankComponent } from '../rank/rank.component';
 
 @Component({
@@ -16,7 +17,8 @@ import { RankComponent } from '../rank/rank.component';
     RankComponent,
     CurrentUserDirective,
     CurrencyPipe,
-    PercentPipe
+    PercentPipe,
+    ScrollWrapperDirective
   ],
   templateUrl: './penalty-table.component.html',
   styleUrl: './penalty-table.component.scss',
