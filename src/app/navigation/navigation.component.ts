@@ -37,7 +37,7 @@ export class NavigationComponent {
   );
 
   navigationItems: MenuItem[] = [
-    {label: 'Spiele', icon: 'casino', url: 'home'},
+    {label: 'Spiele', icon: 'casino', role: Role.PLAYER, url: 'home'},
     {
       label: 'Verwaltung',
       icon: 'settings',
@@ -47,8 +47,8 @@ export class NavigationComponent {
         {label: 'Ereignisse', icon: 'euro_symbol', url: 'administration/event-type'},
       ]
     },
-    {label: 'Statistiken', icon: 'bar_chart', url: 'statistics'},
-    {label: 'Satzung', icon: 'menu_book', url: 'constitution'},
+    {label: 'Statistiken', icon: 'bar_chart', role: Role.PLAYER, url: 'statistics'},
+    {label: 'Satzung', icon: 'menu_book', role: Role.PLAYER, url: 'constitution'},
     {label: 'Über', icon: 'info', url: 'about'},
   ];
 

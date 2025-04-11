@@ -7,6 +7,7 @@ import { PlayerAdministrationComponent } from './administration/player-administr
 import { Role } from './auth/model/role.enum';
 import { PermissionsService } from './auth/permissions.service';
 import { ConstitutionComponent } from './constitution/constitution.component';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -60,6 +61,10 @@ export const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent
   },
   {
     path: '',

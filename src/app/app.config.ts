@@ -21,7 +21,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter } from '@angular/router';
 import { authHttpInterceptorFn, AuthService, provideAuth0 } from '@auth0/auth0-angular';
 import { de } from 'date-fns/locale';
-import { defer, firstValueFrom, iif, of, switchMap, tap } from 'rxjs';
+import { catchError, defer, firstValueFrom, iif, of, switchMap, tap, throwError } from 'rxjs';
 import { ApiModule as NgOpenapiGenApiModule } from './api/ng-openapi-gen/api.module';
 import { ApiModule as OpenApiModule, Configuration, PlayerService } from './api/openapi';
 import { routes } from './app.routes';
@@ -87,7 +87,14 @@ export const appConfig: ApplicationConfig = {
               switchMap(user => {
                 return iif(
                   () => !!user && !!user?.sub,
-                  defer(() => playerService.getPlayerIdByUserId(user!.sub!)),
+                  defer(() => playerService.getPlayerIdByUserId(user!.sub!).pipe(
+                    catchError(err => {
+                      if (err.status === 403) {
+                        return of(null);
+                      }
+                      return throwError(() => err);
+                    })
+                  )),
                   of(null)
                 );
               }),
