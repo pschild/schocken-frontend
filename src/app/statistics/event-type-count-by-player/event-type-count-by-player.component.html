@@ -1,0 +1,12 @@
+<div>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Ereignis</mat-label>
+    <mat-select [formControl]="selectControl">
+      @for (eventType of allEventTypes$ | async; track eventType.id) {
+        <mat-option [value]="eventType.id">{{eventType.description}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<hop-event-type-count-by-player-table [data]="data()" [loading]="loading()"></hop-event-type-count-by-player-table>

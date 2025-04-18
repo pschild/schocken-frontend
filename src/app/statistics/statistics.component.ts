@@ -12,11 +12,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabChangeEvent, MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { format, getYear, max, min, set } from 'date-fns';
-import { combineLatest, debounceTime, delay, Observable, share, shareReplay } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, delay, Observable, share, shareReplay } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap } from 'rxjs/operators';
 import {
-  AttendancesStatisticsResponseDto,
-  CountDto,
+  AttendancesStatisticsResponseDto, CountByNameDto,
+  CountDto, EventTypeCountsDto,
   EventTypesStatisticsResponseDto,
   GameIdsWithDatetimeDto,
   GamesAndRoundsStatisticsResponseDto,
@@ -30,7 +30,7 @@ import {
   PointsStatisticsResponseDto,
   QuoteByNameDto, RecordDto,
   RecordsPerGameDto,
-  RoundCountByGameIdDto,
+  RoundCountByGameIdDto, SchockAusEffectivityTableDto, SchockAusStreakDto,
   StatisticsService,
   StreakStatisticsResponseDto
 } from '../api/openapi';
@@ -38,6 +38,8 @@ import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
 import { LoadingState } from '../shared/loading/loading.state';
 import { doWithLoading } from '../shared/operators';
 import { AttendanceTableComponent } from './attendance-table/attendance-table.component';
+import { EventTypeCountByPlayerComponent } from './event-type-count-by-player/event-type-count-by-player.component';
+import { EventTypeCountTableComponent } from './event-type-count-table/event-type-count-table.component';
 import { FinalsAttendanceTableComponent } from './finals-attendance-table/finals-attendance-table.component';
 import { GameAndRoundsComponent } from './game-and-rounds/game-and-rounds.component';
 import { HostTableComponent } from './host-table/host-table.component';
@@ -45,6 +47,7 @@ import { PenaltySumsComponent } from './penalty-sums/penalty-sums.component';
 import { PenaltyTableComponent } from './penalty-table/penalty-table.component';
 import { PointsComponent } from './points/points.component';
 import { RecordsComponent } from './records/records.component';
+import { SchockAusEffectivityTableComponent } from './schock-aus-effectivity-table/schock-aus-effectivity-table.component';
 import { StreaksComponent } from './streaks/streaks.component';
 
 @Component({
@@ -68,7 +71,10 @@ import { StreaksComponent } from './streaks/streaks.component';
     StreaksComponent,
     PenaltyTableComponent,
     PenaltySumsComponent,
-    PointsComponent
+    PointsComponent,
+    SchockAusEffectivityTableComponent,
+    EventTypeCountTableComponent,
+    EventTypeCountByPlayerComponent
   ],
   templateUrl: './statistics.component.html',
   styleUrl: './statistics.component.scss',
@@ -188,6 +194,14 @@ export class StatisticsComponent implements OnInit {
     map(({recordsPerGame}) => recordsPerGame)
   );
 
+  eventTypeCounts$: Observable<EventTypeCountsDto[]> = this.eventTypesStatistics$.pipe(
+    map(({eventTypeCounts}) => eventTypeCounts)
+  );
+
+  schockAusEffectivityTable$: Observable<SchockAusEffectivityTableDto[]> = this.eventTypesStatistics$.pipe(
+    map(({schockAusEffectivityTable}) => schockAusEffectivityTable)
+  );
+
   penaltyStatistics$: Observable<PenaltyStatisticsResponseDto> = this.filterChanges$.pipe(
     switchMap(config => this.statisticsService.penaltyStatistics(config).pipe(
       doWithLoading(this.loadingState, 'penalty-statistics'),
@@ -221,6 +235,11 @@ export class StatisticsComponent implements OnInit {
     switchMap(config => this.statisticsService.streakStatistics(config).pipe(
       doWithLoading(this.loadingState, 'streak-statistics'),
     )),
+    share(),
+  );
+
+  schockAusStreak$: Observable<SchockAusStreakDto> = this.streakStatistics$.pipe(
+    map(({ schockAusStreak }) => schockAusStreak)
   );
 
   pointsStatistics$: Observable<PointsStatisticsResponseDto> = this.filterChanges$.pipe(
@@ -238,7 +257,18 @@ export class StatisticsComponent implements OnInit {
     map(({ maxGamePoints }) => maxGamePoints)
   );
 
-  // // eventTypeCountsByPlayer: this.statisticsService.eventTypeCountsByPlayer(),
+  eventTypeSelection$: BehaviorSubject<string> = new BehaviorSubject('');
+
+  eventTypeCountsByPlayer$: Observable<CountByNameDto[]> = combineLatest([this.filterChanges$, this.eventTypeSelection$]).pipe(
+    map(([filter, eventTypeId]) => ({ ...filter, eventTypeId })),
+    switchMap(config => this.statisticsService.eventTypeCountsByPlayer(config).pipe(
+      doWithLoading(this.loadingState, 'event-type-counts-by-player-statistics'),
+    )),
+  );
+
+  handleEventTypeSelectionChange(selection: string): void {
+    this.eventTypeSelection$.next(selection);
+  }
 
   ngOnInit(): void {
     this.minDate$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(date => this.filterForm.patchValue({fromDate: date}));

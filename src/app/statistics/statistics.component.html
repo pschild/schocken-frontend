@@ -99,6 +99,8 @@
           [minGamePointsLoading]="'points-statistics' | isLoading | async"
           [maxGamePoints]="maxGamePoints$ | async"
           [maxGamePointsLoading]="'points-statistics' | isLoading | async"
+          [schockAusStreak]="schockAusStreak$ | async"
+          [schockAusStreakLoading]="'streak-statistics' | isLoading | async"
         ></hop-records>
       </mat-tab>
     </mat-tab-group>
@@ -121,9 +123,19 @@
       }
     </ng-template>
     <mat-tab-group mat-stretch-tabs="false" id="event-types" (selectedTabChange)="handleTabChange($event)" #innerTabGroup>
-      <mat-tab label="Schock-Aus">Schock-Aus</mat-tab>
-      <mat-tab label="pro Spieler">pro Spieler</mat-tab>
-      <mat-tab label="Anzahlen">Anzahlen</mat-tab>
+      <mat-tab label="Schock-Aus">
+        <hop-schock-aus-effectivity-table [data]="schockAusEffectivityTable$ | async" [loading]="'event-type-statistics' | isLoading | async"></hop-schock-aus-effectivity-table>
+      </mat-tab>
+      <mat-tab label="pro Spieler">
+        <hop-event-type-count-by-player
+          [data]="eventTypeCountsByPlayer$ | async"
+          [loading]="'event-type-counts-by-player-statistics' | isLoading | async"
+          (onEventTypeChange)="handleEventTypeSelectionChange($event)"
+        ></hop-event-type-count-by-player>
+      </mat-tab>
+      <mat-tab label="Anzahlen">
+        <hop-event-type-count-table [data]="eventTypeCounts$ | async" [loading]="'event-type-statistics' | isLoading | async"></hop-event-type-count-table>
+      </mat-tab>
     </mat-tab-group>
   </mat-tab>
 </mat-tab-group>

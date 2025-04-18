@@ -226,6 +226,11 @@ export class GameState extends StateService<IGameState> {
       tap(response => this.setState({ rounds: [...this.state.rounds, response.round] })),
       tap(() => this.openLastRound$.next()),
       tap(() => this.successMessageService.showSuccess(`Neue Runde erstellt`)),
+      switchMap(response => {
+        return this.state.rounds.length === 1
+          ? this.updateAttendance(response.round.id).pipe(map(() => response))
+          : of(response);
+      }),
     );
   }
 

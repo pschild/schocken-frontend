@@ -1,0 +1,55 @@
+<h2>Effektivität der Schock-Aus</h2>
+
+@if (loading()) {
+  <hop-loading-mask></hop-loading-mask>
+}
+
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive="rank"
+  matSortDirection="asc"
+  hopScrollWrapper
+>
+  <ng-container matColumnDef="rank">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Platz</th>
+    <td mat-cell *matCellDef="let element">
+      <hop-rank [rank]="element.rank"></hop-rank>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Spieler</th>
+    <td mat-cell *matCellDef="let element">
+      <span [hopCurrentUser]="element.playerId">{{ element.name }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="saCount">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Schock-Aus</th>
+    <td mat-cell *matCellDef="let element">{{ element.saCount | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="sasCount">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Schock-Aus-Strafen</th>
+    <td mat-cell *matCellDef="let element">{{ element.sasCount | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="quote">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Quote</th>
+    <td mat-cell *matCellDef="let element">{{ element.quote | number: '1.1-2' }} SA-Strafen pro SA</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+      <p class="no-data">Es gibt keine Daten für die ausgewählten Filter.</p>
+    </td>
+  </tr>
+</table>
+
+<hop-hint>
+  Gezählt werden nur Runden, die durch <strong>einen einzigen</strong> Schock-Aus beendet wurden.
+</hop-hint>

@@ -1,0 +1,41 @@
+@if (loading()) {
+  <hop-loading-mask></hop-loading-mask>
+}
+
+<table
+  mat-table
+  [dataSource]="dataSource"
+  matSort
+  matSortActive="count"
+  matSortDirection="desc"
+  hopScrollWrapper
+>
+  <ng-container matColumnDef="description">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="count">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Anzahl</th>
+    <td mat-cell *matCellDef="let element">{{ element.count | number }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="penalty">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>verursachte Strafe</th>
+    <td mat-cell *matCellDef="let element">
+      @if (element.penalty) {
+        <hop-penalty-with-unit [penalty]="element.penalty" [unit]="element.penaltyUnit"></hop-penalty-with-unit>
+      } @else {
+        -
+      }
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+      <p class="no-data">Es gibt keine Daten für die ausgewählten Filter.</p>
+    </td>
+  </tr>
+</table>

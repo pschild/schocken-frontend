@@ -1,4 +1,24 @@
 <div class="card-grid">
+  <hop-stats-card [loading]="schockAusStreakLoading()" infoText="aufeinanderfolgende Runden mit mind. 1x Schock-Aus">
+    @let saStreak = schockAusStreak();
+
+    <ng-template #value>
+      @if (saStreak) {
+        <hop-odometer [countTo]="saStreak.maxStreak"></hop-odometer>
+      } @else if (!schockAusStreakLoading()) {
+        <span class="odometer-placeholder">?</span>
+      }
+    </ng-template>
+    <ng-template #description>
+      <span>Schock-Aus in Folge</span>
+    </ng-template>
+    <ng-template #details>
+      @if (saStreak) {
+        am <a [href]="'game/' + saStreak.gameId">{{saStreak.datetime | date:'dd.MM.yyyy'}}</a>
+      }
+    </ng-template>
+  </hop-stats-card>
+
   @for (record of recordsPerGame(); track record.eventTypeId) {
     @if (record.records.length > 0) {
       <hop-stats-card [loading]="recordsPerGameLoading()">

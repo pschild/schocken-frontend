@@ -5,7 +5,7 @@ import {
   MostExpensiveRoundAveragePerGameDto,
   MostExpensiveRoundDto,
   RecordDto, RecordsPerGameDto,
-  RoundCountByGameIdDto
+  RoundCountByGameIdDto, SchockAusStreakDto
 } from '../../api/openapi';
 import { OdometerComponent } from '../../odometer/odometer.component';
 import { CarouselComponent } from '../../shared/carousel/carousel.component';
@@ -53,6 +53,11 @@ export class RecordsComponent {
 
   maxGamePoints = input<RecordDto[] | null>();
   maxGamePointsLoading = input<boolean, boolean | null>(false, {
+    transform: (value: boolean | null) => !!value
+  });
+
+  schockAusStreak = input<SchockAusStreakDto | null>();
+  schockAusStreakLoading = input<boolean, boolean | null>(false, {
     transform: (value: boolean | null) => !!value
   });
 }
