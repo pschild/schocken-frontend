@@ -22,6 +22,8 @@ import { AttendancesStatisticsResponseDto } from '../model/attendancesStatistics
 // @ts-ignore
 import { CountByNameDto } from '../model/countByNameDto';
 // @ts-ignore
+import { EventTypeStatisticsRequestDto } from '../model/eventTypeStatisticsRequestDto';
+// @ts-ignore
 import { EventTypesStatisticsResponseDto } from '../model/eventTypesStatisticsResponseDto';
 // @ts-ignore
 import { GameIdsWithDatetimeDto } from '../model/gameIdsWithDatetimeDto';
@@ -242,13 +244,17 @@ export class StatisticsService {
     }
 
     /**
+     * @param eventTypeStatisticsRequestDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public eventTypeCountsByPlayer(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByNameDto>>;
-    public eventTypeCountsByPlayer(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByNameDto>>>;
-    public eventTypeCountsByPlayer(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByNameDto>>>;
-    public eventTypeCountsByPlayer(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public eventTypeCountsByPlayer(eventTypeStatisticsRequestDto: EventTypeStatisticsRequestDto, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<CountByNameDto>>;
+    public eventTypeCountsByPlayer(eventTypeStatisticsRequestDto: EventTypeStatisticsRequestDto, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<CountByNameDto>>>;
+    public eventTypeCountsByPlayer(eventTypeStatisticsRequestDto: EventTypeStatisticsRequestDto, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<CountByNameDto>>>;
+    public eventTypeCountsByPlayer(eventTypeStatisticsRequestDto: EventTypeStatisticsRequestDto, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (eventTypeStatisticsRequestDto === null || eventTypeStatisticsRequestDto === undefined) {
+            throw new Error('Required parameter eventTypeStatisticsRequestDto was null or undefined when calling eventTypeCountsByPlayer.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -275,6 +281,15 @@ export class StatisticsService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -290,6 +305,7 @@ export class StatisticsService {
         return this.httpClient.request<Array<CountByNameDto>>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: eventTypeStatisticsRequestDto,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

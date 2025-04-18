@@ -7,6 +7,7 @@ import { filter, Observable } from 'rxjs';
 import { StreakStatisticsResponseDto } from '../../api/openapi';
 import { HintComponent } from '../../shared/hint/hint.component';
 import { StreakChartComponent } from '../streak-chart/streak-chart.component';
+import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
 
 @Component({
   selector: 'hop-streaks',
@@ -16,7 +17,8 @@ import { StreakChartComponent } from '../streak-chart/streak-chart.component';
     FormsModule,
     MatSelectModule,
     ReactiveFormsModule,
-    HintComponent
+    HintComponent,
+    LoadingMaskComponent
   ],
   templateUrl: './streaks.component.html',
   styleUrl: './streaks.component.scss',

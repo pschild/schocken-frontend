@@ -2,50 +2,54 @@
   <div class="game-container">
     <div class="game-info-container">
       <div class="game-info-block">
-        <div class="game-info-item">
-          <mat-icon>today</mat-icon>
-          {{game.datetime | date:'dd.MM.yyyy'}}
+        <div style="display: flex; gap: 5px;">
+          <div class="game-info-item">
+            <mat-icon>today</mat-icon>
+            {{game.datetime | date:'dd.MM.yyyy'}}
+          </div>
+
+          <div class="game-info-item">
+            <mat-icon>place</mat-icon>
+            @if (game.place.type === PlaceTypeEnum.Home) {
+              bei {{game.place.locationLabel}}
+            } @else if (game.place.type === PlaceTypeEnum.Away) {
+              @if (isMobile$ | async) {
+                {{game.place.type | placeTypeToLabel}}
+              } @else {
+                {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
+              }
+            } @else {
+              {{game.place.type | placeTypeToLabel}}
+            }
+          </div>
         </div>
 
-        <div class="game-info-item">
-          <mat-icon>place</mat-icon>
-          @if (game.place.type === PlaceTypeEnum.Home) {
-            bei {{game.place.locationLabel}}
-          } @else if (game.place.type === PlaceTypeEnum.Away) {
-            @if (isMobile$ | async) {
-              {{game.place.type | placeTypeToLabel}}
-            } @else {
-              {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
-            }
+        <div style="display: flex; gap: 5px;">
+          @if (!game.completed) {
+            <div class="game-info-item">
+              <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
+            </div>
           } @else {
-            {{game.place.type | placeTypeToLabel}}
+            <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
+          }
+
+          @if (game.excludeFromStatistics) {
+            <div class="game-info-item">
+              <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
+            </div>
+          }
+
+          @if (warnings$ | async; as warnings) {
+            <div class="game-info-item">
+              <mat-icon
+                aria-hidden="false"
+                style="margin: 10px 0; color: #ffa700;"
+                [matBadge]="warnings"
+                matBadgeSize="large"
+              >warning</mat-icon>
+            </div>
           }
         </div>
-
-        @if (!game.completed) {
-          <div class="game-info-item">
-            <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
-          </div>
-        } @else {
-          <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
-        }
-
-        @if (game.excludeFromStatistics) {
-          <div class="game-info-item">
-            <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
-          </div>
-        }
-
-        @if (warnings$ | async; as warnings) {
-          <div class="game-info-item">
-            <mat-icon
-              aria-hidden="false"
-              style="margin: 10px 0; color: #ffa700;"
-              [matBadge]="warnings"
-              matBadgeSize="large"
-            >warning</mat-icon>
-          </div>
-        }
       </div>
       <div class="game-info-block">
         <button mat-icon-button *hopHasAllPermissions="[Permission.UPDATE_GAMES, Permission.DELETE_GAMES, Permission.DELETE_ROUNDS, Permission.DELETE_EVENTS]" [matMenuTriggerFor]="menu">

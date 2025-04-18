@@ -36,6 +36,7 @@ model/eventTypeDetailDto.ts
 model/eventTypeDto.ts
 model/eventTypeOverviewDto.ts
 model/eventTypeRevisionDto.ts
+model/eventTypeStatisticsRequestDto.ts
 model/eventTypeStreakDto.ts
 model/eventTypesStatisticsResponseDto.ts
 model/gameDetailDto.ts

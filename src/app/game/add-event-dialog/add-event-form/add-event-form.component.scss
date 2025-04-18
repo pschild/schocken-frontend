@@ -1,14 +1,26 @@
 .form-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
-  margin: 15px 0;
+  margin: 10px 0;
+  gap: 10px;
+  padding: 5px;
 
   .form-row {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    gap: 10px;
+    min-width: 200px;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  button {
+    align-self: flex-end;
   }
 
   button.no-text-button mat-icon {

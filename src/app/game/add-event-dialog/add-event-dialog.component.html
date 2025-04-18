@@ -9,7 +9,7 @@
       <mat-divider></mat-divider>
     }
   }
-  <mat-form-field class="full-width margin-top">
+  <mat-form-field class="full-width margin-top" subscriptSizing="dynamic">
     <mat-label>Weitere Ereignisse suchen</mat-label>
     <mat-select [(ngModel)]="selectedEventType">
       @for (eventType of otherEventTypes; track eventType.id) {

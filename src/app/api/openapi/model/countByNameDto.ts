@@ -14,5 +14,6 @@ export interface CountByNameDto {
     id: string;
     name: string;
     count: number;
+    quote: number;
 }
 

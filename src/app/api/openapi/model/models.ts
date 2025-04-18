@@ -19,6 +19,7 @@ export * from './eventTypeDetailDto';
 export * from './eventTypeDto';
 export * from './eventTypeOverviewDto';
 export * from './eventTypeRevisionDto';
+export * from './eventTypeStatisticsRequestDto';
 export * from './eventTypeStreakDto';
 export * from './eventTypesStatisticsResponseDto';
 export * from './gameDetailDto';

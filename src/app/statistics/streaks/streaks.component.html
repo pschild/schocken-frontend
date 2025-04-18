@@ -1,3 +1,7 @@
+@if (loading()) {
+  <hop-loading-mask></hop-loading-mask>
+}
+
 <form [formGroup]="filterForm">
   <h2>
     Aufeinanderfolgende Runden

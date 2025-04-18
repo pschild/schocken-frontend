@@ -4,17 +4,14 @@
 
 .game-info-container {
   display: flex;
-  flex-flow: wrap;
   justify-content: space-between;
   margin-bottom: 10px;
 
   .game-info-block {
     display: flex;
     align-items: center;
-
-    & > * {
-      margin: 0 5px;
-    }
+    flex-flow: wrap;
+    gap: 5px;
 
     .game-info-item {
       display: flex;

@@ -1,17 +1,17 @@
 <form [formGroup]="form" class="form-container">
   @if (eventType().penaltyValue && eventType().penaltyUnit) {
     <div class="form-row">
-      {{ eventType().description }}
+      <h3>{{ eventType().description }}</h3>
       @if (eventType().multiplicatorUnit) {
-        <mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
           <mat-label>{{eventType().multiplicatorUnit}}</mat-label>
-          <input matInput formControlName="multiplicatorValue" type="number">
+          <input matInput formControlName="multiplicatorValue" type="number" [min]="0">
           <span matTextSuffix>á <hop-penalty-with-unit [unit]="eventType().penaltyUnit!" [penalty]="eventType().penaltyValue!"></hop-penalty-with-unit></span>
         </mat-form-field>
       }
 
       @if (eventType().hasComment) {
-        <mat-form-field class="full-width">
+        <mat-form-field class="full-width" subscriptSizing="dynamic">
           <mat-label>Kommentar</mat-label>
           <input matInput formControlName="comment">
         </mat-form-field>

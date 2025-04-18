@@ -18,7 +18,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       } else {
         this.dialog.open(ErrorDialogComponent, {
           data: {
-            userMessage: error.error.message,
+            userMessage: error.error?.message || error.statusText,
             message: error.message,
           }
         });
