@@ -57,7 +57,7 @@ export class PointsTableComponent implements AfterViewInit {
 
   constructor() {
     effect(() => {
-      this.dataSource.data = this.data();
+      this.dataSource.data = this.data().filter(r => !!r.rank);
       this.cdr.markForCheck();
     });
   }

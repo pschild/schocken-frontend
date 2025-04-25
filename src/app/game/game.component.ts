@@ -23,7 +23,13 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, delay, Observable, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { CreateGameDto, EventDto, GameDetailDto, PlayerDto, RoundDetailDto } from '../api/openapi';
+import {
+  CreateGameDto,
+  EventDto,
+  GameDetailDto, LiveGameStatisticsResponseDto,
+  PlayerDto,
+  RoundDetailDto
+} from '../api/openapi';
 import { HasAllPermissionsDirective } from '../auth/has-all-permissions.directive';
 import { HasPermissionDirective } from '../auth/has-permission.directive';
 import { Permission } from '../auth/model/permission.enum';
@@ -40,6 +46,14 @@ import { GameState } from './game.state';
 import { RoundComponent } from './round/round.component';
 import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
 import ContextEnum = EventDto.ContextEnum;
+import { MatExpansionModule } from '@angular/material/expansion';
+import { OdometerComponent } from '../odometer/odometer.component';
+import { StatsCardComponent } from '../statistics/stats-card/stats-card.component';
+import { PenaltySumsComponent } from '../statistics/penalty-sums/penalty-sums.component';
+import { PenaltyTableComponent } from '../statistics/penalty-table/penalty-table.component';
+import { LivePointsTableComponent } from '../statistics/live-points-table/live-points-table.component';
+import { CarouselComponent } from '../shared/carousel/carousel.component';
+import { CurrentUserDirective } from '../shared/current-user.directive';
 
 @Component({
   selector: 'hop-game',
@@ -64,6 +78,14 @@ import ContextEnum = EventDto.ContextEnum;
     MatMenuModule,
     HasPermissionDirective,
     HasAllPermissionsDirective,
+    MatExpansionModule,
+    OdometerComponent,
+    StatsCardComponent,
+    PenaltySumsComponent,
+    PenaltyTableComponent,
+    LivePointsTableComponent,
+    CarouselComponent,
+    CurrentUserDirective,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -89,6 +111,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   players$: Observable<PlayerDto[]> = this.state.players$;
   playersForGameEvents$: Observable<PlayerDto[]> = this.state.playersForGameEvents$;
   warnings$: Observable<number> = this.state.warnings$;
+  stats$: Observable<LiveGameStatisticsResponseDto | null> = this.state.stats$;
 
   isMobile$ = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
     map(state => state.matches)

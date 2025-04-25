@@ -182,5 +182,83 @@
         </button>
       }
     </div>
+
+    <!--
+    TODO: Work in progress. We need some better UI for the statistics.
+    -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>bar_chart</mat-icon> Statistiken
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <hop-live-points-table [data]="(stats$ | async)?.pointsTable || null" [loading]="'penalty-statistics' | isLoading | async"></hop-live-points-table>
+
+      <hop-penalty-sums [data]="(stats$ | async)?.penaltySum || null" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-sums>
+      <hop-penalty-table [data]="(stats$ | async)?.penaltyByPlayerTable || null" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-table>
+
+      <div class="card-grid">
+        <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)">
+          @let euroPerRound = (stats$ | async)?.euroPerRound;
+          @let euroPerRoundCount = euroPerRound?.count ?? undefined;
+
+          <ng-template #value>
+            @if (euroPerRoundCount) {
+              <hop-odometer [countTo]="euroPerRoundCount" type="currency" [showAverage]="true"></hop-odometer>
+            } @else if (!('penalty-statistics' | isLoading | async)) {
+              <span class="odometer-placeholder">?</span>
+            }
+          </ng-template>
+          <ng-template #description>
+            <span>Strafen pro Runde</span>
+          </ng-template>
+        </hop-stats-card>
+
+        <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)" infoText="aufeinanderfolgende Runden mit mind. 1x Schock-Aus">
+          @let schockAusStreak = (stats$ | async)?.schockAusStreak;
+          @let schockAusStreakCount = schockAusStreak?.maxStreak ?? undefined;
+
+          <ng-template #value>
+            @if (schockAusStreakCount) {
+              <hop-odometer [countTo]="schockAusStreakCount"></hop-odometer>
+            } @else if (!('penalty-statistics' | isLoading | async)) {
+              <span class="odometer-placeholder">?</span>
+            }
+          </ng-template>
+          <ng-template #description>
+            <span>Schock-Aus in Folge</span>
+          </ng-template>
+        </hop-stats-card>
+
+        @for (record of (stats$ | async)?.recordsPerGame; track record.eventTypeId) {
+          @if (record.records.length > 0) {
+            <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)">
+              @let firstRecordItem = record.records[0];
+
+              <ng-template #value>
+                <hop-odometer [countTo]="firstRecordItem.count"></hop-odometer>
+              </ng-template>
+              <ng-template #description>
+                <span>{{record.description}}</span>
+              </ng-template>
+              <ng-template #details>
+                @if (record.records.length === 1) {
+                  von <span [hopCurrentUser]="firstRecordItem.playerId">{{ firstRecordItem.name }}</span>
+                } @else {
+                  <hop-carousel>
+                    @for (item of record.records; track item) {
+                      <ng-template #carouselItem>
+                        von <span [hopCurrentUser]="item.playerId">{{item.name}}</span>
+                      </ng-template>
+                    }
+                  </hop-carousel>
+                }
+              </ng-template>
+            </hop-stats-card>
+          }
+        }
+      </div>
+    </mat-expansion-panel>
   </div>
 }

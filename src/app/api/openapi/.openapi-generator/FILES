@@ -47,6 +47,9 @@ model/gameOverviewOfYearDto.ts
 model/gamesAndRoundsStatisticsResponseDto.ts
 model/hostStatisticsResponseDto.ts
 model/hostsTableDto.ts
+model/liveGamePointsTableDto.ts
+model/liveGameStatisticsRequestDto.ts
+model/liveGameStatisticsResponseDto.ts
 model/models.ts
 model/mostExpensiveGameDto.ts
 model/mostExpensiveRoundAveragePerGameDto.ts

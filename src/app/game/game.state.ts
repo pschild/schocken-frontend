@@ -1,7 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { compareAsc } from 'date-fns';
-import { concat, defaultIfEmpty, defer, EMPTY, Observable, of, Subject, switchMap, tap, throwError, toArray } from 'rxjs';
+import {
+  concat,
+  defaultIfEmpty,
+  defer,
+  EMPTY,
+  merge,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  tap,
+  throwError,
+  toArray
+} from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
   CelebrationDto,
@@ -14,10 +27,12 @@ import {
   EventTypeService,
   GameDetailDto,
   GameDetailsService,
+  LiveGameStatisticsResponseDto,
   PlayerDto,
   PlayerService,
   RoundDetailDto,
   RoundDetailsService,
+  StatisticsService,
 } from '../api/openapi';
 import { InvalidArgumentError } from '../error/invalid-argument.error';
 import { LoadingState } from '../shared/loading/loading.state';
@@ -42,6 +57,7 @@ interface IGameState {
   rounds: RoundDetailDto[];
   players: PlayerDto[];
   eventTypes: EventTypeOverviewDto[];
+  stats: LiveGameStatisticsResponseDto | null;
 }
 
 const initialState: IGameState = {
@@ -49,6 +65,7 @@ const initialState: IGameState = {
   rounds: [],
   players: [],
   eventTypes: [],
+  stats: null,
 }
 
 @Injectable({
@@ -65,6 +82,7 @@ export class GameState extends StateService<IGameState> {
   private successMessageService = inject(SuccessMessageService);
   private eventTypeOverviewService = inject(EventTypeOverviewService);
   private gameDialogService = inject(GameDialogService);
+  private statisticsService = inject(StatisticsService);
   private loadingState = inject(LoadingState);
 
   gameDetails$: Observable<GameDetailDto | null> = this.select(state => state.gameDetails);
@@ -72,11 +90,13 @@ export class GameState extends StateService<IGameState> {
   players$: Observable<PlayerDto[]> = this.select(state => state.players);
   playersForGameEvents$: Observable<PlayerDto[]> = this.select(state => playersForGameEvents(state.gameDetails, state.players));
   warnings$: Observable<number> = this.rounds$.pipe(map(rounds => countWarnings(rounds)));
+  stats$: Observable<LiveGameStatisticsResponseDto | null> = this.select(state => state.stats);
 
   openLastRound$ = new Subject<void>();
 
   constructor() {
     super(initialState);
+    merge(this.gameDetails$, this.rounds$).subscribe(() => this.updateStatistics());
   }
 
   init(gameId: string): void {
@@ -246,5 +266,15 @@ export class GameState extends StateService<IGameState> {
       tap(gameDetails => this.setState({ gameDetails })),
       tap(() => this.successMessageService.showSuccess(`Spiel aktualisiert`)),
     );
+  }
+
+  updateStatistics(): void {
+    if (this.state.gameDetails) {
+      this.statisticsService.liveGameStatistics({
+        gameId: this.state.gameDetails.id,
+      }).pipe(
+        doWithLoading(this.loadingState, 'penalty-statistics'),
+      ).subscribe(stats => this.setState({ stats }));
+    }
   }
 }
