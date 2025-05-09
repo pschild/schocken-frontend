@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { MatFabButton, MatIconButton } from '@angular/material/button';
+import { MatFabButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,10 +19,11 @@ import { LoadingState } from '../shared/loading/loading.state';
 import { doWithLoading } from '../shared/operators';
 import { PenaltyWithUnitComponent } from '../shared/penalty-with-unit/penalty-with-unit.component';
 import { SuccessMessageService } from '../shared/success-message.service';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'hop-home',
-  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatIconButton, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner, HasPermissionDirective, HasPermissionDirective],
+  imports: [CommonModule, MatExpansionModule, RouterModule, MatIconModule, LiveIndicatorComponent, MatFabButton, PenaltyWithUnitComponent, IsLoadingPipe, MatProgressSpinner, HasPermissionDirective, HasPermissionDirective, MatListModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

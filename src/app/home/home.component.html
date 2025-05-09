@@ -35,84 +35,82 @@
             }
           </mat-panel-description>
         </mat-expansion-panel-header>
-        @for (game of item.games; track game.id) {
-          <div class="game-item-container">
-            <div>
-              <div>
-                @if (!game.completed) {
-                  <hop-live-indicator></hop-live-indicator>
-                }
-                <strong>{{ game.datetime | date:'dd.MM.yyyy' }}</strong>
-                @if (game.place.type === 'HOME') {
-                  <span>&nbsp;bei {{game.place.locationLabel}}</span>
-                } @else if (game.place.type === 'AWAY') {
-                  <span>&nbsp;auswärts</span>
-                  @if (!isMobile) {
-                    ({{game.place.locationLabel}})
-                  }
-                } @else {
-                  <span>&nbsp;Remote</span>
-                }
-              </div>
-              <div class="game-detail-info-container">
-                <div class="game-detail-info-item">
-                  @if (game.roundCount === 1) {
-                    <span>1 Runde</span>
-                  } @else {
-                    <span>{{game.roundCount}} Runden</span>
-                  }
-                </div>
-                @if (game.penalties.length) {
-                  <div class="game-detail-info-item">
-                    @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
-                      @if (idx > 0) {
-                        <span>/</span>
+
+        <mat-action-list>
+          @for (game of item.games; track game.id) {
+            <mat-list-item [routerLink]="['/game', game.id]">
+              <div class="game-item-container">
+                <div>
+                  <div>
+                    @if (!game.completed) {
+                      <hop-live-indicator></hop-live-indicator>
+                    }
+                    <strong>{{ game.datetime | date:'dd.MM.yyyy' }}</strong>
+                    @if (game.place.type === 'HOME') {
+                      <span>&nbsp;bei {{game.place.locationLabel}}</span>
+                    } @else if (game.place.type === 'AWAY') {
+                      <span>&nbsp;auswärts</span>
+                      @if (!isMobile) {
+                        ({{game.place.locationLabel}})
                       }
-                      <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                    } @else {
+                      <span>&nbsp;Remote</span>
                     }
                   </div>
-                }
+                  <div class="game-detail-info-container">
+                    <div class="game-detail-info-item">
+                      @if (game.roundCount === 1) {
+                        <span>1 Runde</span>
+                      } @else {
+                        <span>{{game.roundCount}} Runden</span>
+                      }
+                    </div>
+                    @if (game.penalties.length) {
+                      <div class="game-detail-info-item">
+                        @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
+                          @if (idx > 0) {
+                            <span>/</span>
+                          }
+                          <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+                <div style="display: flex;">
+                  <mat-icon>chevron_right</mat-icon>
+                </div>
               </div>
-            </div>
-            <div class="game-action-button-container">
-              <button mat-icon-button color="primary" [routerLink]="['/game', game.id]">
-                <mat-icon>table_chart</mat-icon>
-              </button>
-            </div>
-          </div>
-        }
+            </mat-list-item>
+          }
 
-        @if (item.year === '2018') {
-          <div class="game-item-container">
-            <div>
-              <div>
-                <strong>05.10.2018</strong>
-                <span>&nbsp;bei Tobias</span>
+          @if (item.year === '2018') {
+            <mat-list-item disabled>
+              <div class="game-item-container">
+                <div>
+                  <div>
+                    <strong>05.10.2018</strong>
+                    <span>&nbsp;bei Tobias</span>
+                  </div>
+                  <div>ohne Wertung</div>
+                </div>
               </div>
-              <div>ohne Wertung</div>
-            </div>
-            <div class="game-action-button-container">
-              <button mat-icon-button color="primary" disabled>
-                <mat-icon>table_chart</mat-icon>
-              </button>
-            </div>
-          </div>
+            </mat-list-item>
 
-          <div class="game-item-container">
-            <div>
-              <div>
-                <strong>14.09.2018</strong>
-                <span>&nbsp;bei Christian</span>
+            <mat-list-item disabled>
+              <div class="game-item-container">
+                <div>
+                  <div>
+                    <strong>14.09.2018</strong>
+                    <span>&nbsp;bei Christian</span>
+                  </div>
+                  <div>ohne Wertung</div>
+                </div>
               </div>
-              <div>ohne Wertung</div>
-            </div>
-            <div class="game-action-button-container">
-              <button mat-icon-button color="primary" disabled>
-                <mat-icon>table_chart</mat-icon>
-              </button>
-            </div>
-          </div>
-        }
+            </mat-list-item>
+          }
+        </mat-action-list>
+
       </mat-expansion-panel>
     }
   </mat-accordion>

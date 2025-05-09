@@ -12,6 +12,10 @@ mat-panel-description {
   }
 }
 
+mat-list-item {
+  height: 64px !important;
+}
+
 .game-item-container {
   display: flex;
   justify-content: space-between;
@@ -21,18 +25,13 @@ mat-panel-description {
   .game-detail-info-container {
     display: flex;
     align-items: center;
+    font-size: 14px;
 
     .game-detail-info-item {
       &:not(:last-of-type):after {
         content: "•";
         padding: 0 10px;
       }
-    }
-  }
-
-  .game-action-button-container {
-    button {
-      margin-left: 5px;
     }
   }
 }
