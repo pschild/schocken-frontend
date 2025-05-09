@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "^19.2.3",
     "@angular/router": "^19.2.3",
     "@auth0/auth0-angular": "^2.2.3",
+    "angular-split": "^19.0.0",
     "canvas-confetti": "^1.9.3",
     "date-fns": "4.0.0",
     "jwt-decode": "^4.0.0",

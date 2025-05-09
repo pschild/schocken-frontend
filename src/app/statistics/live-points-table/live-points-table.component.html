@@ -24,6 +24,11 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="gamePoints">
+    <th mat-header-cell mat-sort-header *matHeaderCellDef>Σ Spielpkt.</th>
+    <td mat-cell *matCellDef="let element">{{ element.gamePoints | number }}</td>
+  </ng-container>
+
   <ng-container matColumnDef="points">
     <th mat-header-cell mat-sort-header *matHeaderCellDef>Punkte</th>
     <td mat-cell *matCellDef="let element">{{ element.points | number }}</td>

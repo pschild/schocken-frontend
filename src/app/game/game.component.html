@@ -1,264 +1,302 @@
-@if (gameDetails$ | async; as game) {
-  <div class="game-container">
-    <div class="game-info-container">
-      <div class="game-info-block">
-        <div style="display: flex; gap: 5px;">
-          <div class="game-info-item">
-            <mat-icon>today</mat-icon>
-            {{game.datetime | date:'dd.MM.yyyy'}}
-          </div>
+@if (!showStats) {
+  <button *hopHasPermission="Permission.READ_STATISTICS" mat-fab extended class="hop-fab-button" (click)="showStats = true">
+    <mat-icon>bar_chart</mat-icon>
+    Statistiken
+  </button>
+}
 
-          <div class="game-info-item">
-            <mat-icon>place</mat-icon>
-            @if (game.place.type === PlaceTypeEnum.Home) {
-              bei {{game.place.locationLabel}}
-            } @else if (game.place.type === PlaceTypeEnum.Away) {
-              @if (isMobile$ | async) {
-                {{game.place.type | placeTypeToLabel}}
-              } @else {
-                {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
-              }
-            } @else {
-              {{game.place.type | placeTypeToLabel}}
-            }
-          </div>
-        </div>
+<as-split [direction]="(isMobile$ | async) ? 'vertical' : 'horizontal'">
+  <as-split-area [size]="70" [minSize]="30">
+    @if (gameDetails$ | async; as game) {
+      <div class="game-container">
+        <div class="game-info-container">
+          <div class="game-info-block">
+            <div style="display: flex; gap: 5px;">
+              <div class="game-info-item">
+                <mat-icon>today</mat-icon>
+                {{game.datetime | date:'dd.MM.yyyy'}}
+              </div>
 
-        <div style="display: flex; gap: 5px;">
-          @if (!game.completed) {
-            <div class="game-info-item">
-              <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
-            </div>
-          } @else {
-            <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
-          }
-
-          @if (game.excludeFromStatistics) {
-            <div class="game-info-item">
-              <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
-            </div>
-          }
-
-          @if (warnings$ | async; as warnings) {
-            <div class="game-info-item">
-              <mat-icon
-                aria-hidden="false"
-                style="margin: 10px 0; color: #ffa700;"
-                [matBadge]="warnings"
-                matBadgeSize="large"
-              >warning</mat-icon>
-            </div>
-          }
-        </div>
-      </div>
-      <div class="game-info-block">
-        <button mat-icon-button *hopHasAllPermissions="[Permission.UPDATE_GAMES, Permission.DELETE_GAMES, Permission.DELETE_ROUNDS, Permission.DELETE_EVENTS]" [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="handleUpdateGame()">
-            <mat-icon>edit</mat-icon>
-            <span>bearbeiten</span>
-          </button>
-          <button mat-menu-item (click)="handleRemoveGame()">
-            <mat-icon>delete</mat-icon>
-            <span>Spiel löschen</span>
-          </button>
-        </mat-menu>
-      </div>
-    </div>
-
-    <mat-stepper orientation="vertical" #stepper>
-      <ng-template matStepperIcon="edit" let-index="index">
-        <span *ngIf="index > 0">{{index}}</span>
-        <mat-icon *ngIf="index === 0">gavel</mat-icon>
-      </ng-template>
-      <ng-template matStepperIcon="number" let-index="index">
-        <span *ngIf="index > 0">{{index}}</span>
-        <mat-icon *ngIf="index === 0">gavel</mat-icon>
-      </ng-template>
-
-      <mat-step>
-        <ng-template matStepLabel>
-          <div>
-            Feststellungen
-          </div>
-          <div class="penalty-sum-container">
-            @if ('game-events' | isLoading | async) {
-              <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
-            }
-            @else if (game.penalties && game.penalties.length) {
-              @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
-                @if (idx > 0) {
-                  <span>/</span>
-                }
-                <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
-              }
-            } @else {
-              <span>-</span>
-            }
-          </div>
-        </ng-template>
-        <ng-template matStepContent>
-          @if ('game-events' | isLoading | async) {
-            <hop-loading-mask></hop-loading-mask>
-          }
-          <hop-event-list
-            [context]="Context.Game"
-            [players]="(playersForGameEvents$ | async) || []"
-            [events]="game.events"
-            [disabled]="game.completed"
-            (onEventAdd)="handleGameEventAdd($event)"
-            (onEventRemove)="handleGameEventRemove($event)"
-          ></hop-event-list>
-        </ng-template>
-      </mat-step>
-
-      @for (round of rounds$ | async; track round.id) {
-        <mat-step completed="true" [state]="round.id">
-          <ng-template matStepLabel>
-            <div class="round-marker-list">
-              @if (round.hasFinal) {
-                <mat-icon>sports_score</mat-icon>
-              }
-              @if (round.schockAusCount > 0) {
-                <mat-icon aria-hidden="false" style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
-              }
-              @if (round.warnings?.length) {
-                <mat-icon
-                  aria-hidden="false"
-                  style="margin: 10px 0;
-                  color: #ffa700;"
-                  [matBadge]="round.warnings!.length"
-                  matBadgeSize="large"
-                  [matBadgeHidden]="round.warnings!.length === 1"
-                >warning</mat-icon>
-              }
-            </div>
-            <div class="penalty-sum-container">
-              @if (round.id | isLoading | async) {
-                <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
-              } @else if (round.penalties && round.penalties.length) {
-                @for (penalty of round.penalties; track penalty.unit; let idx = $index) {
-                  @if (idx > 0) {
-                    <span>/</span>
+              <div class="game-info-item">
+                <mat-icon>place</mat-icon>
+                @if (game.place.type === PlaceTypeEnum.Home) {
+                  bei {{game.place.locationLabel}}
+                } @else if (game.place.type === PlaceTypeEnum.Away) {
+                  @if (isMobile$ | async) {
+                    {{game.place.type | placeTypeToLabel}}
+                  } @else {
+                    {{game.place.type | placeTypeToLabel}} ({{game.place.locationLabel}})
                   }
-                  <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                } @else {
+                  {{game.place.type | placeTypeToLabel}}
                 }
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 5px; align-items: center;">
+              @if (!game.completed) {
+                <div class="game-info-item">
+                  <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
+                </div>
               } @else {
-                <span>-</span>
+                <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
+              }
+
+              @if (game.excludeFromStatistics) {
+                <div class="game-info-item">
+                  <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
+                </div>
+              }
+
+              @if (warnings$ | async; as warnings) {
+                <div class="game-info-item">
+                  <mat-icon
+                    aria-hidden="false"
+                    style="margin: 10px 0; color: #ffa700;"
+                    [matBadge]="warnings"
+                    matBadgeSize="large"
+                  >warning</mat-icon>
+                </div>
               }
             </div>
-          </ng-template>
-          <ng-template matStepContent>
-            @if (round.id | isLoading | async) {
-              <hop-loading-mask></hop-loading-mask>
-            }
-            <hop-round
-              [round]="round"
-              [players]="(players$ | async) || []"
-              [disabled]="game.completed"
-              (onEventAdd)="handleRoundEventAdd($event)"
-              (onEventRemove)="handleRoundEventRemove($event)"
-              (onRoundRemove)="handleRoundRemove($event)"
-              (onFinalistsChange)="handleFinalistsChange($event)"
-              (onAttendanceChange)="handleAttendanceChange($event)"
-            ></hop-round>
-          </ng-template>
-        </mat-step>
-      }
-    </mat-stepper>
+          </div>
+          <div class="game-info-block">
+            <button mat-icon-button *hopHasAllPermissions="[Permission.UPDATE_GAMES, Permission.DELETE_GAMES, Permission.DELETE_ROUNDS, Permission.DELETE_EVENTS]" [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="handleUpdateGame()">
+                <mat-icon>edit</mat-icon>
+                <span>bearbeiten</span>
+              </button>
+              <button mat-menu-item (click)="handleRemoveGame()">
+                <mat-icon>delete</mat-icon>
+                <span>Spiel löschen</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
 
-    <div class="game-bottom-row">
-      @if (!game.completed) {
-        <button mat-button *hopHasPermission="Permission.CREATE_ROUNDS" class="new-round" (click)="startNewRound()" [loading]="!!('start-new-round' | isLoading | async)">
-          <mat-icon>add</mat-icon>
-          Neue Runde
+        <mat-stepper orientation="vertical" #stepper>
+          <ng-template matStepperIcon="edit" let-index="index">
+            <span *ngIf="index > 0">{{index}}</span>
+            <mat-icon *ngIf="index === 0">gavel</mat-icon>
+          </ng-template>
+          <ng-template matStepperIcon="number" let-index="index">
+            <span *ngIf="index > 0">{{index}}</span>
+            <mat-icon *ngIf="index === 0">gavel</mat-icon>
+          </ng-template>
+
+          <mat-step>
+            <ng-template matStepLabel>
+              <div>
+                Feststellungen
+              </div>
+              <div class="penalty-sum-container">
+                @if ('game-events' | isLoading | async) {
+                  <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
+                }
+                @else if (game.penalties && game.penalties.length) {
+                  @for (penalty of game.penalties; track penalty.unit; let idx = $index) {
+                    @if (idx > 0) {
+                      <span>/</span>
+                    }
+                    <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                  }
+                } @else {
+                  <span>-</span>
+                }
+              </div>
+            </ng-template>
+            <ng-template matStepContent>
+              @if ('game-events' | isLoading | async) {
+                <hop-loading-mask></hop-loading-mask>
+              }
+              <hop-event-list
+                [context]="Context.Game"
+                [players]="(playersForGameEvents$ | async) || []"
+                [events]="game.events"
+                [disabled]="game.completed"
+                (onEventAdd)="handleGameEventAdd($event)"
+                (onEventRemove)="handleGameEventRemove($event)"
+              ></hop-event-list>
+            </ng-template>
+          </mat-step>
+
+          @for (round of rounds$ | async; track round.id) {
+            <mat-step completed="true" [state]="round.id">
+              <ng-template matStepLabel>
+                <div class="round-marker-list">
+                  @if (round.hasFinal) {
+                    <mat-icon>sports_score</mat-icon>
+                  }
+                  @if (round.schockAusCount > 0) {
+                    <mat-icon aria-hidden="false" style="margin: 10px 0;" [matBadge]="round.schockAusCount" matBadgeSize="large" [matBadgeHidden]="round.schockAusCount === 1" svgIcon="schock_aus"></mat-icon>
+                  }
+                  @if (round.warnings?.length) {
+                    <mat-icon
+                      aria-hidden="false"
+                      style="margin: 10px 0;
+                  color: #ffa700;"
+                      [matBadge]="round.warnings!.length"
+                      matBadgeSize="large"
+                      [matBadgeHidden]="round.warnings!.length === 1"
+                    >warning</mat-icon>
+                  }
+                </div>
+                <div class="penalty-sum-container">
+                  @if (round.id | isLoading | async) {
+                    <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
+                  } @else if (round.penalties && round.penalties.length) {
+                    @for (penalty of round.penalties; track penalty.unit; let idx = $index) {
+                      @if (idx > 0) {
+                        <span>/</span>
+                      }
+                      <hop-penalty-with-unit [penalty]="penalty.sum" [unit]="penalty.unit"></hop-penalty-with-unit>
+                    }
+                  } @else {
+                    <span>-</span>
+                  }
+                </div>
+              </ng-template>
+              <ng-template matStepContent>
+                @if (round.id | isLoading | async) {
+                  <hop-loading-mask></hop-loading-mask>
+                }
+                <hop-round
+                  [round]="round"
+                  [players]="(players$ | async) || []"
+                  [disabled]="game.completed"
+                  (onEventAdd)="handleRoundEventAdd($event)"
+                  (onEventRemove)="handleRoundEventRemove($event)"
+                  (onRoundRemove)="handleRoundRemove($event)"
+                  (onFinalistsChange)="handleFinalistsChange($event)"
+                  (onAttendanceChange)="handleAttendanceChange($event)"
+                ></hop-round>
+              </ng-template>
+            </mat-step>
+          }
+        </mat-stepper>
+
+        <div class="game-bottom-row">
+          @if (!game.completed) {
+            <button mat-button *hopHasPermission="Permission.CREATE_ROUNDS" class="new-round" (click)="startNewRound()" [loading]="!!('start-new-round' | isLoading | async)">
+              <mat-icon>add</mat-icon>
+              Neue Runde
+            </button>
+
+            <button hopCelebration *hopHasPermission="Permission.UPDATE_GAMES" mat-flat-button class="complete-game" (click)="setGameCompleted()" [loading]="!!('complete-game' | isLoading | async)">
+              <mat-icon>check</mat-icon>
+              Spiel abschließen
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </as-split-area>
+
+  @if (showStats) {
+    <as-split-area [size]="30" [minSize]="20">
+    <div>
+      <div style="display: flex; justify-content: flex-end; padding-bottom: 20px;">
+        <button mat-icon-button (click)="showStats = false">
+          <mat-icon>close</mat-icon>
         </button>
+      </div>
 
-        <button hopCelebration *hopHasPermission="Permission.UPDATE_GAMES" mat-flat-button class="complete-game" (click)="setGameCompleted()" [loading]="!!('complete-game' | isLoading | async)">
-          <mat-icon>check</mat-icon>
-          Spiel abschließen
-        </button>
-      }
-    </div>
+      <mat-accordion multi>
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>emoji_events</mat-icon> Punkte
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-    <!--
-    TODO: Work in progress. We need some better UI for the statistics.
-    -->
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <mat-icon>bar_chart</mat-icon> Statistiken
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+          <hop-live-points-table [data]="(stats$ | async)?.pointsTable || null" [loading]="'penalty-statistics' | isLoading | async"></hop-live-points-table>
+        </mat-expansion-panel>
 
-      <hop-live-points-table [data]="(stats$ | async)?.pointsTable || null" [loading]="'penalty-statistics' | isLoading | async"></hop-live-points-table>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>euro</mat-icon> Kasse
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-      <hop-penalty-sums [data]="(stats$ | async)?.penaltySum || null" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-sums>
-      <hop-penalty-table [data]="(stats$ | async)?.penaltyByPlayerTable || null" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-table>
+          <hop-penalty-sums [data]="(stats$ | async)?.penaltySum || null" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-sums>
+          <hop-penalty-table [data]="(stats$ | async)?.penaltyByPlayerTable || null" [loading]="'penalty-statistics' | isLoading | async"></hop-penalty-table>
+        </mat-expansion-panel>
 
-      <div class="card-grid">
-        <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)">
-          @let euroPerRound = (stats$ | async)?.euroPerRound;
-          @let euroPerRoundCount = euroPerRound?.count ?? undefined;
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon>star</mat-icon> Rekorde
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-          <ng-template #value>
-            @if (euroPerRoundCount) {
-              <hop-odometer [countTo]="euroPerRoundCount" type="currency" [showAverage]="true"></hop-odometer>
-            } @else if (!('penalty-statistics' | isLoading | async)) {
-              <span class="odometer-placeholder">?</span>
-            }
-          </ng-template>
-          <ng-template #description>
-            <span>Strafen pro Runde</span>
-          </ng-template>
-        </hop-stats-card>
-
-        <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)" infoText="aufeinanderfolgende Runden mit mind. 1x Schock-Aus">
-          @let schockAusStreak = (stats$ | async)?.schockAusStreak;
-          @let schockAusStreakCount = schockAusStreak?.maxStreak ?? undefined;
-
-          <ng-template #value>
-            @if (schockAusStreakCount) {
-              <hop-odometer [countTo]="schockAusStreakCount"></hop-odometer>
-            } @else if (!('penalty-statistics' | isLoading | async)) {
-              <span class="odometer-placeholder">?</span>
-            }
-          </ng-template>
-          <ng-template #description>
-            <span>Schock-Aus in Folge</span>
-          </ng-template>
-        </hop-stats-card>
-
-        @for (record of (stats$ | async)?.recordsPerGame; track record.eventTypeId) {
-          @if (record.records.length > 0) {
+          <div class="card-grid">
             <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)">
-              @let firstRecordItem = record.records[0];
+              @let euroPerRound = (stats$ | async)?.euroPerRound;
+              @let euroPerRoundCount = euroPerRound?.count ?? undefined;
 
               <ng-template #value>
-                <hop-odometer [countTo]="firstRecordItem.count"></hop-odometer>
-              </ng-template>
-              <ng-template #description>
-                <span>{{record.description}}</span>
-              </ng-template>
-              <ng-template #details>
-                @if (record.records.length === 1) {
-                  von <span [hopCurrentUser]="firstRecordItem.playerId">{{ firstRecordItem.name }}</span>
-                } @else {
-                  <hop-carousel>
-                    @for (item of record.records; track item) {
-                      <ng-template #carouselItem>
-                        von <span [hopCurrentUser]="item.playerId">{{item.name}}</span>
-                      </ng-template>
-                    }
-                  </hop-carousel>
+                @if (euroPerRoundCount) {
+                  <hop-odometer [countTo]="euroPerRoundCount" type="currency" [showAverage]="true"></hop-odometer>
+                } @else if (!('penalty-statistics' | isLoading | async)) {
+                  <span class="odometer-placeholder">?</span>
                 }
               </ng-template>
+              <ng-template #description>
+                <span>Strafen pro Runde</span>
+              </ng-template>
             </hop-stats-card>
-          }
-        }
-      </div>
-    </mat-expansion-panel>
-  </div>
-}
+
+            <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)" infoText="aufeinanderfolgende Runden mit mind. 1x Schock-Aus">
+              @let schockAusStreak = (stats$ | async)?.schockAusStreak;
+              @let schockAusStreakCount = schockAusStreak?.maxStreak ?? undefined;
+
+              <ng-template #value>
+                @if (schockAusStreakCount) {
+                  <hop-odometer [countTo]="schockAusStreakCount"></hop-odometer>
+                } @else if (!('penalty-statistics' | isLoading | async)) {
+                  <span class="odometer-placeholder">?</span>
+                }
+              </ng-template>
+              <ng-template #description>
+                <span>Schock-Aus in Folge</span>
+              </ng-template>
+            </hop-stats-card>
+
+            @for (record of (stats$ | async)?.recordsPerGame; track record.eventTypeId) {
+              @if (record.records.length > 0) {
+                <hop-stats-card [loading]="!!('penalty-statistics' | isLoading | async)">
+                  @let firstRecordItem = record.records[0];
+
+                  <ng-template #value>
+                    <hop-odometer [countTo]="firstRecordItem.count"></hop-odometer>
+                  </ng-template>
+                  <ng-template #description>
+                    <span>{{record.description}}</span>
+                  </ng-template>
+                  <ng-template #details>
+                    @if (record.records.length === 1) {
+                      von <span [hopCurrentUser]="firstRecordItem.playerId">{{ firstRecordItem.name }}</span>
+                    } @else {
+                      <hop-carousel>
+                        @for (item of record.records; track item) {
+                          <ng-template #carouselItem>
+                            von <span [hopCurrentUser]="item.playerId">{{item.name}}</span>
+                          </ng-template>
+                        }
+                      </hop-carousel>
+                    }
+                  </ng-template>
+                </hop-stats-card>
+              }
+            }
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </as-split-area>
+  }
+</as-split>

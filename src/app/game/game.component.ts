@@ -14,7 +14,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -54,6 +54,7 @@ import { PenaltyTableComponent } from '../statistics/penalty-table/penalty-table
 import { LivePointsTableComponent } from '../statistics/live-points-table/live-points-table.component';
 import { CarouselComponent } from '../shared/carousel/carousel.component';
 import { CurrentUserDirective } from '../shared/current-user.directive';
+import { AngularSplitModule } from 'angular-split';
 
 @Component({
   selector: 'hop-game',
@@ -86,6 +87,8 @@ import { CurrentUserDirective } from '../shared/current-user.directive';
     LivePointsTableComponent,
     CarouselComponent,
     CurrentUserDirective,
+    AngularSplitModule,
+    MatFabButton,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -116,6 +119,8 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   isMobile$ = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
     map(state => state.matches)
   );
+
+  showStats = false;
 
   private updateFinalistsDebouncer$ = new Subject<{ roundId: string; finalistIds: string[] }>();
 

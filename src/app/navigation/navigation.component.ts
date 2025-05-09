@@ -49,7 +49,7 @@ export class NavigationComponent {
     },
     {label: 'Statistiken', icon: 'bar_chart', role: Role.PLAYER, url: 'statistics'},
     {label: 'Satzung', icon: 'menu_book', role: Role.PLAYER, url: 'constitution'},
-    {label: 'Über', icon: 'info', url: 'about'},
+    // {label: 'Über', icon: 'info', url: 'about'},
   ];
 
   constructor() {

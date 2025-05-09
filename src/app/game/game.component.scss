@@ -1,3 +1,13 @@
+as-split {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  as-split-area > :first-child {
+    padding: 16px;
+  }
+}
+
 .game-container {
   max-width: 900px;
 }

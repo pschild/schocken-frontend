@@ -33,7 +33,7 @@ export class LivePointsTableComponent implements AfterViewInit {
     transform: (value: boolean | null) => !!value
   });
 
-  displayedColumns: string[] = ['rank', 'name', 'points', 'rankYear', 'pointsYear'];
+  displayedColumns: string[] = ['rank', 'name', 'gamePoints', 'points', 'rankYear', 'pointsYear'];
   dataSource: MatTableDataSource<LiveGamePointsTableDto> = new MatTableDataSource();
 
   private cdr = inject(ChangeDetectorRef);
@@ -46,11 +46,11 @@ export class LivePointsTableComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort();
-
     // make null values be sorted after others
     // @ts-ignore
     this.dataSource.sortingDataAccessor = (item, property) => item[property] || Infinity;
+
+    this.dataSource.sort = this.sort();
   }
 
 }
