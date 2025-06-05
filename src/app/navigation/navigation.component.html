@@ -21,7 +21,7 @@
               @if (auth.user$ | async; as user) {
                 <div class="profile-details">
                   <img [src]="user.picture" />
-                  <div>{{user.name}}</div>
+                  <div class="overflow" [matTooltip]="user.name">{{user.name}}</div>
                 </div>
                 <button mat-icon-button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
                   <mat-icon>logout</mat-icon>

@@ -12,6 +12,7 @@ import { GameComponent } from './game/game.component';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { StatisticsComponent } from './statistics/statistics.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 const roleGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   return inject(PermissionsService).hasRole((route.data as any).requiredRole);
@@ -56,6 +57,11 @@ export const routes: Routes = [
   {
     path: 'constitution',
     component: ConstitutionComponent,
+    canActivate: [authGuardFn]
+  },
+  {
+    path: 'calendar',
+    component: CalendarComponent,
     canActivate: [authGuardFn]
   },
   {

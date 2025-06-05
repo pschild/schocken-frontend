@@ -13,10 +13,11 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { HasRoleDirective } from '../auth/has-role.directive';
 import { Role } from '../auth/model/role.enum';
 import { MenuItem, MenuItemComponent } from './menu-item/menu-item.component';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'hop-navigation',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MenuItemComponent, AsyncPipe, HasRoleDirective],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MenuItemComponent, AsyncPipe, HasRoleDirective, MatTooltip],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,6 +38,7 @@ export class NavigationComponent {
   );
 
   navigationItems: MenuItem[] = [
+    // {label: 'Dashboard', icon: 'dashboard', role: Role.PLAYER, url: 'dashboard'},
     {label: 'Spiele', icon: 'casino', role: Role.PLAYER, url: 'home'},
     {
       label: 'Verwaltung',
@@ -48,6 +50,7 @@ export class NavigationComponent {
       ]
     },
     {label: 'Statistiken', icon: 'bar_chart', role: Role.PLAYER, url: 'statistics'},
+    {label: 'Termine', icon: 'calendar_month', role: Role.PLAYER, url: 'calendar'},
     {label: 'Satzung', icon: 'menu_book', role: Role.PLAYER, url: 'constitution'},
     // {label: 'Über', icon: 'info', url: 'about'},
   ];

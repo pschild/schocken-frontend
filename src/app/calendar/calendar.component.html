@@ -1,0 +1,28 @@
+<div class="button-container">
+  <div>
+    <button mat-icon-button (click)="previousYear()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+
+    <h2>{{ calendarComponent?.getApi()?.view?.title }}</h2>
+
+    <button mat-icon-button (click)="nextYear()">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <mat-button-toggle-group [value]="activeView()" [hideSingleSelectionIndicator]="true">
+      <mat-button-toggle value="listYear" (click)="changeView('listYear')">
+        <mat-icon>list</mat-icon>
+        Übersicht
+      </mat-button-toggle>
+      <mat-button-toggle value="multiMonthYear" (click)="changeView('multiMonthYear')">
+        <mat-icon>calendar_month</mat-icon>
+        Kalender
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>
+
+<full-calendar #calendar [options]="calendarOptions"></full-calendar>

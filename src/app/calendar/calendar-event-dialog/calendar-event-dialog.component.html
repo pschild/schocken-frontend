@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+<mat-dialog-content>
+  {{ data | json }}
+
+  <form [formGroup]="eventForm">
+    <mat-form-field class="full-width">
+      <mat-label>Termin-Typ</mat-label>
+      <mat-select formControlName="type">
+        <mat-option>bitte wählen</mat-option>
+        <mat-option [value]="'SCHOCKENABEND'">Schocken-Abend</mat-option>
+        <mat-option [value]="'TOUR'">Hopti-Fahrt</mat-option>
+        <mat-option [value]="'OTHER'">Sonstiges</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    @if (eventForm.value.type === 'SCHOCKENABEND') {
+      <mat-form-field class="half-width">
+        <mat-label>Ort</mat-label>
+        <mat-select formControlName="placeType">
+          <mat-option>bitte wählen</mat-option>
+          @for (type of placeTypes; track type) {
+            <mat-option [value]="type">{{ type | placeTypeToLabel }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @if (eventForm.value.placeType === PlaceType.Home) {
+        <mat-form-field class="half-width">
+          <mat-label>bei</mat-label>
+          <mat-select formControlName="hostedById">
+            <mat-option>bitte wählen</mat-option>
+            @for (player of activePlayers$ | async; track player.id) {
+              <mat-option [value]="player.id">{{ player.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
+      @if (eventForm.value.placeType === PlaceType.Away) {
+        <mat-form-field class="half-width">
+          <mat-label>Wo genau?</mat-label>
+          <input matInput formControlName="placeOfAwayGame">
+        </mat-form-field>
+      }
+    } @else if (!!eventForm.value.type) {
+      <mat-form-field class="full-width">
+        <mat-label>Beschreibung</mat-label>
+        <input matInput formControlName="description">
+      </mat-form-field>
+    }
+
+    <div>
+      <mat-checkbox formControlName="isAllDay">Ganztägig</mat-checkbox>
+    </div>
+
+    <div>
+      <mat-form-field class="half-width">
+        <mat-label>Beginn</mat-label>
+        <input matInput formControlName="fromDate" [matDatepicker]="datepickerFrom" (click)="datepickerFrom.open()">
+        <mat-datepicker #datepickerFrom/>
+      </mat-form-field>
+
+      @if (!eventForm.value.isAllDay) {
+        <mat-form-field>
+          <mat-label>Uhrzeit</mat-label>
+          <input matInput formControlName="fromTime" [matTimepicker]="timepickerFrom" (click)="timepickerFrom.open()">
+          <mat-timepicker #timepickerFrom/>
+        </mat-form-field>
+      }
+    </div>
+
+    <div>
+      <mat-form-field class="half-width">
+        <mat-label>Ende</mat-label>
+        <input matInput formControlName="toDate" [matDatepicker]="datepickerTo" (click)="datepickerTo.open()">
+        <mat-datepicker #datepickerTo/>
+      </mat-form-field>
+
+      @if (!eventForm.value.isAllDay) {
+        <mat-form-field>
+          <mat-label>Uhrzeit</mat-label>
+          <input matInput formControlName="toTime" [matTimepicker]="timepickerTo" (click)="timepickerTo.open()">
+          <mat-timepicker #timepickerTo/>
+        </mat-form-field>
+      }
+    </div>
+  </form>
+
+  {{ eventForm.value | json }}
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Abbrechen</button>
+  <button mat-flat-button [disabled]="!eventForm.valid" (click)="save()">Speichern</button>
+</mat-dialog-actions>

@@ -1,0 +1,19 @@
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+
+  & > div {
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    margin: 0 10px;
+  }
+}
+
+.fc-theme-standard .fc-list {
+  border: 0;
+}
