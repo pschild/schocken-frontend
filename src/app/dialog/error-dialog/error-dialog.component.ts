@@ -18,6 +18,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
   styleUrl: './error-dialog.component.scss'
 })
 export class ErrorDialogComponent {
-  data: { message: string; userMessage: string; } = inject(MAT_DIALOG_DATA);
+  data: { title: string; message: string; userMessage: string; } = inject(MAT_DIALOG_DATA);
   now = new Date();
 }

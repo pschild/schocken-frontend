@@ -27,6 +27,7 @@ import { ApiModule as OpenApiModule, Configuration, PlayerService } from './api/
 import { routes } from './app.routes';
 import { GlobalErrorHandler } from './global-error-handler';
 import { ConfigService, CURRENT_PLAYER_ID } from './shared/config.service';
+import { retryInterceptorFn } from './shared/interceptors/retry.interceptor';
 
 registerLocaleData(localeDe, 'de');
 
@@ -38,7 +39,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authHttpInterceptorFn])),
+    provideHttpClient(withInterceptors([authHttpInterceptorFn, retryInterceptorFn])),
     provideAuth0({
       domain: auth0Domain,
       clientId: auth0ClientId,
