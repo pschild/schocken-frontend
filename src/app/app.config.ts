@@ -9,7 +9,8 @@ import {
   inject,
   LOCALE_ID,
   provideAppInitializer,
-  provideZoneChangeDetection
+  provideZoneChangeDetection,
+  isDevMode
 } from '@angular/core';
 import { DateFnsAdapter, MAT_DATE_FNS_FORMATS, provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -28,6 +29,8 @@ import { routes } from './app.routes';
 import { GlobalErrorHandler } from './global-error-handler';
 import { ConfigService, CURRENT_PLAYER_ID } from './shared/config.service';
 import { retryInterceptorFn } from './shared/interceptors/retry.interceptor';
+import { provideServiceWorker } from '@angular/service-worker';
+import { PwaUpdateCheckService } from './shared/pwa-update-check.service';
 
 registerLocaleData(localeDe, 'de');
 
@@ -105,6 +108,16 @@ export const appConfig: ApplicationConfig = {
         };
       })(inject(ConfigService), inject(PlayerService), inject(AuthService));
       return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = ((pwaUpdateCheckService: PwaUpdateCheckService) => {
+        return () => pwaUpdateCheckService.listenForAppUpdates();
+      })(inject(PwaUpdateCheckService));
+      return initializerFn();
+    }),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
     }),
     {
       provide: CURRENT_PLAYER_ID,

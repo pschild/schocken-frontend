@@ -8,6 +8,10 @@
   right: 0;
 }
 
+.toolbar {
+  --mat-toolbar-container-background-color: #be00ca;
+}
+
 .is-mobile .toolbar {
   position: fixed;
   z-index: 2;
