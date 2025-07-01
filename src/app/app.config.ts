@@ -31,6 +31,7 @@ import { ConfigService, CURRENT_PLAYER_ID } from './shared/config.service';
 import { retryInterceptorFn } from './shared/interceptors/retry.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
 import { PwaUpdateCheckService } from './shared/pwa-update-check.service';
+import { SettingsState } from './settings/settings.state';
 
 registerLocaleData(localeDe, 'de');
 
@@ -113,6 +114,12 @@ export const appConfig: ApplicationConfig = {
       const initializerFn = ((pwaUpdateCheckService: PwaUpdateCheckService) => {
         return () => pwaUpdateCheckService.listenForAppUpdates();
       })(inject(PwaUpdateCheckService));
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = ((settingsState: SettingsState) => {
+        return () => settingsState.load();
+      })(inject(SettingsState));
       return initializerFn();
     }),
     provideServiceWorker('ngsw-worker.js', {

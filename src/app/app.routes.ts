@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { StatisticsComponent } from './statistics/statistics.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { DebugComponent } from './debug/debug.component';
+import { SettingsComponent } from './settings/settings.component';
 
 const roleGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   return inject(PermissionsService).hasRole((route.data as any).requiredRole);
@@ -68,6 +69,11 @@ export const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    canActivate: [authGuardFn]
   },
   {
     path: 'debug',

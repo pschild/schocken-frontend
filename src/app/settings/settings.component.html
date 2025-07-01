@@ -1,0 +1,15 @@
+<form [formGroup]="form">
+  <mat-slide-toggle formControlName="enablePushNotifications">Push-Benachrichtigungen aktivieren</mat-slide-toggle>
+  @switch (this.pushSubscriptionService.permission | async) {
+    @case ('default') {
+      <p>Um mit deinem Gerät Push-Benachrichtigungen zu erhalten wird zunächst deine Zustimmung benötigt.</p>
+    }
+    @case ('denied') {
+      <p>Derzeit werden Push-Benachrichtigungen durch deine Browser-Einstellungen blockiert!</p>
+    }
+  }
+
+  @if (deviceSubscription$ | async) {
+    <mat-icon>notifications_active</mat-icon>
+  }
+</form>
