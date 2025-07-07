@@ -254,14 +254,14 @@ export class GameState extends StateService<IGameState> {
     );
   }
 
-  setGameCompleted(completed: boolean): Observable<GameDetailDto> {
+  setGameCompleted(): Observable<GameDetailDto> {
     const warningCount = countWarnings(this.state.rounds);
-    const confirmation$ = warningCount > 0
+    const warningConfirmation$ = warningCount > 0
       ? this.gameDialogService.warningBeforeCompleteDialog(warningCount)
       : of(true);
 
-    return confirmation$.pipe(
-      switchMap(() => this.gameDetailsService.update(this.state.gameDetails!.id, { completed })),
+    return warningConfirmation$.pipe(
+      switchMap(() => this.gameDetailsService.completeGame(this.state.gameDetails!.id)),
       doWithLoading(this.loadingState, 'complete-game'),
       tap(gameDetails => this.setState({ gameDetails })),
       tap(() => this.successMessageService.showSuccess(`Spiel aktualisiert`)),

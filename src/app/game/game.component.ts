@@ -231,7 +231,7 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setGameCompleted(): void {
-    this.state.setGameCompleted(true).pipe(
+    this.state.setGameCompleted().pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe();
   }

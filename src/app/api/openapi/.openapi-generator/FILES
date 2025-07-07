@@ -11,6 +11,7 @@ api/player.service.ts
 api/roundDetails.service.ts
 api/statistics.service.ts
 api/user.service.ts
+api/whatsapp.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -62,6 +63,7 @@ model/playerDto.ts
 model/pointsDto.ts
 model/pointsPerGameDto.ts
 model/pointsStatisticsResponseDto.ts
+model/qrCodeDto.ts
 model/quoteByNameDto.ts
 model/recordDto.ts
 model/recordsPerGameDto.ts

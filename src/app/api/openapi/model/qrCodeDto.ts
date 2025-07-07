@@ -10,15 +10,8 @@
  */
 
 
-export interface PenaltyByPlayerTableDto { 
-    rank: number;
-    playerId: string;
-    name: string;
-    gameEventEuroSum: number;
-    roundEventEuroSum: number;
-    euroSum: number;
-    quote: number;
-    euroPerRound: number;
-    attended: boolean;
+export interface QrCodeDto { 
+    createDateTime: string;
+    qrImage: string;
 }
 

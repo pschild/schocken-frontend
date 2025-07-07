@@ -16,4 +16,6 @@ export * from './statistics.service';
 import { StatisticsService } from './statistics.service';
 export * from './user.service';
 import { UserService } from './user.service';
-export const APIS = [EventDetailsService, EventTypeService, EventTypeOverviewService, GameDetailsService, GameOverviewService, PlayerService, RoundDetailsService, StatisticsService, UserService];
+export * from './whatsapp.service';
+import { WhatsappService } from './whatsapp.service';
+export const APIS = [EventDetailsService, EventTypeService, EventTypeOverviewService, GameDetailsService, GameOverviewService, PlayerService, RoundDetailsService, StatisticsService, UserService, WhatsappService];

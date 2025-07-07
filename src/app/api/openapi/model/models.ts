@@ -44,6 +44,7 @@ export * from './playerDto';
 export * from './pointsDto';
 export * from './pointsPerGameDto';
 export * from './pointsStatisticsResponseDto';
+export * from './qrCodeDto';
 export * from './quoteByNameDto';
 export * from './recordDto';
 export * from './recordsPerGameDto';
