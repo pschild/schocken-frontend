@@ -189,6 +189,11 @@
               <mat-icon>check</mat-icon>
               Spiel abschließen
             </button>
+          } @else {
+            <button *hopHasRole="Role.MANAGER" mat-flat-button class="publish-penalties" (click)="publishPenalties()" [loading]="!!('publish-penalties' | isLoading | async)">
+              <mat-icon>send</mat-icon>
+              Strafen veröffentlichen
+            </button>
           }
         </div>
       </div>

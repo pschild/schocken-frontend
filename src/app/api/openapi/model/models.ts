@@ -62,3 +62,6 @@ export * from './updateFinalistsDto';
 export * from './updateGameDto';
 export * from './updatePlayerDto';
 export * from './userDto';
+export * from './whatsAppChatInfoDto';
+export * from './whatsAppClientStatusDto';
+export * from './whatsAppSentMessageDto';

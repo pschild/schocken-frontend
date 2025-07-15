@@ -236,6 +236,12 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe();
   }
 
+  publishPenalties(): void {
+    this.state.publishPenalties().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe();
+  }
+
   private openLastRound(): void {
     this.steppers.first.selectedIndex = this.steppers.first.steps.length - 1;
   }

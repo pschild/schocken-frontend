@@ -268,6 +268,13 @@ export class GameState extends StateService<IGameState> {
     );
   }
 
+  publishPenalties(): Observable<WhatsAppSentMessageDto> {
+    return this.gameDetailsService.publishPenalties(this.state.gameDetails!.id).pipe(
+      doWithLoading(this.loadingState, 'publish-penalties'),
+      tap(() => this.successMessageService.showSuccess(`Strafen wurden veröffentlicht`)),
+    );
+  }
+
   updateStatistics(): void {
     if (this.state.gameDetails) {
       this.statisticsService.liveGameStatistics({

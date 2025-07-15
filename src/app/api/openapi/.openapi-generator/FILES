@@ -55,6 +55,9 @@ model/models.ts
 model/mostExpensiveGameDto.ts
 model/mostExpensiveRoundAveragePerGameDto.ts
 model/mostExpensiveRoundDto.ts
+model/paymentDto.ts
+model/paymentSummaryByPlayerDto.ts
+model/paymentSummaryDto.ts
 model/penaltyByPlayerTableDto.ts
 model/penaltyDto.ts
 model/penaltyStatisticsResponseDto.ts
@@ -81,5 +84,8 @@ model/updateFinalistsDto.ts
 model/updateGameDto.ts
 model/updatePlayerDto.ts
 model/userDto.ts
+model/whatsAppChatInfoDto.ts
+model/whatsAppClientStatusDto.ts
+model/whatsAppSentMessageDto.ts
 param.ts
 variables.ts
