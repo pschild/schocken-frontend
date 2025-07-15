@@ -55,6 +55,10 @@ import { LivePointsTableComponent } from '../statistics/live-points-table/live-p
 import { CarouselComponent } from '../shared/carousel/carousel.component';
 import { CurrentUserDirective } from '../shared/current-user.directive';
 import { AngularSplitModule } from 'angular-split';
+import { Role } from '../auth/model/role.enum';
+import { HasRoleDirective } from '../auth/has-role.directive';
+import { BadgeComponent } from '../shared/badge/badge.component';
+import { BadgeType } from '../shared/badge/badge-type';
 
 @Component({
   selector: 'hop-game',
@@ -77,6 +81,7 @@ import { AngularSplitModule } from 'angular-split';
     LiveIndicatorComponent,
     ButtonSpinnerDirective,
     MatMenuModule,
+    HasRoleDirective,
     HasPermissionDirective,
     HasAllPermissionsDirective,
     MatExpansionModule,
@@ -89,6 +94,7 @@ import { AngularSplitModule } from 'angular-split';
     CurrentUserDirective,
     AngularSplitModule,
     MatFabButton,
+    BadgeComponent,
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss',
@@ -105,6 +111,8 @@ export class GameComponent implements OnInit, OnDestroy, AfterViewInit {
   PlaceTypeEnum = PlaceTypeEnum;
   Context = ContextEnum;
   Permission = Permission;
+  Role = Role;
+  BadgeType = BadgeType;
 
   private state = inject(GameState);
   private route = inject(ActivatedRoute);

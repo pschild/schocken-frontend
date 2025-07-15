@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import { FinanceComponent } from './finance/finance.component';
 
 const roleGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   return inject(PermissionsService).hasRole((route.data as any).requiredRole);
@@ -63,6 +64,14 @@ export const routes: Routes = [
     path: 'calendar',
     component: CalendarComponent,
     canActivate: [authGuardFn]
+  },
+  {
+    path: 'finance',
+    component: FinanceComponent,
+    data: {
+      requiredRole: Role.TREASURER
+    },
+    canActivate: [authGuardFn, roleGuardFn]
   },
   {
     path: 'about',

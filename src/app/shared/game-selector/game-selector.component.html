@@ -1,0 +1,33 @@
+@let isMobile = isMobile$ | async;
+
+<div>
+  <button mat-icon-button (click)="currentIndex().set(0)" [disabled]="currentIndex()() === 0">
+    <mat-icon>first_page</mat-icon>
+  </button>
+  @if (!isMobile) {
+    <button mat-icon-button (click)="selectPrevious()" [disabled]="currentIndex()() === 0">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+  }
+
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Spieltag</mat-label>
+    <mat-select [value]="currentIndex()()" (selectionChange)="onSelectionChanged($event)">
+      @for (game of games(); track game.id; let idx = $index) {
+        <ng-template #defaultTemplate let-game>{{ game.id }}</ng-template>
+        <mat-option [value]="idx">
+          <ng-container *ngTemplateOutlet="optionLabel || defaultTemplate; context: { $implicit: game }"></ng-container>
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (!isMobile) {
+    <button mat-icon-button (click)="selectNext()" [disabled]="currentIndex()() >= games().length - 1">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  }
+  <button mat-icon-button (click)="currentIndex().set(games().length - 1)" [disabled]="currentIndex()() >= games().length - 1">
+    <mat-icon>last_page</mat-icon>
+  </button>
+</div>

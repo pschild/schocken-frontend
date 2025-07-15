@@ -1,11 +1,4 @@
-@let isMobile = isMobile$ | async;
-
 @if (data() && data()!.pointsPerGame.length > 0) {
-  @let idx = currentIndex()();
-  @let pointsPerGame = data()!.pointsPerGame;
-  @let accumulatedPoints = data()!.accumulatedPoints;
-  @let count = pointsPerGame.length;
-
   <div class="help-button-row">
     <button mat-button (click)="showHelpDialog()">
       <mat-icon>help</mat-icon>
@@ -86,44 +79,27 @@
 
   <div class="control-elements">
     <div>
-      <button mat-icon-button (click)="currentIndex().set(0)" [disabled]="idx === 0">
-        <mat-icon>first_page</mat-icon>
-      </button>
-      @if (!isMobile) {
-        <button mat-icon-button (click)="currentIndex().set(idx > 0 ? idx - 1 : idx)" [disabled]="idx === 0">
-          <mat-icon>keyboard_arrow_left</mat-icon>
-        </button>
-      }
-
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>Spieltag</mat-label>
-        <mat-select [value]="idx" (selectionChange)="onSelectionChanged($event)">
-          @for (matchDay of pointsPerGame; track matchDay.gameId; let idx = $index) {
-            <mat-option [value]="idx">{{matchDay.datetime | date:'dd.MM.yyyy'}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      @if (!isMobile) {
-        <button mat-icon-button (click)="currentIndex().set(count - 1 ? idx + 1 : idx)" [disabled]="idx >= count - 1">
-          <mat-icon>keyboard_arrow_right</mat-icon>
-        </button>
-      }
-      <button mat-icon-button (click)="currentIndex().set(count - 1)" [disabled]="idx >= count - 1">
-        <mat-icon>last_page</mat-icon>
-      </button>
+      <hop-game-selector
+        [games]="gamesWithId()"
+        (onSelectionChange)="onSelectionChanged($event)"
+      >
+        <ng-template #optionLabel let-game>
+          {{ game.datetime | date:'dd.MM.yyyy' }}
+        </ng-template>
+      </hop-game-selector>
     </div>
     <div>
       <mat-slide-toggle [formControl]="showExpandedColums">Detailansicht</mat-slide-toggle>
     </div>
   </div>
 
-  <h2>Punkte am {{pointsPerGame[idx].datetime | date:'dd.MM.yyyy'}}</h2>
-  <hop-points-table [data]="pointsPerGame[idx].points" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
+  <!-- TODO: REFACTOR ME -->
+  @if (info()) {
+    <h2>Punkte am {{info()!.datetime | date:'dd.MM.yyyy'}}</h2>
+    <hop-points-table [data]="info()!.points || []" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
 
-  @if (count > 1 && idx > 0) {
-    <h2>Punkte vom {{pointsPerGame[0].datetime | date:'dd.MM.yyyy'}} bis {{pointsPerGame[idx].datetime | date:'dd.MM.yyyy'}}</h2>
-    <hop-points-table [data]="accumulatedPoints[idx].points" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
+    <h2>Punkte vom {{info()!.datetimeOfFirstGame | date:'dd.MM.yyyy'}} bis {{info()!.datetime | date:'dd.MM.yyyy'}}</h2>
+    <hop-points-table [data]="info()?.accumulatedPoints || []" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
   }
 } @else if (!loading()) {
   <p class="no-data">Es gibt keine Daten für die ausgewählten Filter.</p>

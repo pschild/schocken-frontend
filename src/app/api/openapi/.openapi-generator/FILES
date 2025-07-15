@@ -7,6 +7,7 @@ api/eventType.service.ts
 api/eventTypeOverview.service.ts
 api/gameDetails.service.ts
 api/gameOverview.service.ts
+api/payment.service.ts
 api/player.service.ts
 api/roundDetails.service.ts
 api/statistics.service.ts
@@ -82,6 +83,7 @@ model/updateAttendanceDto.ts
 model/updateEventTypeDto.ts
 model/updateFinalistsDto.ts
 model/updateGameDto.ts
+model/updatePaymentDto.ts
 model/updatePlayerDto.ts
 model/userDto.ts
 model/whatsAppChatInfoDto.ts

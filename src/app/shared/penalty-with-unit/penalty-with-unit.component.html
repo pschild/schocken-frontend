@@ -1,7 +1,11 @@
 @switch (unit()) {
   @case (PenaltyUnit.Euro) {
     <span>
-      {{penalty() | currency}}
+      @if (typeof penalty() === 'undefined') {
+        €
+      } @else {
+        {{penalty() | currency}}
+      }
       @if (multiplicatorUnit()) {
         pro {{multiplicatorUnit()}}
       }
@@ -9,10 +13,14 @@
   }
   @case (PenaltyUnit.BeerCrate) {
     <span>
-      @if (penalty() === 1) {
-        {{penalty()}} Bierkiste
+      @if (typeof penalty() === 'undefined') {
+        Bierkiste(n)
       } @else {
-        {{penalty()}} Bierkisten
+        @if (penalty() === 1) {
+          {{penalty()}} Bierkiste
+        } @else {
+          {{penalty()}} Bierkisten
+        }
       }
       @if (multiplicatorUnit()) {
         pro {{multiplicatorUnit()}}

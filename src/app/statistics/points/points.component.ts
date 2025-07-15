@@ -1,18 +1,14 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal, viewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatOption } from '@angular/material/core';
+import { MatButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { map } from 'rxjs/operators';
 import { PointsStatisticsResponseDto } from '../../api/openapi';
 import { HelpDialogComponent } from '../../dialog/help-dialog/help-dialog.component';
 import { PointsTableComponent } from '../points-table/points-table.component';
+import { GameSelectorComponent } from '../../shared/game-selector/game-selector.component';
 
 @Component({
   selector: 'hop-points',
@@ -20,15 +16,10 @@ import { PointsTableComponent } from '../points-table/points-table.component';
     PointsTableComponent,
     DatePipe,
     MatIcon,
-    MatIconButton,
     ReactiveFormsModule,
-    MatFormField,
-    MatLabel,
-    MatOption,
-    MatSelect,
     MatButton,
-    AsyncPipe,
-    MatSlideToggle
+    MatSlideToggle,
+    GameSelectorComponent
   ],
   templateUrl: './points.component.html',
   styleUrl: './points.component.scss',
@@ -37,7 +28,6 @@ import { PointsTableComponent } from '../points-table/points-table.component';
 export class PointsComponent {
 
   private dialog = inject(MatDialog);
-  private breakpointObserver = inject(BreakpointObserver);
 
   helpTextTpl = viewChild('helpText');
 
@@ -46,18 +36,37 @@ export class PointsComponent {
     transform: (value: boolean | null) => !!value
   });
 
-  currentIndex = computed(() => {
-    return signal(this.data() && this.data()!.pointsPerGame.length > 0 ? this.data()!.pointsPerGame.length - 1 : 0);
+  gamesWithId = computed(() => {
+    return this.data() ? this.data()!.pointsPerGame.map(item => ({ ...item, id: item.gameId })) : [];
+  });
+
+  selectedGameId = signal<string | null>(null);
+
+  selectedIndex = computed(() => {
+    return this.data() ? this.data()!.pointsPerGame.findIndex(item => item.gameId === this.selectedGameId()) : -1;
+  });
+
+  // TODO: REFACTOR ME!
+  info = computed(() => {
+    const response = this.data();
+    const selectedGameId = this.selectedGameId();
+    if (!response || !selectedGameId) {
+      return null;
+    }
+    const selectedGame = response!.pointsPerGame.find(game => game.gameId === selectedGameId);
+    const accumulatedPoints = response!.accumulatedPoints.find(game => game.gameId === selectedGameId);
+    return {
+      datetimeOfFirstGame: response.pointsPerGame[0].datetime,
+      datetime: selectedGame?.datetime,
+      points: selectedGame?.points,
+      accumulatedPoints: accumulatedPoints?.points,
+    };
   });
 
   showExpandedColums = new FormControl<boolean>(false);
 
-  isMobile$ = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
-    map(state => state.matches)
-  );
-
-  onSelectionChanged($event: MatSelectChange) {
-    this.currentIndex().set($event.value);
+  onSelectionChanged(gameId: string) {
+    this.selectedGameId.set(gameId);
   }
 
   showHelpDialog(): void {

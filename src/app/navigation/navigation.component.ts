@@ -52,6 +52,7 @@ export class NavigationComponent {
     {label: 'Statistiken', icon: 'bar_chart', role: Role.PLAYER, url: 'statistics'},
     {label: 'Termine', icon: 'calendar_month', role: Role.PLAYER, url: 'calendar'},
     {label: 'Satzung', icon: 'menu_book', role: Role.PLAYER, url: 'constitution'},
+    {label: 'Finanzen', icon: 'payments', role: Role.TREASURER, url: 'finance'},
     // {label: 'Über', icon: 'info', url: 'about'},
   ];
 

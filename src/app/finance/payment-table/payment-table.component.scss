@@ -1,0 +1,36 @@
+:host {
+  position: relative;
+}
+
+tr.confirmed {
+  color: #aaa;
+}
+
+td {
+  .editabled-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &.cell-with-buttons {
+    text-align: right;
+  }
+}
+
+.table-footer {
+  padding: 16px;
+  text-align: right;
+}
+
+mat-form-field {
+  &.debit {
+    --mdc-filled-text-field-container-color: #fbdad7;
+    --mdc-filled-text-field-disabled-container-color: rgba(251, 218, 215, 0.44);
+  }
+
+  &.credit {
+    --mdc-filled-text-field-container-color: #d7ffbd;
+    --mdc-filled-text-field-disabled-container-color: rgba(215, 255, 189, 0.44);
+  }
+}

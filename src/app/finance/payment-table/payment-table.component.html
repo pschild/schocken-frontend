@@ -1,0 +1,114 @@
+@if (loading()) {
+  <hop-loading-mask></hop-loading-mask>
+}
+
+<table
+  mat-table
+  [dataSource]="dataSource"
+  hopScrollWrapper
+>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Spieler</th>
+    <td mat-cell *matCellDef="let element">
+      <span [hopCurrentUser]="element.playerId">{{ element.name }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="penaltyValue">
+    <th mat-header-cell *matHeaderCellDef>Strafe</th>
+    <td mat-cell *matCellDef="let element">
+      <hop-penalty-with-unit [penalty]="element.penaltyValue" [unit]="element.penaltyUnit"></hop-penalty-with-unit>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="outstandingValue">
+    <th mat-header-cell *matHeaderCellDef>Ausstehend</th>
+    <td mat-cell *matCellDef="let element">
+      <div class="editabled-cell">
+        <mat-form-field subscriptSizing="dynamic" style="width: 180px; padding: 5px 0" [ngClass]="{ credit: element.outstandingValue < 0, debit: element.outstandingValue > 0 }">
+          <input type="number" matInput [(ngModel)]="element.outstandingValue" [disabled]="element.confirmed">
+          <span matSuffix style="padding: 0 12px;">
+            <hop-penalty-with-unit [unit]="element.penaltyUnit"></hop-penalty-with-unit>
+          </span>
+        </mat-form-field>
+        @if (!element.confirmed && element.outstandingValue !== 0) {
+          <button mat-icon-button (click)="element.outstandingValue = 0" matTooltip="Strafe begleichen">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="confirmed">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let element">
+      @if (element.confirmed) {
+        <hop-badge [type]="BadgeType.SUCCESS">freigegeben</hop-badge>
+      } @else {
+        <hop-badge>warte auf Freigabe</hop-badge>
+      }
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lastChangedDateTime">
+    <th mat-header-cell *matHeaderCellDef>zuletzt geändert</th>
+    <td mat-cell *matCellDef="let element">{{ element.lastChangedDateTime | date:'dd.MM.yyyy, HH:mm:ss' }} Uhr</td>
+  </ng-container>
+
+  <ng-container matColumnDef="dueDate">
+    <th mat-header-cell *matHeaderCellDef>Zahlungsziel</th>
+    <td mat-cell *matCellDef="let element">
+      <div style="display: flex; align-items: center; gap: 5px;">
+        @if (element.dueDate) {
+          {{ element.dueDate | date:'dd.MM.yyyy, HH:mm:ss' }} Uhr
+          @if (isPast(element.dueDate)) {
+            <mat-icon style="margin: 10px 0; color: #ffa700;" matTooltip="Zahlung überzogen">warning</mat-icon>
+          }
+        } @else {
+          -
+        }
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element" class="cell-with-buttons">
+      @if (element.confirmed) {
+        <!--<button mat-stroked-button class="danger" (click)="unconfirm(element)">
+          <mat-icon>remove_done</mat-icon>
+          bearbeiten
+        </button>-->
+        <button mat-stroked-button class="danger" (click)="unconfirm(element)">
+          <mat-icon>edit</mat-icon>
+          bearbeiten
+        </button>
+      } @else {
+        <!--<button mat-flat-button (click)="confirm(element)">
+          <mat-icon>done</mat-icon>
+          veröffentlichen
+        </button>-->
+        <button mat-flat-button (click)="confirm(element)">
+          <mat-icon>campaign</mat-icon>
+          veröffentlichen
+        </button>
+      }
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.confirmed]="row.confirmed"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+      <p class="no-data">Keine Strafen für das ausgewählte Spiel.</p>
+    </td>
+  </tr>
+</table>
+
+<div class="table-footer">
+  <button mat-flat-button (click)="confirmAll()" [disabled]="!unconfirmedPaymentsExist()">
+    <mat-icon>campaign</mat-icon>
+    alle veröffentlichen
+  </button>
+</div>

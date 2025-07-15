@@ -1,0 +1,31 @@
+.badge {
+  display: inline-block;
+  padding: 4px 7px;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 6px;
+
+  color: #fff;
+  background-color: #718ba3;
+
+  &.success {
+    color: #fff;
+    background-color: #57b90d;
+  }
+
+  &.warn {
+    color: #fff;
+    background-color: #ffa700;
+  }
+
+  &.error {
+    color: #fff;
+    background-color: #f50303;
+  }
+
+  &.error-alt {
+    color: #f50303;
+    background-color: #fff;
+    border: 1px solid #f50303;
+  }
+}

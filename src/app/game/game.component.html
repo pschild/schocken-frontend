@@ -36,15 +36,18 @@
             <div style="display: flex; gap: 5px; align-items: center;">
               @if (!game.completed) {
                 <div class="game-info-item">
-                  <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
+                  <hop-badge [type]="BadgeType.ERROR_ALT">
+                    <hop-live-indicator></hop-live-indicator>
+                    live
+                  </hop-badge>
                 </div>
               } @else {
-                <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
+                <hop-badge [type]="BadgeType.SUCCESS">abgeschlossen</hop-badge>
               }
 
               @if (game.excludeFromStatistics) {
                 <div class="game-info-item">
-                  <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
+                  <hop-badge>ohne Wertung</hop-badge>
                 </div>
               }
 

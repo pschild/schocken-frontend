@@ -33,6 +33,7 @@ import {
   RoundDetailDto,
   RoundDetailsService,
   StatisticsService,
+  WhatsAppSentMessageDto,
 } from '../api/openapi';
 import { InvalidArgumentError } from '../error/invalid-argument.error';
 import { LoadingState } from '../shared/loading/loading.state';
