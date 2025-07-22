@@ -54,8 +54,8 @@
               @if (warnings$ | async; as warnings) {
                 <div class="game-info-item">
                   <mat-icon
-                    aria-hidden="false"
-                    style="margin: 10px 0; color: #ffa700;"
+                    style="margin: 10px 0;"
+                    class="warn-text"
                     [matBadge]="warnings"
                     matBadgeSize="large"
                   >warning</mat-icon>
@@ -139,8 +139,8 @@
                   @if (round.warnings?.length) {
                     <mat-icon
                       aria-hidden="false"
-                      style="margin: 10px 0;
-                  color: #ffa700;"
+                      style="margin: 10px 0;"
+                      class="warn-text"
                       [matBadge]="round.warnings!.length"
                       matBadgeSize="large"
                       [matBadgeHidden]="round.warnings!.length === 1"
@@ -195,7 +195,7 @@
           } @else {
             <button *hopHasRole="Role.MANAGER" mat-flat-button class="publish-penalties" (click)="publishPenalties()" [loading]="!!('publish-penalties' | isLoading | async)">
               <mat-icon>send</mat-icon>
-              Strafen veröffentlichen
+              Strafen bei WhatsApp veröffentlichen
             </button>
           }
         </div>

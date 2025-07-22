@@ -15,3 +15,8 @@
   (onUnconfirmation)="unconfirm($event)"
 >
 </hop-payment-table>
+
+<hop-balance-table
+  [data]="paymentsSummary$ | async"
+  [loading]="'payments-summary' | isLoading | async"
+></hop-balance-table>

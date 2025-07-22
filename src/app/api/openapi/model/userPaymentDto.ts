@@ -10,14 +10,19 @@
  */
 
 
-export interface CreatePaymentDto { 
+export interface UserPaymentDto { 
     gameId: string;
-    playerId: string;
-    penaltyUnit: CreatePaymentDto.PenaltyUnitEnum;
+    datetime: string;
+    penaltyUnit: UserPaymentDto.PenaltyUnitEnum;
     penaltyValue: number;
-    payedValue?: number;
+    outstandingValue: number;
+    lastChangedDateTime: string;
+    confirmed: boolean;
+    confirmedAt: string | null;
+    confirmedBy: string | null;
+    dueDate?: string;
 }
-export namespace CreatePaymentDto {
+export namespace UserPaymentDto {
     export type PenaltyUnitEnum = 'EURO' | 'BEER_CRATE';
     export const PenaltyUnitEnum = {
         Euro: 'EURO' as PenaltyUnitEnum,

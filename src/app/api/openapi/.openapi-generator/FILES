@@ -12,6 +12,7 @@ api/player.service.ts
 api/roundDetails.service.ts
 api/statistics.service.ts
 api/user.service.ts
+api/userPayment.service.ts
 api/whatsapp.service.ts
 configuration.ts
 encoder.ts
@@ -46,6 +47,7 @@ model/gameDto.ts
 model/gameIdsWithDatetimeDto.ts
 model/gameOverviewDto.ts
 model/gameOverviewOfYearDto.ts
+model/gameWithPaymentInfoDto.ts
 model/gamesAndRoundsStatisticsResponseDto.ts
 model/hostStatisticsResponseDto.ts
 model/hostsTableDto.ts
@@ -56,9 +58,9 @@ model/models.ts
 model/mostExpensiveGameDto.ts
 model/mostExpensiveRoundAveragePerGameDto.ts
 model/mostExpensiveRoundDto.ts
+model/outstandingPenaltyDto.ts
+model/paymentBalanceDto.ts
 model/paymentDto.ts
-model/paymentSummaryByPlayerDto.ts
-model/paymentSummaryDto.ts
 model/penaltyByPlayerTableDto.ts
 model/penaltyDto.ts
 model/penaltyStatisticsResponseDto.ts
@@ -86,6 +88,7 @@ model/updateGameDto.ts
 model/updatePaymentDto.ts
 model/updatePlayerDto.ts
 model/userDto.ts
+model/userPaymentDto.ts
 model/whatsAppChatInfoDto.ts
 model/whatsAppClientStatusDto.ts
 model/whatsAppSentMessageDto.ts

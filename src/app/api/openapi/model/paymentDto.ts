@@ -18,6 +18,7 @@ export interface PaymentDto {
     penaltyValue: number;
     outstandingValue: number;
     confirmed: boolean;
+    confirmedAt: string | null;
     confirmedBy: string | null;
     gameId: string;
     playerId: string;

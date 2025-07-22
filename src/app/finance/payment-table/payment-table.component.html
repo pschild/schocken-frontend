@@ -51,19 +51,25 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="lastChangedDateTime">
-    <th mat-header-cell *matHeaderCellDef>zuletzt geändert</th>
-    <td mat-cell *matCellDef="let element">{{ element.lastChangedDateTime | date:'dd.MM.yyyy, HH:mm:ss' }} Uhr</td>
+  <ng-container matColumnDef="confirmedAt">
+    <th mat-header-cell *matHeaderCellDef>Veröffentlichung</th>
+    <td mat-cell *matCellDef="let element">
+      @if (element.confirmedAt) {
+        {{ element.confirmedAt | date:'dd.MM.yyyy, HH:mm:ss' }} Uhr
+      } @else {
+        -
+      }
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="dueDate">
-    <th mat-header-cell *matHeaderCellDef>Zahlungsziel</th>
+    <th mat-header-cell *matHeaderCellDef>Fälligkeitsdatum</th>
     <td mat-cell *matCellDef="let element">
       <div style="display: flex; align-items: center; gap: 5px;">
         @if (element.dueDate) {
-          {{ element.dueDate | date:'dd.MM.yyyy, HH:mm:ss' }} Uhr
+          <span [matTooltip]="(element.dueDate | date:'dd.MM.yyyy, HH:mm:ss') + ' Uhr'">{{ element.dueDate | relativizeDate }}</span>
           @if (isPast(element.dueDate)) {
-            <mat-icon style="margin: 10px 0; color: #ffa700;" matTooltip="Zahlung überzogen">warning</mat-icon>
+            <mat-icon style="margin: 10px 0;" class="warn-text" matTooltip="Zahlung überzogen">warning</mat-icon>
           }
         } @else {
           -

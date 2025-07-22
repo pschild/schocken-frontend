@@ -37,30 +37,21 @@ export class PointsComponent {
   });
 
   gamesWithId = computed(() => {
-    return this.data() ? this.data()!.pointsPerGame.map(item => ({ ...item, id: item.gameId })) : [];
+    return this.data() ? this.data()!.pointsPerGame.map(item => ({ ...item, id: item.gameId, datetime: item.datetime })) : [];
   });
 
   selectedGameId = signal<string | null>(null);
 
-  selectedIndex = computed(() => {
-    return this.data() ? this.data()!.pointsPerGame.findIndex(item => item.gameId === this.selectedGameId()) : -1;
+  dateOfFirstGame = computed(() => {
+    return this.data()?.pointsPerGame[0].datetime;
   });
 
-  // TODO: REFACTOR ME!
-  info = computed(() => {
-    const response = this.data();
-    const selectedGameId = this.selectedGameId();
-    if (!response || !selectedGameId) {
-      return null;
-    }
-    const selectedGame = response!.pointsPerGame.find(game => game.gameId === selectedGameId);
-    const accumulatedPoints = response!.accumulatedPoints.find(game => game.gameId === selectedGameId);
-    return {
-      datetimeOfFirstGame: response.pointsPerGame[0].datetime,
-      datetime: selectedGame?.datetime,
-      points: selectedGame?.points,
-      accumulatedPoints: accumulatedPoints?.points,
-    };
+  pointsPerGame = computed(() => {
+    return this.data()?.pointsPerGame.find(game => game.gameId === this.selectedGameId());
+  });
+
+  accumulatedPoints = computed(() => {
+    return this.data()?.accumulatedPoints.find(game => game.gameId === this.selectedGameId());
   });
 
   showExpandedColums = new FormControl<boolean>(false);

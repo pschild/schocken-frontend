@@ -1,0 +1,31 @@
+<div class="summary-container">
+  @if ('summary' | isLoading | async) {
+    <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
+  }
+  @if (summarizedPaymentsByPlayer$ | async; as items) {
+    @if (!items.length) {
+      <div class="flex-container success-text">
+        <mat-icon style="cursor: pointer;" hopCelebration>favorite</mat-icon>
+        <strong>Du hast alle Strafen beglichen.</strong>
+      </div>
+    } @else {
+      <div class="flex-container">
+        <hop-badge [type]="BadgeType.ERROR">Ausstehend:</hop-badge>
+        <strong class="error-text">
+          @for (row of items; track row.penaltyUnit; let idx = $index) {
+            @if (idx > 0) {
+              <span>/</span>
+            }
+            <hop-penalty-with-unit [penalty]="row.outstandingValueSum" [unit]="row.penaltyUnit"></hop-penalty-with-unit>
+          }
+        </strong>
+
+        @if (outstandingEuroPaymentByPlayer$ | async; as outstandingEuroPayment) {
+          <button mat-icon-button (click)="showQrCode(outstandingEuroPayment)">
+            <mat-icon>qr_code</mat-icon>
+          </button>
+        }
+      </div>
+    }
+  }
+</div>

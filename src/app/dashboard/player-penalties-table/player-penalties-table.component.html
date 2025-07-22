@@ -1,0 +1,89 @@
+@if (loading()) {
+  <hop-loading-mask></hop-loading-mask>
+}
+
+<div>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    matSortActive="datetime"
+    matSortDirection="desc"
+    hopScrollWrapper
+    hopScrollWrapperMaxHeight="300"
+  >
+    <ng-container matColumnDef="datetime">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Spieldatum</th>
+      <td mat-cell *matCellDef="let element">
+        <a [routerLink]="['/game', element.id]">{{ element.datetime | date:'dd.MM.yyyy' }}</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="penaltyValue">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Strafe</th>
+      <td mat-cell *matCellDef="let element">
+        <hop-penalty-with-unit [penalty]="element.penaltyValue" [unit]="element.penaltyUnit"></hop-penalty-with-unit>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="outstandingValue">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Ausstehend</th>
+      <td mat-cell *matCellDef="let element">
+        <hop-penalty-with-unit [penalty]="element.outstandingValue" [unit]="element.penaltyUnit"></hop-penalty-with-unit>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentStatus">
+      <th mat-header-cell *matHeaderCellDef>Zahlung</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="badges-container">
+          @if (element.confirmed) {
+            @if (element.outstandingValue <= 0) {
+              <hop-badge [type]="BadgeType.SUCCESS">erledigt</hop-badge>
+            } @else {
+              @if (isPast(element.dueDate)) {
+                <hop-badge [type]="BadgeType.ERROR">überfällig</hop-badge>
+              } @else {
+                <hop-badge [type]="BadgeType.WARN">offen</hop-badge>
+              }
+            }
+
+            <mat-icon
+              class="success-text"
+              [matTooltip]="'Veröffentlicht am ' + (element.confirmedAt | date:'dd.MM.yyyy HH:mm') + ' Uhr durch ' + (element.confirmedBy || 'System')"
+            >verified</mat-icon>
+          } @else {
+            <hop-badge [type]="BadgeType.WARN">offen</hop-badge>
+            <mat-icon
+              class="neutral-text"
+              matTooltip="Veröffentlichung durch KW ausstehend"
+            >hourglass_empty</mat-icon>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dueDate">
+      <th mat-header-cell *matHeaderCellDef>Fälligkeitsdatum</th>
+      <td mat-cell *matCellDef="let element">
+        @if (element.dueDate) {
+          <span [matTooltip]="(element.dueDate | date:'dd.MM.yyyy, HH:mm:ss') + ' Uhr'">{{ element.dueDate | relativizeDate:true }}</span>
+        } @else {
+          -
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+        <p class="no-data">Keine Strafen vorhanden.</p>
+      </td>
+    </tr>
+  </table>
+
+  <mat-checkbox [checked]="false" (change)="handleFilterCheckboxChange($event)">
+    Erledigte anzeigen
+  </mat-checkbox>
+</div>

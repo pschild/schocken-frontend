@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { BehaviorSubject, catchError, forkJoin, Observable, of, Subject } from 'rxjs';
-import { PaymentDto, PaymentService, StatisticsService } from '../api/openapi';
+import { PaymentBalanceDto, PaymentDto, PaymentService } from '../api/openapi';
 import { doWithLoading } from '../shared/operators';
 import { LoadingState } from '../shared/loading/loading.state';
 import { PaymentTableComponent } from './payment-table/payment-table.component';
@@ -8,9 +8,10 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { IsLoadingPipe } from '../shared/loading/is-loading.pipe';
 import { GameSelectorComponent } from '../shared/game-selector/game-selector.component';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { GameWithId } from '../shared/game-selector/model/game-with-id.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SuccessMessageService } from '../shared/success-message.service';
+import { BalanceTableComponent } from './balance-table/balance-table.component';
+import { GameIdentifierModel } from '../shared/game-selector/model/game-identifier.model';
 
 @Component({
   selector: 'hop-finance',
@@ -20,6 +21,7 @@ import { SuccessMessageService } from '../shared/success-message.service';
     IsLoadingPipe,
     GameSelectorComponent,
     DatePipe,
+    BalanceTableComponent,
   ],
   templateUrl: './finance.component.html',
   styleUrl: './finance.component.scss',
@@ -27,12 +29,11 @@ import { SuccessMessageService } from '../shared/success-message.service';
 })
 export class FinanceComponent implements OnInit {
 
-  private statisticsService = inject(StatisticsService);
   private paymentService = inject(PaymentService);
   private loadingState = inject(LoadingState);
   private successMessageService = inject(SuccessMessageService);
 
-  allGames$: Observable<GameWithId[]> = this.statisticsService.allGames();
+  allGames$: Observable<GameIdentifierModel[]> = this.paymentService.getGameList();
 
   selectedGameId$: Subject<string> = new Subject();
 
@@ -44,6 +45,12 @@ export class FinanceComponent implements OnInit {
   );
 
   paymentsState$: BehaviorSubject<PaymentDto[]> = new BehaviorSubject<PaymentDto[]>([]);
+
+  paymentsSummary$: Observable<PaymentBalanceDto[]> = this.paymentsState$.pipe(
+    switchMap(() => this.paymentService.getBalances().pipe(
+      doWithLoading(this.loadingState, 'payments-summary'),
+    ))
+  );
 
   ngOnInit(): void {
     this.loadPayments$.subscribe(payments => this.paymentsState$.next(payments));

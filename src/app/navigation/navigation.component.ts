@@ -38,7 +38,7 @@ export class NavigationComponent {
   );
 
   navigationItems: MenuItem[] = [
-    // {label: 'Dashboard', icon: 'dashboard', role: Role.PLAYER, url: 'dashboard'},
+    {label: 'Dashboard', icon: 'dashboard', role: Role.PLAYER, url: 'dashboard'},
     {label: 'Spiele', icon: 'casino', role: Role.PLAYER, url: 'home'},
     {
       label: 'Verwaltung',

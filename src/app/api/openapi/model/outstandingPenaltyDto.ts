@@ -10,17 +10,14 @@
  */
 
 
-export interface PaymentSummaryByPlayerDto { 
-    gameId: string;
-    datetime: string;
-    penaltyUnit: PaymentSummaryByPlayerDto.PenaltyUnitEnum;
-    penaltyValue: number;
-    outstandingValue: number;
-    lastChangedDateTime: string;
-    confirmed: boolean;
-    confirmedBy: string | null;
+export interface OutstandingPenaltyDto { 
+    name: string;
+    outstandingValueSum: number;
+    penaltyUnit: OutstandingPenaltyDto.PenaltyUnitEnum;
+    count: number;
+    datetime: string | null;
 }
-export namespace PaymentSummaryByPlayerDto {
+export namespace OutstandingPenaltyDto {
     export type PenaltyUnitEnum = 'EURO' | 'BEER_CRATE';
     export const PenaltyUnitEnum = {
         Euro: 'EURO' as PenaltyUnitEnum,

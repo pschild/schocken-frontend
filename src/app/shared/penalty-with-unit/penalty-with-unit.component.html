@@ -16,7 +16,7 @@
       @if (typeof penalty() === 'undefined') {
         Bierkiste(n)
       } @else {
-        @if (penalty() === 1) {
+        @if (penalty() === 1 || penalty() === -1) {
           {{penalty()}} Bierkiste
         } @else {
           {{penalty()}} Bierkisten

@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { StatisticsComponent } from './statistics/statistics.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { FinanceComponent } from './finance/finance.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const roleGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   return inject(PermissionsService).hasRole((route.data as any).requiredRole);
@@ -28,6 +29,14 @@ const permissionsGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 };
 
 export const routes: Routes = [
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    data: {
+      requiredRole: Role.PLAYER
+    },
+    canActivate: [authGuardFn, roleGuardFn]
+  },
   {
     path: 'home',
     component: HomeComponent,
@@ -83,7 +92,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/home', pathMatch: 'full'
+    redirectTo: '/dashboard', pathMatch: 'full'
   },
   {
     path: '**',

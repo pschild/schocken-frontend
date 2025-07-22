@@ -17,7 +17,9 @@ import { MatIcon } from '@angular/material/icon';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map } from 'rxjs/operators';
-import { GameWithId } from './model/game-with-id.model';
+import { GameIdentifierModel } from './model/game-identifier.model';
+import { groupBy } from 'lodash';
+import { getYear } from 'date-fns';
 
 @Component({
   selector: 'hop-game-selector',
@@ -35,12 +37,23 @@ import { GameWithId } from './model/game-with-id.model';
 })
 export class GameSelectorComponent {
 
-  games = input<GameWithId[], GameWithId[] | null>([], {
-    transform: (value: GameWithId[] | null) => !!value ? value : []
+  games = input<GameIdentifierModel[], GameIdentifierModel[] | null>([], {
+    transform: (value: GameIdentifierModel[] | null) => !!value ? value : []
   });
 
-  currentIndex = computed(() => {
-    return signal(this.games() && this.games().length > 0 ? this.games().length - 1 : 0);
+  optionGroups = computed(() => {
+    return Object.entries(groupBy<GameIdentifierModel>(this.games(), game => getYear(game.datetime)))
+      .map(([key, value]) => ({ year: key, games: value }));
+  });
+
+  selectedValue = signal<string | null>(null);
+
+  disableFirstAndPrevious = computed(() => {
+    return this.getSelectedIndex() === 0;
+  });
+
+  disableLastAndNext = computed(() => {
+    return this.getSelectedIndex() === this.games().length - 1;
   });
 
   @ContentChild('optionLabel') optionLabel!: TemplateRef<any>;
@@ -55,20 +68,44 @@ export class GameSelectorComponent {
 
   constructor() {
     effect(() => {
-      this.onSelectionChange.emit(this.games()[this.currentIndex()()]?.id ?? null);
+      this.selectedValue.set(this.games()[this.games().length - 1]?.id);
+    });
+
+    effect(() => {
+      if (!!this.selectedValue()) {
+        this.onSelectionChange.emit(this.selectedValue()!);
+      }
     });
   }
 
+  selectFirst(): void {
+    this.selectedValue.set(this.games()[0]?.id);
+  }
+
   selectPrevious(): void {
-    this.currentIndex().update(idx => Math.max(0, idx - 1));
+    const selectedIndex = this.getSelectedIndex();
+    if (selectedIndex > 0) {
+      this.selectedValue.set(this.games()[selectedIndex - 1]?.id);
+    }
   }
 
   selectNext(): void {
-    this.currentIndex().update(idx => Math.min(this.games().length - 1, idx + 1));
+    const selectedIndex = this.getSelectedIndex();
+    if (selectedIndex < this.games().length - 1) {
+      this.selectedValue.set(this.games()[selectedIndex + 1]?.id);
+    }
+  }
+
+  selectLast(): void {
+    this.selectedValue.set(this.games()[this.games().length - 1]?.id);
+  }
+
+  private getSelectedIndex(): number {
+    return this.games().findIndex(game => game.id === this.selectedValue());
   }
 
   onSelectionChanged($event: MatSelectChange) {
-    this.currentIndex().set($event.value);
+    this.selectedValue.set($event.value);
   }
 
 }

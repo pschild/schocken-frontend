@@ -10,14 +10,14 @@
  */
 
 
-export interface PaymentSummaryDto { 
+export interface PaymentBalanceDto { 
     playerId: string;
     name: string;
-    penaltyUnit: PaymentSummaryDto.PenaltyUnitEnum;
+    penaltyUnit: PaymentBalanceDto.PenaltyUnitEnum;
     penaltyValue: number;
     outstandingValue: number;
 }
-export namespace PaymentSummaryDto {
+export namespace PaymentBalanceDto {
     export type PenaltyUnitEnum = 'EURO' | 'BEER_CRATE';
     export const PenaltyUnitEnum = {
         Euro: 'EURO' as PenaltyUnitEnum,

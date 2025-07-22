@@ -93,14 +93,11 @@
     </div>
   </div>
 
-  <!-- TODO: REFACTOR ME -->
-  @if (info()) {
-    <h2>Punkte am {{info()!.datetime | date:'dd.MM.yyyy'}}</h2>
-    <hop-points-table [data]="info()!.points || []" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
+  <h2>Punkte am {{pointsPerGame()?.datetime | date:'dd.MM.yyyy'}}</h2>
+  <hop-points-table [data]="pointsPerGame()?.points || []" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
 
-    <h2>Punkte vom {{info()!.datetimeOfFirstGame | date:'dd.MM.yyyy'}} bis {{info()!.datetime | date:'dd.MM.yyyy'}}</h2>
-    <hop-points-table [data]="info()?.accumulatedPoints || []" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
-  }
+  <h2>Punkte vom {{dateOfFirstGame() | date:'dd.MM.yyyy'}} bis {{pointsPerGame()?.datetime | date:'dd.MM.yyyy'}}</h2>
+  <hop-points-table [data]="accumulatedPoints()?.points || []" [loading]="loading()" [isExpanded]="!!showExpandedColums.value"></hop-points-table>
 } @else if (!loading()) {
   <p class="no-data">Es gibt keine Daten für die ausgewählten Filter.</p>
 }

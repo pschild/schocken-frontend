@@ -24,6 +24,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { BadgeComponent } from '../../shared/badge/badge.component';
 import { BadgeType } from '../../shared/badge/badge-type';
 import { isPast } from 'date-fns';
+import { RelativizeDatePipe } from '../../shared/pipes/relativize-date.pipe';
 
 @Component({
   selector: 'hop-payment-table',
@@ -45,7 +46,8 @@ import { isPast } from 'date-fns';
     FormsModule,
     MatTooltip,
     NgClass,
-    BadgeComponent
+    BadgeComponent,
+    RelativizeDatePipe
   ],
   templateUrl: './payment-table.component.html',
   styleUrl: './payment-table.component.scss',
@@ -68,7 +70,7 @@ export class PaymentTableComponent {
   onConfirmationAll = output<PaymentDto[]>();
   onUnconfirmation = output<PaymentDto>();
 
-  displayedColumns: string[] = ['name', 'penaltyValue', 'outstandingValue', 'confirmed', 'lastChangedDateTime', 'dueDate', 'actions'];
+  displayedColumns: string[] = ['name', 'penaltyValue', 'outstandingValue', 'confirmed', 'confirmedAt', 'dueDate', 'actions'];
   dataSource: MatTableDataSource<PaymentDto> = new MatTableDataSource();
 
   protected readonly BadgeType = BadgeType;

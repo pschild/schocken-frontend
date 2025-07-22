@@ -88,7 +88,7 @@ export const appConfig: ApplicationConfig = {
               switchMap(user => {
                 return iif(
                   () => !!user && !!user?.sub,
-                  defer(() => playerService.getPlayerIdByUserId(user!.sub!).pipe(
+                  defer(() => playerService.getPlayerByUserId(user!.sub!).pipe(
                     catchError(err => {
                       if (err.status === 403) {
                         return of(null);
@@ -99,7 +99,7 @@ export const appConfig: ApplicationConfig = {
                   of(null)
                 );
               }),
-              tap(id => configService.setCurrentPlayerId(id))
+              tap(player => configService.setCurrentPlayer(player))
             )
           );
         };
