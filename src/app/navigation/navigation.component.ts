@@ -53,6 +53,7 @@ export class NavigationComponent {
     {label: 'Termine', icon: 'calendar_month', role: Role.PLAYER, url: 'calendar'},
     {label: 'Satzung', icon: 'menu_book', role: Role.PLAYER, url: 'constitution'},
     {label: 'Finanzen', icon: 'payments', role: Role.TREASURER, url: 'finance'},
+    {label: 'Debug', icon: 'bug_report', role: Role.ADMIN, url: 'debug'},
     // {label: 'Über', icon: 'info', url: 'about'},
   ];
 

@@ -1,0 +1,70 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>WhatsApp Client</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div>
+      Aktualisiert: {{ (lastUpdate$ | async)! | date:'dd.MM.yyyy HH:mm:ss' }} Uhr
+    </div>
+
+    @if (whatsappClientStatus$ | async; as whatsappClientStatus) {
+      <div style="display: flex; align-items: center">
+        initialisiert
+        @if (whatsappClientStatus.isInitialized) {
+          <mat-icon class="success-text">check_circle</mat-icon>
+        } @else {
+          <mat-icon class="error-text">cancel</mat-icon>
+        }
+      </div>
+
+      <div style="display: flex; align-items: center">
+        fertig
+        @if (whatsappClientStatus.isReady) {
+          <mat-icon class="success-text">check_circle</mat-icon>
+        } @else {
+          <mat-icon class="error-text">cancel</mat-icon>
+        }
+      </div>
+
+      <div style="display: flex; align-items: center">
+        authentifiziert
+        @if (whatsappClientStatus.isAuthenticated) {
+          <mat-icon class="success-text">check_circle</mat-icon>
+        } @else {
+          <mat-icon class="error-text">cancel</mat-icon>
+        }
+      </div>
+
+      <div style="display: flex; align-items: center">
+        Status: {{ whatsappClientStatus.waState }}
+        @if (whatsappClientStatus.waState === 'CONNECTED') {
+          <mat-icon class="success-text">check_circle</mat-icon>
+        } @else {
+          <mat-icon class="warn-text">warning</mat-icon>
+        }
+      </div>
+
+      <button mat-flat-button (click)="purgeWaClient()">
+        <mat-icon>delete_forever</mat-icon>
+        Daten entfernen
+      </button>
+
+      <button mat-flat-button (click)="initializeWaClient()">
+        <mat-icon>refresh</mat-icon>
+        Client neu initialisieren
+      </button>
+    }
+
+    @if (whatsappLatestQrCode$ | async; as whatsappLatestQrCode) {
+      @if (whatsappLatestQrCode.qrImage) {
+        <div>
+          <img [src]="whatsappLatestQrCode.qrImage" />
+          <br/>
+          <small>generated at {{whatsappLatestQrCode.createDateTime | date:'dd.MM.yyyy HH:mm:ss'}} Uhr</small>
+        </div>
+      }
+    }
+
+  </mat-expansion-panel>
+</mat-accordion>

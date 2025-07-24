@@ -14,6 +14,7 @@ export interface WhatsAppClientStatusDto {
     isInitialized: boolean;
     isAuthenticated: boolean;
     isReady: boolean;
+    isDestroyed: boolean;
     waState: string;
 }
 

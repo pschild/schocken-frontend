@@ -15,6 +15,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { FinanceComponent } from './finance/finance.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DebugComponent } from './debug/debug.component';
 
 const roleGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   return inject(PermissionsService).hasRole((route.data as any).requiredRole);
@@ -85,6 +86,14 @@ export const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent
+  },
+  {
+    path: 'debug',
+    component: DebugComponent,
+    data: {
+      requiredRole: Role.ADMIN
+    },
+    canActivate: [authGuardFn, roleGuardFn]
   },
   {
     path: 'forbidden',
