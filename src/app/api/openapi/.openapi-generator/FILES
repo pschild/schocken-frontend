@@ -90,6 +90,7 @@ model/updatePlayerDto.ts
 model/userDto.ts
 model/userPaymentDto.ts
 model/whatsAppChatInfoDto.ts
+model/whatsAppClientLogHistoryDto.ts
 model/whatsAppClientStatusDto.ts
 model/whatsAppSentMessageDto.ts
 param.ts

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { QrCodeDto, WhatsAppClientStatusDto, WhatsappService } from '../api/openapi';
+import { QrCodeDto, WhatsAppClientLogHistoryDto, WhatsAppClientStatusDto, WhatsappService } from '../api/openapi';
 import { Observable, share, switchMap, timer } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { AsyncPipe, DatePipe } from '@angular/common';
@@ -30,6 +30,10 @@ export class DebugComponent implements OnInit {
 
   whatsappClientStatus$: Observable<WhatsAppClientStatusDto> = this.pollingInterval$.pipe(
     switchMap(() => this.whatsappService.getClientStatus())
+  );
+
+  whatsappClientLogs$: Observable<WhatsAppClientLogHistoryDto[]> = this.pollingInterval$.pipe(
+    switchMap(() => this.whatsappService.getLogHistory())
   );
 
   whatsappLatestQrCode$: Observable<QrCodeDto | null> = this.pollingInterval$.pipe(

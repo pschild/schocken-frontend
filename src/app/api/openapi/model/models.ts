@@ -69,5 +69,6 @@ export * from './updatePlayerDto';
 export * from './userDto';
 export * from './userPaymentDto';
 export * from './whatsAppChatInfoDto';
+export * from './whatsAppClientLogHistoryDto';
 export * from './whatsAppClientStatusDto';
 export * from './whatsAppSentMessageDto';

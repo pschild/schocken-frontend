@@ -66,5 +66,13 @@
       }
     }
 
+    @if (whatsappClientLogs$ | async; as whatsAppClientLogs) {
+      <pre style="white-space: unset">
+        @for (log of whatsAppClientLogs; track log.id) {
+          <div>{{ log.datetime | date:'dd.MM.yyyy HH:mm:ss' }} [{{ log.type }}] {{ log.message }}</div>
+        }
+      </pre>
+    }
+
   </mat-expansion-panel>
 </mat-accordion>
