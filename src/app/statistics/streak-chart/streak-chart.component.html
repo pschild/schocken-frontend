@@ -1,36 +1,53 @@
 @if (!streaks() || streaks().length === 0) {
   Keine Statistiken vorhanden.
 } @else {
-  <div class="grid">
+  <div class="new-grid">
     @for (streak of streaks(); track streak.playerId) {
       @let outerWidth = (streak.maxStreak / overallMaxStreak()) * 100;
       @let innerWidth = (streak.currentStreak / streak.maxStreak) * outerWidth;
-      <div class="rank-with-name">
-        <hop-rank [rank]="streak.rank"></hop-rank>
-        <span [hopCurrentUser]="streak.playerId">{{streak.name}}</span>
-      </div>
+
       <div>
-        @if (outerWidth > 0) {
-          <div class="bar-container">
-            <div
-              class="outer-bar"
-              [style.width.%]="outerWidth"
-            ></div>
-            <div
-              class="inner-bar"
-              [class.shine]="streak.isCurrent"
-              [style.width.%]="innerWidth"
-              [matTooltip]="streak.currentStreak.toString()"
-            >
+        <ng-template #defaultOptionTemplate let-streak>{{ streak.name }}</ng-template>
+        <ng-container *ngTemplateOutlet="label || defaultOptionTemplate; context: { $implicit: streak }"></ng-container>
+      </div>
+      <div class="row">
+        <div class="bar-container" style="width: 100%;">
+          <div class="bar dotted overall-streak"></div>
+          <div class="marker-container bottom" [matTooltip]="'absoluter Bestwert: ' + (streak.overallHighscore?.datetime | date:'dd.MM.yy') + ' von ' + streak.overallHighscore?.name" matTooltipPosition="left">
+            <div class="marker"></div>
+            <div class="label">
+              @if (streak.overallHighscore?.lastRoundIdOfStreak && streak.overallHighscore?.gameId) {
+                <a [href]="'game/' + streak.overallHighscore?.gameId + '?roundId=' + streak.overallHighscore?.lastRoundIdOfStreak">{{ streak.overallHighscore?.maxStreak | number }}</a>
+              } @else {
+                {{ streak.overallHighscore?.maxStreak | number }}
+              }
+            </div>
+<!--            <mat-icon style="color: orange">star</mat-icon>-->
+<!--            <mat-icon svgIcon="user_star"></mat-icon>-->
+          </div>
+        </div>
+        <div class="bar-container" [style.width.%]="outerWidth">
+          <div class="bar rounded personal-streak"></div>
+          @if (streak.overallHighscore?.maxStreak !== streak.maxStreak) {
+            <div class="marker-container bottom" [matTooltip]="'persönlicher Bestwert: ' + (streak.datetime | date:'dd.MM.yy')" matTooltipPosition="below">
+              <div class="marker"></div>
+              <div class="label">
+                @if (streak.lastRoundIdOfStreak && streak.gameId) {
+                  <a [href]="'game/' + streak.gameId + '?roundId=' + streak.lastRoundIdOfStreak">{{ streak.maxStreak | number }}</a>
+                } @else {
+                  {{ streak.maxStreak | number }}
+                }
+              </div>
+            </div>
+          }
+        </div>
+        <div class="bar-container big" [style.width.%]="innerWidth">
+          <div class="bar rounded current-streak" [class.shine]="streak.isCurrent">
+            <div [hopAutoPlacement]="streak.currentStreak" class="label">
+              <span>{{ streak.currentStreak | number }}</span>
             </div>
           </div>
-        }
-      </div>
-      <div class="odometer">
-        <hop-odometer [countTo]="streak.maxStreak"></hop-odometer>
-        @if (streak.lastRoundIdOfStreak && streak.gameId) {
-          (<a [href]="'game/' + streak.gameId + '?roundId=' + streak.lastRoundIdOfStreak">{{streak.datetime | date:'MM/yyyy'}}</a>)
-        }
+        </div>
       </div>
     }
   </div>

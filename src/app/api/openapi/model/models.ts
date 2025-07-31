@@ -12,6 +12,7 @@ export * from './createGameDto';
 export * from './createPenaltyDto';
 export * from './createPlayerDto';
 export * from './createRoundDto';
+export * from './dashboardStreaksResponseDto';
 export * from './eventDetailDto';
 export * from './eventDto';
 export * from './eventTypeCountsDto';

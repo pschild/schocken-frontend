@@ -1,45 +1,99 @@
 @use '@angular/material' as mat;
 @use './chart-theme' as chartTheme;
 
-.grid {
+.new-grid {
   display: grid;
-  grid-template-columns: max-content auto max-content;
+  grid-template-columns: max-content auto;
+  gap: 15px 10px;
+  padding-right: 20px;
 
-  & > div {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    padding: 8px 4px;
-  }
+  .row {
+    position: relative;
+    height: 45px;
 
-  & > .rank-with-name {
-    hop-rank {
-      padding-right: 5px;
+    .bar-container {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      height: 20px;
+
+      &.big {
+        height: 26px;
+        top: -3px;
+
+        .marker-container {
+          &.top {
+            bottom: 3px;
+          }
+
+          &.bottom {
+            top: 3px;
+          }
+
+          .maker {
+            height: 27px;
+          }
+        }
+      }
+
+      .bar {
+        width: 100%;
+        height: 100%;
+
+        &.dotted {
+          border: 1px dotted #aaa;
+          box-sizing: border-box;
+        }
+
+        &.rounded {
+          border-radius: 3px;
+        }
+
+        &.current-streak {
+          @include chartTheme.animation(progress-bar-stripes 2s linear infinite);
+          @include chartTheme.gradient-striped;
+          background-size: 40px 40px;
+
+          .label {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            justify-content: center;
+
+            &.outer {
+              position: relative;
+              color: #000;
+              justify-content: unset;
+              left: calc(100% + 5px);
+            }
+          }
+        }
+      }
+
+      .marker-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        right: 0;
+        transform: translateX(50%);
+        cursor: pointer;
+
+        &.top {
+          bottom: 0;
+          flex-direction: column-reverse;
+        }
+
+        &.bottom {
+          top: 20px;
+        }
+
+        .marker {
+          height: 5px;
+          border-left: 1px solid #aaa;
+        }
+      }
     }
-  }
-
-  & > .odometer {
-    justify-content: end;
-  }
-}
-
-.bar-container {
-  position: relative;
-  width: 100%;
-
-  .outer-bar {
-    height: 20px;
-  }
-
-  .inner-bar {
-    height: 20px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    text-align: center;
-
-    @include chartTheme.animation(progress-bar-stripes 2s linear infinite);
-    @include chartTheme.gradient-striped;
-    background-size: 40px 40px;
   }
 }

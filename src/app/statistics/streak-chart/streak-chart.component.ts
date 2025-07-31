@@ -1,19 +1,19 @@
-import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, ContentChild, input, TemplateRef } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 import { StreakDto } from '../../api/openapi';
-import { OdometerComponent } from '../../odometer/odometer.component';
-import { CurrentUserDirective } from '../../shared/current-user.directive';
-import { RankComponent } from '../rank/rank.component';
+import { MatIcon } from '@angular/material/icon';
+import { AutoPlacementDirective } from '../../shared/pipes/auto-placement.directive';
 
 @Component({
   selector: 'hop-streak-chart',
   imports: [
     DatePipe,
-    OdometerComponent,
-    RankComponent,
     MatTooltip,
-    CurrentUserDirective,
+    MatIcon,
+    NgTemplateOutlet,
+    AutoPlacementDirective,
+    DecimalPipe,
   ],
   templateUrl: './streak-chart.component.html',
   styleUrl: './streak-chart.component.scss',
@@ -22,6 +22,8 @@ import { RankComponent } from '../rank/rank.component';
 export class StreakChartComponent {
 
   streaks = input.required<StreakDto[]>();
-  overallMaxStreak = computed(() => this.streaks()[0].maxStreak);
+  overallMaxStreak = computed(() => this.streaks()[0].overallHighscore?.maxStreak ?? 1);
+
+  @ContentChild('label') label!: TemplateRef<any>;
 
 }

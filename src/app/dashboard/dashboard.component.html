@@ -4,16 +4,34 @@
   <div class="div1">
     <h2>Meine Strafen</h2>
 
-    <hop-penalty-summary></hop-penalty-summary>
+    <div class="tile-content">
+      <hop-penalty-summary></hop-penalty-summary>
 
-    <hop-player-penalties-table
-      [data]="paymentsByPlayer$ | async"
-      [loading]="'payments' | isLoading | async"
-    ></hop-player-penalties-table>
+      <hop-player-penalties-table
+        [data]="paymentsByPlayer$ | async"
+        [loading]="'payments' | isLoading | async"
+      ></hop-player-penalties-table>
+    </div>
   </div>
   <div class="div2">
     <h2>Meine Streaks</h2>
-    in Kürze
+
+    @if ('streaks' | isLoading | async) {
+      <mat-spinner diameter="30" strokeWidth="2"></mat-spinner>
+    }
+
+    <div class="tile-content">
+      @if (streaks$ | async; as streaks) {
+        Meine aktuellen Runden am Stück...
+        @for (streak of streaks; track streak.label) {
+          <hop-streak-chart [streaks]="streak.streaks">
+            <ng-template #label>
+              {{ streak.label }}
+            </ng-template>
+          </hop-streak-chart>
+        }
+      }
+    </div>
   </div>
   <div class="div3">
     <h2>Meine Platzierung</h2>

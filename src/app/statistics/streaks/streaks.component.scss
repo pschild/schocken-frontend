@@ -1,12 +1,10 @@
 @use '../streak-chart/chart-theme' as chartTheme;
 
-h2 {
+form {
   display: flex;
   align-items: center;
   gap: 10px;
-}
 
-form {
   padding: 10px 0;
 }
 
@@ -14,20 +12,12 @@ form {
   padding: 5px 0;
 }
 
-.legend-row {
+.rank-with-name {
   display: flex;
-  padding: 2px 0;
+  justify-content: start;
+  align-items: center;
 
-  & > .bar {
-    height: 15px;
-    width: 30px;
-    margin-right: 5px;
-    flex-shrink: 0;
-
-    &.inner-bar {
-      @include chartTheme.animation(progress-bar-stripes 2s linear infinite);
-      @include chartTheme.gradient-striped;
-      background-size: 40px 40px;
-    }
+  hop-rank {
+    padding-right: 5px;
   }
 }

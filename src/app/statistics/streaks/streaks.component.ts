@@ -5,9 +5,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { filter, Observable } from 'rxjs';
 import { StreakStatisticsResponseDto } from '../../api/openapi';
-import { HintComponent } from '../../shared/hint/hint.component';
 import { StreakChartComponent } from '../streak-chart/streak-chart.component';
 import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-mask.component';
+import { RankComponent } from '../rank/rank.component';
+import { CurrentUserDirective } from '../../shared/current-user.directive';
 
 @Component({
   selector: 'hop-streaks',
@@ -17,8 +18,9 @@ import { LoadingMaskComponent } from '../../shared/loading/loading-mask/loading-
     FormsModule,
     MatSelectModule,
     ReactiveFormsModule,
-    HintComponent,
-    LoadingMaskComponent
+    LoadingMaskComponent,
+    RankComponent,
+    CurrentUserDirective
   ],
   templateUrl: './streaks.component.html',
   styleUrl: './streaks.component.scss',

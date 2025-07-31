@@ -1,3 +1,5 @@
+export * from './dashboard.service';
+import { DashboardService } from './dashboard.service';
 export * from './eventDetails.service';
 import { EventDetailsService } from './eventDetails.service';
 export * from './eventType.service';
@@ -22,4 +24,4 @@ export * from './userPayment.service';
 import { UserPaymentService } from './userPayment.service';
 export * from './whatsapp.service';
 import { WhatsappService } from './whatsapp.service';
-export const APIS = [EventDetailsService, EventTypeService, EventTypeOverviewService, GameDetailsService, GameOverviewService, PaymentService, PlayerService, RoundDetailsService, StatisticsService, UserService, UserPaymentService, WhatsappService];
+export const APIS = [DashboardService, EventDetailsService, EventTypeService, EventTypeOverviewService, GameDetailsService, GameOverviewService, PaymentService, PlayerService, RoundDetailsService, StatisticsService, UserService, UserPaymentService, WhatsappService];

@@ -20,5 +20,6 @@ export interface StreakDto {
     lastRoundIdOfStreak: string;
     gameId: string;
     datetime: string;
+    overallHighscore?: StreakDto;
 }
 
