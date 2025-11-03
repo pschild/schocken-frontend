@@ -13,8 +13,10 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { CalendarComponent } from './calendar/calendar.component';
-import { DebugComponent } from './debug/debug.component';
 import { SettingsComponent } from './settings/settings.component';
+import { FinanceComponent } from './finance/finance.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DebugComponent } from './debug/debug.component';
 
 const roleGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   return inject(PermissionsService).hasRole((route.data as any).requiredRole);
@@ -29,6 +31,14 @@ const permissionsGuardFn: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 };
 
 export const routes: Routes = [
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    data: {
+      requiredRole: Role.PLAYER
+    },
+    canActivate: [authGuardFn, roleGuardFn]
+  },
   {
     path: 'home',
     component: HomeComponent,
@@ -67,8 +77,12 @@ export const routes: Routes = [
     canActivate: [authGuardFn]
   },
   {
-    path: 'about',
-    component: AboutComponent
+    path: 'finance',
+    component: FinanceComponent,
+    data: {
+      requiredRole: Role.TREASURER
+    },
+    canActivate: [authGuardFn, roleGuardFn]
   },
   {
     path: 'settings',
@@ -84,12 +98,16 @@ export const routes: Routes = [
     canActivate: [authGuardFn, roleGuardFn]
   },
   {
+    path: 'about',
+    component: AboutComponent
+  },
+  {
     path: 'forbidden',
     component: ForbiddenComponent
   },
   {
     path: '',
-    redirectTo: '/home', pathMatch: 'full'
+    redirectTo: '/dashboard', pathMatch: 'full'
   },
   {
     path: '**',

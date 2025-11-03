@@ -36,23 +36,26 @@
             <div style="display: flex; gap: 5px; align-items: center;">
               @if (!game.completed) {
                 <div class="game-info-item">
-                  <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #f50303; border: 1px solid #f50303;"><hop-live-indicator></hop-live-indicator>live</div>
+                  <hop-badge [type]="BadgeType.ERROR_ALT">
+                    <hop-live-indicator></hop-live-indicator>
+                    live
+                  </hop-badge>
                 </div>
               } @else {
-                <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #57b90d;">abgeschlossen</div>
+                <hop-badge [type]="BadgeType.SUCCESS">abgeschlossen</hop-badge>
               }
 
               @if (game.excludeFromStatistics) {
                 <div class="game-info-item">
-                  <div style="display: inline-block; padding: 4px 7px; font-size: 12px; white-space: nowrap; border-radius: 6px; color: #fff; background-color: #718ba3;">ohne Wertung</div>
+                  <hop-badge>ohne Wertung</hop-badge>
                 </div>
               }
 
               @if (warnings$ | async; as warnings) {
                 <div class="game-info-item">
                   <mat-icon
-                    aria-hidden="false"
-                    style="margin: 10px 0; color: #ffa700;"
+                    style="margin: 10px 0;"
+                    class="warn-text"
                     [matBadge]="warnings"
                     matBadgeSize="large"
                   >warning</mat-icon>
@@ -136,8 +139,8 @@
                   @if (round.warnings?.length) {
                     <mat-icon
                       aria-hidden="false"
-                      style="margin: 10px 0;
-                  color: #ffa700;"
+                      style="margin: 10px 0;"
+                      class="warn-text"
                       [matBadge]="round.warnings!.length"
                       matBadgeSize="large"
                       [matBadgeHidden]="round.warnings!.length === 1"
@@ -188,6 +191,11 @@
             <button hopCelebration *hopHasPermission="Permission.UPDATE_GAMES" mat-flat-button class="complete-game" (click)="setGameCompleted()" [loading]="!!('complete-game' | isLoading | async)">
               <mat-icon>check</mat-icon>
               Spiel abschließen
+            </button>
+          } @else {
+            <button *hopHasRole="Role.MANAGER" mat-flat-button class="publish-penalties" (click)="publishPenalties()" [loading]="!!('publish-penalties' | isLoading | async)">
+              <mat-icon svgIcon="whatsapp"></mat-icon>
+              Strafen bei WhatsApp veröffentlichen
             </button>
           }
         </div>

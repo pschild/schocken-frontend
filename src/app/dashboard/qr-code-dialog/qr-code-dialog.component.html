@@ -1,0 +1,15 @@
+<mat-dialog-content>
+  <p>
+    Scanne folgenden QR-Code mit deiner Banking-App, um deinen offenen Betrag von
+    <strong>
+      <hop-penalty-with-unit [penalty]="data.penalty.value" [unit]="data.penalty.unit"></hop-penalty-with-unit>
+    </strong>
+    zu überweisen:
+  </p>
+  <div style="text-align: center">
+    <img width="244" height="244" [src]="data.qrCode" />
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close>Schließen</button>
+</mat-dialog-actions>

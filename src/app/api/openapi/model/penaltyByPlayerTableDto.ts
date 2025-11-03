@@ -19,5 +19,6 @@ export interface PenaltyByPlayerTableDto {
     euroSum: number;
     quote: number;
     euroPerRound: number;
+    attended: boolean;
 }
 

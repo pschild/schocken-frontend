@@ -15,7 +15,7 @@ export class PenaltyWithUnitComponent {
 
   PenaltyUnit = PenaltyUnitEnum;
 
-  penalty = input.required<number>();
+  penalty = input<number>();
   unit = input.required<string>();
   multiplicatorUnit = input<string>();
 

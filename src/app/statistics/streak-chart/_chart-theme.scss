@@ -19,16 +19,18 @@
 }
 
 @mixin color($theme) {
-  .inner-bar {
-    background-color: mat.get-theme-color($theme, primary);
-
-    &.shine {
-      box-shadow: 0 0 10px 3px mat.get-theme-color($theme, primary, 90);
+  .bar {
+    &.personal-streak {
+      background-color: #caefa8;
     }
-  }
 
-  .outer-bar {
-    background-color: mat.get-theme-color($theme, neutral, 90);
+    &.current-streak {
+      background-color: mat.get-theme-color($theme, primary);
+
+      &.shine {
+        box-shadow: 0 0 10px 3px mat.get-theme-color($theme, primary, 90);
+      }
+    }
   }
 }
 

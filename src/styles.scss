@@ -33,6 +33,27 @@ $schocken-frontend-theme: schockenTheme.$light-theme;
 @include mat.all-component-typographies();
 
 :root {
+  --color-neutral: #718ba3;
+  --color-success: #57b90d;
+  --color-warn: #ffa700;
+  --color-error: #f50303;
+
+  .neutral-text {
+    color: var(--color-neutral);
+  }
+
+  .success-text {
+    color: var(--color-success);
+  }
+
+  .warn-text {
+    color: var(--color-warn);
+  }
+
+  .error-text {
+    color: var(--color-error);
+  }
+
   @include mat.all-component-themes($schocken-frontend-theme);
 
   .secondary-slide-toggle {

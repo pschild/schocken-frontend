@@ -1,4 +1,5 @@
 import { Injectable, InjectionToken } from '@angular/core';
+import { PlayerDto } from '../api/openapi';
 
 export const CURRENT_PLAYER_ID = new InjectionToken<string>('current-player-id');
 
@@ -7,15 +8,19 @@ export const CURRENT_PLAYER_ID = new InjectionToken<string>('current-player-id')
 })
 export class ConfigService {
 
-  private _currentPlayerId: string | null = null;
+  private _currentPlayer: PlayerDto | null = null;
 
   constructor() {}
 
-  setCurrentPlayerId(id: string | null) {
-    this._currentPlayerId = id;
+  setCurrentPlayer(id: PlayerDto | null) {
+    this._currentPlayer = id;
   }
 
   getCurrentPlayerId(): string | null {
-    return this._currentPlayerId;
+    return this._currentPlayer?.id || null;
+  }
+
+  getCurrentPlayerName(): string | null {
+    return this._currentPlayer?.name || null;
   }
 }

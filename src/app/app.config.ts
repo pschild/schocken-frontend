@@ -80,6 +80,8 @@ export const appConfig: ApplicationConfig = {
         const sanitizer = inject(DomSanitizer);
         return () => {
           iconRegistry.addSvgIcon('schock_aus', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/schock-aus.svg'));
+          iconRegistry.addSvgIcon('whatsapp', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/icons8-whatsapp.svg'));
+          iconRegistry.addSvgIcon('user_star', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/user-star-svgrepo-com.svg'));
         };
       })();
       return initializerFn();
@@ -92,7 +94,7 @@ export const appConfig: ApplicationConfig = {
               switchMap(user => {
                 return iif(
                   () => !!user && !!user?.sub,
-                  defer(() => playerService.getPlayerIdByUserId(user!.sub!).pipe(
+                  defer(() => playerService.getPlayerByUserId(user!.sub!).pipe(
                     catchError(err => {
                       if (err.status === 403) {
                         return of(null);
@@ -103,7 +105,7 @@ export const appConfig: ApplicationConfig = {
                   of(null)
                 );
               }),
-              tap(id => configService.setCurrentPlayerId(id))
+              tap(player => configService.setCurrentPlayer(player))
             )
           );
         };

@@ -1,0 +1,22 @@
+<hop-game-selector
+  [games]="allGames$ | async"
+  (onSelectionChange)="handleGameChanged($event)"
+>
+  <ng-template #optionLabel let-game>
+    {{ game.datetime | date:'dd.MM.yyyy' }}
+  </ng-template>
+</hop-game-selector>
+
+<hop-payment-table
+  [data]="paymentsState$ | async"
+  [loading]="'payments' | isLoading | async"
+  (onConfirmation)="confirm($event)"
+  (onConfirmationAll)="confirmAll($event)"
+  (onUnconfirmation)="unconfirm($event)"
+>
+</hop-payment-table>
+
+<hop-balance-table
+  [data]="paymentsSummary$ | async"
+  [loading]="'payments-summary' | isLoading | async"
+></hop-balance-table>

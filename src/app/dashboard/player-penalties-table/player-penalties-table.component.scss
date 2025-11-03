@@ -1,0 +1,13 @@
+:host {
+  position: relative;
+}
+
+.badges-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mat-column-paymentStatus {
+  width: 140px;
+}

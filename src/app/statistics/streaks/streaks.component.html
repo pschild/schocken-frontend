@@ -2,39 +2,31 @@
   <hop-loading-mask></hop-loading-mask>
 }
 
+<h2>Streaks</h2>
+
 <form [formGroup]="filterForm">
-  <h2>
-    Aufeinanderfolgende Runden
-    <mat-button-toggle-group formControlName="type">
-      <mat-button-toggle value="with">mit</mat-button-toggle>
-      <mat-button-toggle value="without">ohne</mat-button-toggle>
-    </mat-button-toggle-group>
-    <mat-form-field subscriptSizing="dynamic">
-      <mat-label>Ereignis</mat-label>
-      <mat-select formControlName="eventTypeId">
-        @for (option of eventTypeOptions(); track option.id) {
-          <mat-option [value]="option.id">{{option.description}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </h2>
+  Aufeinanderfolgende Runden
+  <mat-button-toggle-group formControlName="type">
+    <mat-button-toggle value="with">mit</mat-button-toggle>
+    <mat-button-toggle value="without">ohne</mat-button-toggle>
+  </mat-button-toggle-group>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Ereignis</mat-label>
+    <mat-select formControlName="eventTypeId">
+      @for (option of eventTypeOptions(); track option.id) {
+        <mat-option [value]="option.id">{{option.description}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 </form>
 
 <div class="streak-container">
-  <hop-streak-chart [streaks]="visibleStreaks() || []"></hop-streak-chart>
+  <hop-streak-chart [streaks]="visibleStreaks() || []">
+    <ng-template #label let-streak>
+      <div class="rank-with-name">
+        <hop-rank [rank]="streak.rank"></hop-rank>
+        <span [hopCurrentUser]="streak.playerId">{{streak.name}}</span>
+      </div>
+    </ng-template>
+  </hop-streak-chart>
 </div>
-
-<hop-hint>
-  <div class="legend-row">
-    <div class="bar outer-bar"></div>
-    Persönlicher Rekord (bei gleicher Anzahl wird der neuere "eingestellte" Rekord als besser bewertet)
-  </div>
-  <div class="legend-row">
-    <div class="bar inner-bar"></div>
-    Aktueller Lauf
-  </div>
-  <div class="legend-row">
-    <div class="bar inner-bar shine"></div>
-    Aktueller Lauf entspricht persönlichem Rekord, der somit ggf. weiter ausgebaut werden kann
-  </div>
-</hop-hint>
