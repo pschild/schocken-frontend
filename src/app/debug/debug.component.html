@@ -1,15 +1,21 @@
-<h2>PWA Update Log</h2>
-<pre style="font-size: smaller; margin: 0;">
-  @for (message of pwaUpdateCheckService.messages(); track message) {
-    {{message}}
-  }
-</pre>
-
-<h2>Push Notifications</h2>
-<button mat-flat-button (click)="sendMessage()">Push-Notification senden</button>
-<p>{{ sendResults() }} Nachricht(en) gesendet</p>
-
 <mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>PWA</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <h2>Update Log</h2>
+    <pre style="font-size: smaller; margin: 0;">
+      @for (message of pwaUpdateCheckService.messages(); track message) {
+        {{message}}
+      }
+    </pre>
+
+    <h2>Push Notifications</h2>
+    <button mat-flat-button (click)="sendMessage()">Push-Notification senden</button>
+    <p>{{ sendResults() }} Nachricht(en) gesendet</p>
+
+  </mat-expansion-panel>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>WhatsApp Client</mat-panel-title>

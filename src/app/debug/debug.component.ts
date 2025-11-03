@@ -1,6 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { PwaUpdateCheckService } from '../shared/pwa-update-check.service';
-import { QrCodeDto, WhatsAppClientLogHistoryDto, WhatsAppClientStatusDto, WhatsappService, PushNotificationService } from '../api/openapi';
+import {
+  PushNotificationService,
+  QrCodeDto,
+  WhatsAppClientLogHistoryDto,
+  WhatsAppClientStatusDto,
+  WhatsappService
+} from '../api/openapi';
 import { Observable, share, switchMap, timer } from 'rxjs';
 import { MatButton } from '@angular/material/button';
 import { AsyncPipe, DatePipe } from '@angular/common';
@@ -23,14 +29,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 })
 export class DebugComponent implements OnInit {
 
+  // push
   sendResults = signal<number>(0);
   pwaUpdateCheckService = inject(PwaUpdateCheckService);
   private pushNotificationService = inject(PushNotificationService);
 
+  // whats-app
   private whatsappService = inject(WhatsappService);
-
   pollingInterval$: Observable<number> = timer(0, 5000).pipe(share());
-
   lastUpdate$: Observable<Date> = this.pollingInterval$.pipe(map(() => new Date()));
 
   whatsappClientStatus$: Observable<WhatsAppClientStatusDto> = this.pollingInterval$.pipe(
@@ -48,16 +54,18 @@ export class DebugComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // push
+  sendMessage(): void {
+    this.pushNotificationService.send().subscribe(sendResults => this.sendResults.set(sendResults.length));
+  }
+
+  // whats-app
   initializeWaClient(): void {
     this.whatsappService.initialize().subscribe();
   }
 
   purgeWaClient(): void {
     this.whatsappService.purge().subscribe();
-  }
-
-  sendMessage(): void {
-    this.pushNotificationService.send().subscribe(sendResults => this.sendResults.set(sendResults.length));
   }
 
 }
