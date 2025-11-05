@@ -52,6 +52,8 @@ export const appConfig: ApplicationConfig = {
         audience: auth0Audience,
         ui_locales: 'de'
       },
+      cacheLocation: 'localstorage',
+      useRefreshTokens: true,
       httpInterceptor: {
         allowedList: [
           {

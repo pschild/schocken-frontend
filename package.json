@@ -43,6 +43,7 @@
     "lodash": "^4.17.21",
     "ngx-extended-pdf-viewer": "^23.0.0-alpha.6",
     "rxjs": "~7.8.0",
+    "ts-md5": "^2.0.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

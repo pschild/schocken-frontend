@@ -3,5 +3,5 @@
   {{data.message}}
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button [mat-dialog-close]="true">OK</button>
+  <button mat-flat-button [mat-dialog-close]="true">{{data.buttonLabel || 'OK'}}</button>
 </mat-dialog-actions>

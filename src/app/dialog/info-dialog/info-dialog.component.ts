@@ -15,5 +15,5 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
   styleUrl: './info-dialog.component.scss'
 })
 export class InfoDialogComponent {
-  data: { title: string; message: string; } = inject(MAT_DIALOG_DATA);
+  data: { title: string; message: string; buttonLabel?: string; } = inject(MAT_DIALOG_DATA);
 }
