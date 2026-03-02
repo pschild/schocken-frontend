@@ -22,13 +22,15 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter } from '@angular/router';
 import { authHttpInterceptorFn, AuthService, provideAuth0 } from '@auth0/auth0-angular';
 import { de } from 'date-fns/locale';
-import { catchError, defer, firstValueFrom, iif, of, switchMap, tap, throwError } from 'rxjs';
+import { catchError, defer, firstValueFrom, forkJoin, iif, of, switchMap, tap, throwError } from 'rxjs';
 import { ApiModule as NgOpenapiGenApiModule } from './api/ng-openapi-gen/api.module';
-import { ApiModule as OpenApiModule, Configuration, PlayerService } from './api/openapi';
+import { ApiModule as OpenApiModule, Configuration, EventTypeService, PlayerService } from './api/openapi';
 import { routes } from './app.routes';
 import { GlobalErrorHandler } from './global-error-handler';
 import { ConfigService, CURRENT_PLAYER_ID } from './shared/config.service';
 import { retryInterceptorFn } from './shared/interceptors/retry.interceptor';
+import { offlineInterceptorFn } from './shared/interceptors/offline.interceptor';
+// import { OfflineAuthService } from './auth/offline-auth.service';
 import { provideServiceWorker } from '@angular/service-worker';
 import { PwaUpdateCheckService } from './shared/pwa-update-check.service';
 import { SettingsState } from './settings/settings.state';
@@ -43,7 +45,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authHttpInterceptorFn, retryInterceptorFn])),
+    provideHttpClient(withInterceptors([offlineInterceptorFn, authHttpInterceptorFn, retryInterceptorFn])),
     provideAuth0({
       domain: auth0Domain,
       clientId: auth0ClientId,
@@ -88,6 +90,19 @@ export const appConfig: ApplicationConfig = {
       })();
       return initializerFn();
     }),
+    /*provideAppInitializer(() => {
+      const initializerFn = ((offlineAuthService: OfflineAuthService, auth: AuthService) => {
+        return () => {
+          console.log('isOnline?', offlineAuthService.isOnline());
+          console.log('isTokenValidOffline?', offlineAuthService.isTokenValidOffline());
+          return offlineAuthService.isAuthenticated().then(response => {
+            console.log('isAuthenticated?', response);
+            return true;
+          });
+        };
+      })(inject(OfflineAuthService), inject(AuthService));
+      return initializerFn();
+    }),*/
     provideAppInitializer(() => {
       const initializerFn = ((configService: ConfigService, playerService: PlayerService, auth: AuthService) => {
         return () => {
@@ -124,6 +139,12 @@ export const appConfig: ApplicationConfig = {
       const initializerFn = ((settingsState: SettingsState) => {
         return () => settingsState.load();
       })(inject(SettingsState));
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = ((playerService: PlayerService, eventTypeService: EventTypeService) => {
+        return () => forkJoin([playerService.findAll(), eventTypeService.findAll()]);
+      })(inject(PlayerService), inject(EventTypeService));
       return initializerFn();
     }),
     provideServiceWorker('ngsw-worker.js', {

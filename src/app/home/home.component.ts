@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
 
   gameOverview: GameOverviewOfYearDto[] = [];
 
-  private openApiGameOverviewService = inject(GameOverviewService);
+  private gameOverviewService = inject(GameOverviewService);
   private gameDetailsService = inject(GameDetailsService);
   private playerService = inject(PlayerService);
   private successMessageService = inject(SuccessMessageService);
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
   Permission = Permission;
 
   ngOnInit(): void {
-    this.openApiGameOverviewService.getOverview().pipe(
+    this.gameOverviewService.getOverview().pipe(
       doWithLoading(this.loadingState, 'game-overview'),
     ).subscribe(overview => this.gameOverview = overview);
   }

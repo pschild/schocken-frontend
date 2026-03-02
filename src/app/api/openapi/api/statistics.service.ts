@@ -47,13 +47,16 @@ import { StreakStatisticsResponseDto } from '../model/streakStatisticsResponseDt
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    StatisticsServiceInterface
+} from './statistics.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class StatisticsService {
+export class StatisticsService implements StatisticsServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

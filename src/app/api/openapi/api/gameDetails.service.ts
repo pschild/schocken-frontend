@@ -29,13 +29,16 @@ import { WhatsAppSentMessageDto } from '../model/whatsAppSentMessageDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    GameDetailsServiceInterface
+} from './gameDetails.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class GameDetailsService {
+export class GameDetailsService implements GameDetailsServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

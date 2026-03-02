@@ -31,13 +31,16 @@ import { UpdateFinalistsDto } from '../model/updateFinalistsDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    RoundDetailsServiceInterface
+} from './roundDetails.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoundDetailsService {
+export class RoundDetailsService implements RoundDetailsServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

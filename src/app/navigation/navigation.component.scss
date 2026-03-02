@@ -10,6 +10,14 @@
 
 .toolbar {
   --mat-toolbar-container-background-color: #be00ca;
+
+  &.offline {
+    border-bottom: 5px solid var(--color-warn);
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
 }
 
 .is-mobile .toolbar {

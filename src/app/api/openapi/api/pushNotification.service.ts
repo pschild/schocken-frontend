@@ -23,13 +23,16 @@ import { PushSubscriptionDto } from '../model/pushSubscriptionDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    PushNotificationServiceInterface
+} from './pushNotification.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class PushNotificationService {
+export class PushNotificationService implements PushNotificationServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

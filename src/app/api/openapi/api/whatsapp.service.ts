@@ -31,13 +31,16 @@ import { WhatsAppSentMessageDto } from '../model/whatsAppSentMessageDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    WhatsappServiceInterface
+} from './whatsapp.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class WhatsappService {
+export class WhatsappService implements WhatsappServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

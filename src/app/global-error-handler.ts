@@ -67,7 +67,7 @@ export class GlobalErrorHandler implements ErrorHandler {
           this.dialog.open(InfoDialogComponent, {
             data: {
               title: 'Hinweis',
-              message: 'Deine Sitzung ist abgelaufen. Bitte logge dich neu ein.',
+              message: 'Deine Sitzung ist wegen Inaktivität abgelaufen. Bitte logge dich neu ein.',
               buttonLabel: 'Zum Login',
             }
           })
@@ -82,7 +82,11 @@ export class GlobalErrorHandler implements ErrorHandler {
               userMessage: 'Bitte logge dich neu ein.',
               message: `${error.error}\n\n${error.error_description}`,
             }
-          });
+          })
+            .afterClosed()
+            .subscribe(() =>
+              this.auth.logout({ logoutParams: { returnTo: document.location.origin } })
+            );
         }
       } else { // all other errors
         this.dialog.open(ErrorDialogComponent, {

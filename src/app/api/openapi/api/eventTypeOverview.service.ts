@@ -23,13 +23,16 @@ import { EventTypeOverviewDto } from '../model/eventTypeOverviewDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    EventTypeOverviewServiceInterface
+} from './eventTypeOverview.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventTypeOverviewService {
+export class EventTypeOverviewService implements EventTypeOverviewServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

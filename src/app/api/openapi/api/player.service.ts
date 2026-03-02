@@ -27,13 +27,16 @@ import { UpdatePlayerDto } from '../model/updatePlayerDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    PlayerServiceInterface
+} from './player.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class PlayerService {
+export class PlayerService implements PlayerServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

@@ -23,13 +23,16 @@ import { UserDto } from '../model/userDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    UserServiceInterface
+} from './user.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService implements UserServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

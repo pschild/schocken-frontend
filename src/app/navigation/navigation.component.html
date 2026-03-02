@@ -1,9 +1,13 @@
 <div class="app-container" [class.is-mobile]="(isMobile$ | async) === true">
-  <mat-toolbar class="toolbar">
+  <mat-toolbar class="toolbar" [class.offline]="(offline$ | async) === true">
     <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Die Hoptimisten</span>
+    <span class="spacer"></span>
+    @if ((offline$ | async) === true) {
+      <mat-icon matTooltip="Du bist offline">cloud_off</mat-icon>
+    }
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="(isMobile$ | async) === true ? 56 : 0">
@@ -11,7 +15,7 @@
       <div class="inner-sidenav-container">
         <mat-nav-list>
           @for (item of navigationItems; track item.label) {
-            <hop-menu-item *hopHasRole="item.role" [item]="item"></hop-menu-item>
+            <hop-menu-item *hopHasRole="item.role" [hopDisabledWhenOffline]="!!item.disabledWhenOffline" [item]="item"></hop-menu-item>
           }
         </mat-nav-list>
 
@@ -23,7 +27,7 @@
                   <img [src]="user.picture" />
                   <div class="overflow" [matTooltip]="user.name">{{user.name}}</div>
                 </div>
-                <button mat-icon-button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
+                <button hopDisabledWhenOffline mat-icon-button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
                   <mat-icon>logout</mat-icon>
                 </button>
               }

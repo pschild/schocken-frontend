@@ -26,7 +26,8 @@ import { filter, map } from 'rxjs/operators';
 import {
   CreateGameDto,
   EventDto,
-  GameDetailDto, LiveGameStatisticsResponseDto,
+  GameDetailDto,
+  LiveGameStatisticsResponseDto,
   PlayerDto,
   RoundDetailDto
 } from '../api/openapi';
@@ -44,8 +45,6 @@ import { CelebrationDialogComponent } from './celebration-dialog/celebration-dia
 import { EventListComponent } from './event-list/event-list.component';
 import { GameState } from './game.state';
 import { RoundComponent } from './round/round.component';
-import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
-import ContextEnum = EventDto.ContextEnum;
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OdometerComponent } from '../odometer/odometer.component';
 import { StatsCardComponent } from '../statistics/stats-card/stats-card.component';
@@ -59,6 +58,8 @@ import { Role } from '../auth/model/role.enum';
 import { HasRoleDirective } from '../auth/has-role.directive';
 import { BadgeComponent } from '../shared/badge/badge.component';
 import { BadgeType } from '../shared/badge/badge-type';
+import PlaceTypeEnum = CreateGameDto.PlaceTypeEnum;
+import ContextEnum = EventDto.ContextEnum;
 
 @Component({
   selector: 'hop-game',

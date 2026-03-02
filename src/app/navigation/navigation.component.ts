@@ -14,10 +14,12 @@ import { HasRoleDirective } from '../auth/has-role.directive';
 import { Role } from '../auth/model/role.enum';
 import { MenuItem, MenuItemComponent } from './menu-item/menu-item.component';
 import { MatTooltip } from '@angular/material/tooltip';
+import { NetworkStatusService } from '../offline/network-status.service';
+import { DisabledWhenOfflineDirective } from '../shared/disabled-when-offline.directive';
 
 @Component({
   selector: 'hop-navigation',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MenuItemComponent, AsyncPipe, HasRoleDirective, MatTooltip],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MenuItemComponent, AsyncPipe, HasRoleDirective, MatTooltip, DisabledWhenOfflineDirective],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,6 +30,7 @@ export class NavigationComponent {
   readonly breakpointObserver = inject(BreakpointObserver);
   readonly router = inject(Router);
   readonly auth = inject(AuthService);
+  readonly network = inject(NetworkStatusService);
   protected readonly document = document;
 
   @ViewChild('snav') private snav!: MatSidenav;
@@ -37,8 +40,10 @@ export class NavigationComponent {
     takeUntilDestroyed(this.destroyRef)
   );
 
+  offline$ = this.network.online$.pipe(map(online => !online));
+
   navigationItems: MenuItem[] = [
-    {label: 'Dashboard', icon: 'dashboard', role: Role.PLAYER, url: 'dashboard'},
+    {label: 'Dashboard', icon: 'dashboard', role: Role.PLAYER, url: 'dashboard', disabledWhenOffline: true},
     {label: 'Spiele', icon: 'casino', role: Role.PLAYER, url: 'home'},
     {
       label: 'Verwaltung',
@@ -47,13 +52,14 @@ export class NavigationComponent {
       subItems: [
         {label: 'Spieler', icon: 'people', url: 'administration/player'},
         {label: 'Ereignisse', icon: 'euro_symbol', url: 'administration/event-type'},
-      ]
+      ],
+      disabledWhenOffline: true
     },
-    {label: 'Statistiken', icon: 'bar_chart', role: Role.PLAYER, url: 'statistics'},
+    {label: 'Statistiken', icon: 'bar_chart', role: Role.PLAYER, url: 'statistics', disabledWhenOffline: true},
     {label: 'Termine', icon: 'calendar_month', role: Role.PLAYER, url: 'calendar'},
     {label: 'Satzung', icon: 'menu_book', role: Role.PLAYER, url: 'constitution'},
-    {label: 'Finanzen', icon: 'payments', role: Role.TREASURER, url: 'finance'},
-    {label: 'Einstellungen', icon: 'settings', role: Role.PLAYER, url: 'settings'},
+    {label: 'Finanzen', icon: 'payments', role: Role.TREASURER, url: 'finance', disabledWhenOffline: true},
+    {label: 'Einstellungen', icon: 'settings', role: Role.PLAYER, url: 'settings', disabledWhenOffline: true},
     {label: 'Debug', icon: 'bug_report', role: Role.ADMIN, url: 'debug'},
     // {label: 'Über', icon: 'info', url: 'about'},
   ];

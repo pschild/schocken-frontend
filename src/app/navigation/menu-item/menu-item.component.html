@@ -6,6 +6,7 @@
   routerLinkActive="selected-menu-item"
   #rla="routerLinkActive"
   [activated]="rla.isActive"
+  [hopDisabledWhenOffline]="!!item().disabledWhenOffline"
 >
   <mat-icon matListItemIcon>{{item().icon}}</mat-icon>
   <span matListItemTitle>{{item().label}}</span>

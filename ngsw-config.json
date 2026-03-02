@@ -26,5 +26,48 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "google-fonts-stylesheets",
+      "urls": [
+        "https://fonts.googleapis.com/css",
+        "https://fonts.googleapis.com/css2"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 20,
+        "maxAge": "365d",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "google-fonts-webfonts",
+      "urls": [
+        "https://fonts.gstatic.com/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "365d",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "gravatar-images",
+      "urls": [
+        "https://s.gravatar.com/avatar/**",
+        "https://www.gravatar.com/avatar/**",
+        "https://gravatar.com/avatar/**",
+        "https://secure.gravatar.com/avatar/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "30d",
+        "timeout": "5s",
+        "cacheOpaqueResponses": true
+      }
+    }
   ]
 }

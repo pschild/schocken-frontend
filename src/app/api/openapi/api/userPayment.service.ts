@@ -25,13 +25,16 @@ import { UserPaymentDto } from '../model/userPaymentDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    UserPaymentServiceInterface
+} from './userPayment.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserPaymentService {
+export class UserPaymentService implements UserPaymentServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

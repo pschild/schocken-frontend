@@ -23,13 +23,16 @@ import { GameOverviewOfYearDto } from '../model/gameOverviewOfYearDto';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import {
+    GameOverviewServiceInterface
+} from './gameOverview.serviceInterface';
 
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class GameOverviewService {
+export class GameOverviewService implements GameOverviewServiceInterface {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();

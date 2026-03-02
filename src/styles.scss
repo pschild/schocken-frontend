@@ -197,3 +197,9 @@ p.no-data {
   gap: 10px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
+
+.disabled-due-to-offline {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
